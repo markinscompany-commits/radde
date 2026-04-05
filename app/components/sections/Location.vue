@@ -21,6 +21,10 @@
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18.5l-3-1.5-6 3v-13l6-3 6 3 6-3v7.5"/><path d="M9 4v13"/><path d="M15 7v5.5"/><circle cx="19" cy="18" r="3"/></svg>
             Открыть в навигаторе
           </a>
+          <button @click="shareLocation" class="loc-share-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>
+            Поделиться
+          </button>
         </div>
       </div>
 
@@ -194,6 +198,21 @@ function copyCoords() {
   setTimeout(() => { coordsCopied.value = false }, 2000)
 }
 
+async function shareLocation() {
+  const shareData = {
+    title: 'Пансионат Радде',
+    text: 'Пансионат Радде — отдых в горах Дагестана на высоте 1600 метров',
+    url: 'https://yandex.ru/maps/-/CPfFnT2P',
+  }
+  if (navigator.share) {
+    await navigator.share(shareData).catch(() => {})
+  } else {
+    navigator.clipboard?.writeText(shareData.url)
+    coordsCopied.value = true
+    setTimeout(() => { coordsCopied.value = false }, 2000)
+  }
+}
+
 function handleTransferPhone(e: Event) {
   transferForm.phone = phoneMaskInput(e)
 }
@@ -341,6 +360,25 @@ onMounted(() => {
 .loc-small-btn:hover {
   background: #F0E6D6;
   border-color: #D4BC96;
+}
+
+.loc-share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  background: #C17F3E;
+  border: 1px solid #A66B32;
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.loc-share-btn:hover {
+  background: #A66B32;
 }
 
 .map-guard {
