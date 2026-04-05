@@ -1,0 +1,264 @@
+/* Радде — Global Styles */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  background-color: #FAF6F0;
+  color: #2C2416;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Typography base */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Manrope', system-ui, sans-serif;
+  font-weight: 500;
+  line-height: 1.15;
+  color: #2C2416;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* Accent font optical size correction — Cormorant Garamond x-height is ~30% smaller than Manrope.
+   Uses attribute selector to avoid UnoCSS specificity conflict on .font-accent */
+[class*="font-accent"] {
+  font-size: 1.3em !important;
+}
+
+/* Lazy rendering — sections below the fold skip layout until near viewport */
+section[id] {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}
+
+/* Selection */
+::selection {
+  background-color: #E8D5B7;
+  color: #2C2416;
+}
+
+/* Focus visible — только для кнопок и ссылок, НЕ для полей ввода */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid #C17F3E;
+  outline-offset: 2px;
+}
+
+/* Поля ввода — ПОЛНЫЙ сброс outline/shadow во всех состояниях */
+input, textarea, select,
+input:focus, input:focus-visible, input:focus-within, input:active,
+textarea:focus, textarea:focus-visible, textarea:focus-within, textarea:active,
+select:focus, select:focus-visible, select:focus-within, select:active {
+  outline: 0 !important;
+  outline-style: none !important;
+  outline-width: 0 !important;
+  outline-color: transparent !important;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+/* Дополнительно для Webkit */
+input::-webkit-contacts-auto-fill-button,
+input::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+}
+
+/* =============================================
+   ЕДИНАЯ СИСТЕМА ПОЛЕЙ ВВОДА
+   ============================================= */
+
+/* Светлая тема (модалки, формы на светлом фоне) */
+.input-light {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  background: #FFFFFF;
+  border: 1.5px solid #E0D5C8;
+  border-radius: 10px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 15px;
+  color: #2C2416;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none !important;
+  box-shadow: none;
+}
+.input-light::placeholder { color: #B5A898; }
+.input-light:focus {
+  border-color: #C17F3E !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+textarea.input-light {
+  height: auto;
+  min-height: 80px;
+  padding: 12px 16px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+/* Тёмная тема (Hero booking, тёмные секции) */
+.input-dark {
+  width: 100%;
+  height: 46px;
+  padding: 0 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 14px;
+  color: white;
+  transition: border-color 0.2s;
+  outline: none !important;
+  box-shadow: none;
+}
+.input-dark::placeholder { color: rgba(255, 255, 255, 0.35); }
+.input-dark:hover {
+  border-color: rgba(193, 127, 62, 0.35);
+}
+.input-dark:focus {
+  border-color: rgba(193, 127, 62, 0.5) !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+textarea.input-dark {
+  height: auto;
+  min-height: 80px;
+  padding: 10px 14px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+/* Label */
+.label-light {
+  display: block;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6B5B4A;
+  margin-bottom: 6px;
+}
+
+.label-dark {
+  display: block;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 8px;
+}
+
+/* =============================================
+   ЕДИНАЯ СИСТЕМА АНИМАЦИЙ ПЕРЕХОДОВ
+   ============================================= */
+
+/* Backdrop (для модалок) */
+.backdrop-enter-active { transition: opacity 0.3s ease; }
+.backdrop-leave-active { transition: opacity 0.2s ease; }
+.backdrop-enter-from,
+.backdrop-leave-to { opacity: 0; }
+
+/* Popup/modal появление (scale + fade) */
+.popup-enter-active {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+.popup-leave-active {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.popup-enter-from {
+  opacity: 0;
+  transform: scale(0.95) translateY(10px);
+}
+.popup-leave-to {
+  opacity: 0;
+  transform: scale(0.97);
+}
+
+/* Dropdown (slide down) */
+.dropdown-enter-active { transition: all 0.2s ease; }
+.dropdown-leave-active { transition: all 0.15s ease; }
+.dropdown-enter-from,
+.dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+/* Slide down (мобильное меню) */
+.slide-enter-active { transition: all 0.3s ease; }
+.slide-leave-active { transition: all 0.2s ease; }
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+/* =============================================
+   МОДАЛЬНЫЕ ОКНА: скроллбар + тени
+   ============================================= */
+
+/* Скрываем скроллбар в модалках, но оставляем скролл */
+.modal-body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  position: relative;
+  overscroll-behavior: none;
+  background: var(--modal-bg, #FDFBF7);
+}
+.modal-body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Тени модалок отключены */
+.modal-shadow-top,
+.modal-shadow-bottom {
+  display: none;
+}

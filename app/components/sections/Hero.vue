@@ -1,0 +1,198 @@
+<template>
+  <section class="relative min-h-screen overflow-hidden bg-sand-900">
+    <!-- Фоновая фотография -->
+    <img
+      :src="heroImage"
+      alt="Пансионат Радде — горы Дагестана"
+      class="absolute inset-0 w-full h-full object-cover"
+      fetchpriority="high"
+    />
+    <div class="absolute inset-0 bg-sand-900/70"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 min-h-screen flex flex-col">
+      <!-- Отступ под фиксированную шапку -->
+      <div class="h-16 md:h-18"></div>
+
+      <!-- Заголовок по центру -->
+      <div class="flex-1 flex flex-col items-center justify-center text-center px-5">
+        <h1 ref="titleRef" class="font-display font-500 text-white leading-none mb-6 hero-hidden"
+            style="font-size: clamp(2.4rem, 7vw, 5rem)">
+          Место силы<br><span class="font-accent italic font-500 text-sand-300 text-[1.3em]">в горах Дагестана</span>
+        </h1>
+        <p ref="labelRef" class="font-body text-4 md:text-5 font-400 text-white/80 mt-8 hero-hidden">
+          Пансионат в Гунибе на высоте 1600 метров
+        </p>
+      </div>
+
+      <!-- Форма бронирования -->
+      <div class="px-5 md:px-8 pb-8 overflow-hidden">
+        <div ref="bookingRef" class="max-w-1000px mx-auto bg-white/10 backdrop-blur-md border border-white/15 rounded-3 p-5 md:p-6" style="transform: translateY(140%)">
+          <div class="grid grid-cols-2 lg:grid-cols-12 gap-3 md:gap-4 items-end">
+
+            <!-- Заезд -->
+            <div class="lg:col-span-3">
+              <label class="label-dark">Заезд</label>
+              <UiDatePicker v-model="form.checkIn" :min-date="today" placeholder="Выберите дату" />
+            </div>
+
+            <!-- Выезд -->
+            <div class="lg:col-span-3">
+              <label class="label-dark">Выезд</label>
+              <UiDatePicker v-model="form.checkOut" :min-date="checkOutMin" placeholder="Выберите дату" />
+            </div>
+
+            <!-- Взрослые -->
+            <div class="lg:col-span-2">
+              <label class="label-dark">Взрослые</label>
+              <div class="counter-wrap">
+                <button @click="form.adults = Math.max(1, form.adults - 1)" class="counter-btn" :disabled="form.adults <= 1">&minus;</button>
+                <span class="counter-val">{{ form.adults }}</span>
+                <button @click="form.adults = Math.min(10, form.adults + 1)" class="counter-btn">+</button>
+              </div>
+            </div>
+
+            <!-- Дети -->
+            <div class="lg:col-span-2">
+              <label class="label-dark">Дети</label>
+              <div class="counter-wrap">
+                <button @click="form.children = Math.max(0, form.children - 1)" class="counter-btn" :disabled="form.children <= 0">&minus;</button>
+                <span class="counter-val">{{ form.children }}</span>
+                <button @click="form.children = Math.min(6, form.children + 1)" class="counter-btn">+</button>
+              </div>
+            </div>
+
+            <!-- Кнопка -->
+            <div class="col-span-2 lg:col-span-2">
+              <button
+                @click="handleBooking"
+                class="w-full bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white font-body font-600 text-3.5 rounded-2 py-3.5 transition-all duration-300 shadow-lg shadow-amber-500/20 cursor-pointer border-none">
+                Забронировать
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts">
+const labelRef = ref<HTMLElement>()
+const titleRef = ref<HTMLElement>()
+const bookingRef = ref<HTMLElement>()
+
+const heroImage = '/images/hero/hero-1.jpg'
+
+const today = computed(() => new Date().toISOString().split('T')[0])
+
+const form = reactive({
+  checkIn: today.value,
+  checkOut: (() => { const d = new Date(); d.setDate(d.getDate() + 2); return d.toISOString().split('T')[0] })(),
+  adults: 2,
+  children: 0,
+})
+
+const checkOutMin = computed(() => {
+  if (!form.checkIn) return today.value
+  const d = new Date(form.checkIn)
+  d.setDate(d.getDate() + 1)
+  return d.toISOString().split('T')[0]
+})
+
+const nights = computed(() => {
+  if (!form.checkIn || !form.checkOut) return 0
+  const diff = new Date(form.checkOut).getTime() - new Date(form.checkIn).getTime()
+  return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)))
+})
+
+const nightsWord = computed(() => {
+  const n = nights.value
+  if (n % 10 === 1 && n % 100 !== 11) return 'ночь'
+  if ([2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100)) return 'ночи'
+  return 'ночей'
+})
+
+watch(() => form.checkIn, (val) => {
+  if (val && form.checkOut <= val) {
+    const d = new Date(val)
+    d.setDate(d.getDate() + 1)
+    form.checkOut = d.toISOString().split('T')[0]
+  }
+})
+
+function handleBooking() {
+  // TODO: интеграция с Bnovo — пока неактивна
+}
+
+onMounted(() => {
+  if (!import.meta.client) return
+  const { gsap } = useGsap()
+
+  // Без задержки — анимация стартует сразу
+  const tl = gsap.timeline()
+  if (titleRef.value) tl.to(titleRef.value, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' })
+  if (labelRef.value) tl.to(labelRef.value, { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out' }, '-=0.3')
+
+  // Форма бронирования: visibility + opacity + y
+  if (bookingRef.value) {
+    tl.to(bookingRef.value, {
+      y: 0,
+      duration: 0.7,
+      ease: 'power3.out',
+    }, '-=0.2')
+  }
+})
+</script>
+
+<style scoped>
+.counter-wrap {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.counter-wrap:hover {
+  border-color: rgba(193, 127, 62, 0.35);
+}
+.counter-btn {
+  width: 40px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 18px;
+  font-weight: 300;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.counter-btn:hover:not(:disabled) {
+  color: white;
+  background: rgba(255, 255, 255, 0.08);
+}
+.counter-btn:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+.counter-val {
+  flex: 1;
+  text-align: center;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+}
+
+/* Начальное состояние для GSAP — текст скрыт */
+.hero-hidden {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+</style>
