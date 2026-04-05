@@ -7,13 +7,13 @@
       <!-- Header -->
       <div class="text-center mb-14">
         <span class="text-label text-olive-600 mb-4 block">Услуги</span>
-        <h2 ref="titleRef" class="text-h2 font-500 text-sand-900" data-gsap>
+        <h2 ref="titleRef" class="text-h2 font-500 text-sand-900">
           Всё для вашего <span class="section-title-accent">комфорта</span>
         </h2>
       </div>
 
       <!-- Tabs -->
-      <div ref="tabsRef" class="mb-10" data-gsap>
+      <div ref="tabsRef" class="mb-10">
         <div class="flex flex-wrap justify-center gap-2">
           <button
             v-for="(cat, i) in categories"
@@ -475,18 +475,6 @@ function closeDetail() {
 
 onMounted(() => {
   if (!import.meta.client) return
-  const { revealUp, staggerReveal } = useGsap()
-
-  if (titleRef.value) revealUp(titleRef.value)
-  if (tabsRef.value) revealUp(tabsRef.value, { delay: 0.1 })
-
-  const cards = gridRef.value?.querySelectorAll('.service-card')
-  if (cards?.length) {
-    staggerReveal(Array.from(cards) as HTMLElement[], {
-      stagger: 0.08,
-      scrollTrigger: { trigger: gridRef.value, start: 'top 80%' },
-    })
-  }
 
   // Open service modal from URL hash
   const hash = window.location.hash

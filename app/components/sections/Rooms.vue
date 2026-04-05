@@ -3,7 +3,7 @@
     <div class="container">
       <div class="text-center mb-16">
         <span class="text-label text-olive-600 mb-4 block">Размещение</span>
-        <h2 ref="titleRef" class="text-h2 font-500 text-sand-900" data-gsap>
+        <h2 ref="titleRef" class="text-h2 font-500 text-sand-900">
           Выберите <span class="section-title-accent">номер</span>
         </h2>
       </div>
@@ -11,8 +11,7 @@
       <!-- Room cards — one per row, alternating -->
       <div ref="roomsGrid" class="space-y-6">
         <div v-for="(room, i) in rooms" :key="i"
-             class="room-card bg-white rounded-3 overflow-hidden border border-sand-200 shadow-sm"
-             data-gsap>
+             class="room-card bg-white rounded-3 overflow-hidden border border-sand-200 shadow-sm">
           <div class="flex flex-col lg:flex-row" :class="i % 2 === 1 ? 'lg:flex-row-reverse' : ''">
             <!-- Photo carousel (~42%) -->
             <div class="relative lg:w-[42%] flex-shrink-0">
@@ -421,16 +420,6 @@ const rooms = reactive([
 
 onMounted(() => {
   if (!import.meta.client) return
-  const { revealUp, staggerReveal } = useGsap()
-
-  if (titleRef.value) revealUp(titleRef.value)
-
-  const cards = roomsGrid.value?.querySelectorAll('[data-gsap]')
-  if (cards?.length) {
-    staggerReveal(Array.from(cards) as HTMLElement[], {
-      scrollTrigger: { trigger: roomsGrid.value, start: 'top 80%' },
-    })
-  }
 
   // Open room modal from URL hash
   const hash = window.location.hash

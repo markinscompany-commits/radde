@@ -5,10 +5,10 @@
       <div class="mb-12">
         <span class="text-label text-olive-600 mb-4 block">Блог</span>
         <div class="flex items-center justify-between">
-          <h2 ref="titleRef" class="text-h2 font-500 text-sand-900" data-gsap>
+          <h2 ref="titleRef" class="text-h2 font-500 text-sand-900">
             Полезное <span class="section-title-accent">о Радде</span>
           </h2>
-          <a href="/blog" class="hidden md:inline-flex items-center gap-2 font-body text-3.5 font-600 text-amber-600 hover:text-amber-700 transition-colors" data-gsap>
+          <a href="/blog" class="hidden md:inline-flex items-center gap-2 font-body text-3.5 font-600 text-amber-600 hover:text-amber-700 transition-colors">
           Все статьи
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
@@ -26,7 +26,6 @@
             :href="post.href"
             class="blog-card flex-shrink-0 group"
             :style="{ width: cardWidth + 'px' }"
-            data-gsap
           >
             <!-- Photo -->
             <div class="blog-card-img">
@@ -226,16 +225,6 @@ onMounted(() => {
   carouselWrapRef.value?.addEventListener('mouseenter', () => stopAutoplay())
   carouselWrapRef.value?.addEventListener('mouseleave', () => { if (isVisible.value) startAutoplay() })
 
-  const { revealUp, staggerReveal } = useGsap()
-  if (titleRef.value) revealUp(titleRef.value)
-
-  const cards = trackRef.value?.querySelectorAll('[data-gsap]')
-  if (cards?.length) {
-    staggerReveal(Array.from(cards) as HTMLElement[], {
-      stagger: 0.12,
-      scrollTrigger: { trigger: carouselWrapRef.value, start: 'top 85%' },
-    })
-  }
 })
 
 onUnmounted(() => {

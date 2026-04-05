@@ -5,13 +5,13 @@
       <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
         <div>
           <span class="text-label text-olive-600 mb-4 block">Как добраться</span>
-          <h2 ref="titleRef" class="text-h2 font-500 text-sand-900" data-gsap>
+          <h2 ref="titleRef" class="text-h2 font-500 text-sand-900">
             Мы в самом сердце<br>
             <span class="section-title-accent">Гунибского района</span>
           </h2>
         </div>
         <!-- Coordinates -->
-        <div ref="coordRef" class="flex items-center gap-3 flex-wrap" data-gsap>
+        <div ref="coordRef" class="flex items-center gap-3 flex-wrap">
           <span class="text-small text-sand-500 font-500">42.3949°N, 46.9366°E</span>
           <button @click="copyCoords" class="loc-small-btn">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
@@ -25,7 +25,7 @@
       </div>
 
       <!-- Map with scroll guard -->
-      <div ref="mapWrapRef" class="relative rounded-3 overflow-hidden mb-10 shadow-lg" data-gsap>
+      <div ref="mapWrapRef" class="relative rounded-3 overflow-hidden mb-10 shadow-lg">
         <iframe
           v-if="mapLoaded"
           src="https://yandex.ru/map-widget/v1/?ll=46.936568%2C42.394855&z=14&pt=46.936568%2C42.394855,pm2rdm"
@@ -46,7 +46,7 @@
       </div>
 
       <!-- Route cards (no tabs, each opens modal) -->
-      <div ref="routesRef" class="grid grid-cols-1 sm:grid-cols-2 gap-4" data-gsap>
+      <div ref="routesRef" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div v-for="route in allRoutes" :key="route.id" class="route-card" @click="openRouteDetail(route)">
           <div class="flex items-start gap-4">
             <div class="w-10 h-10 rounded-2.5 flex items-center justify-center flex-shrink-0" :class="route.iconBg" v-html="route.icon"></div>
@@ -66,7 +66,7 @@
       </div>
 
       <!-- Transfer CTA -->
-      <div ref="ctaRef" class="mt-10 bg-amber-500/8 border border-amber-400/20 rounded-3 p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-5" data-gsap>
+      <div ref="ctaRef" class="mt-10 bg-amber-500/8 border border-amber-400/20 rounded-3 p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
         <div>
           <h4 class="font-display font-500 text-sand-900 mb-1.5" style="font-size: clamp(1.1rem, 2vw, 1.4rem)">Организуем трансфер из аэропорта</h4>
           <p class="text-small text-sand-500">Напишите заранее — встретим с табличкой, опытный водитель знает горные дороги</p>
@@ -75,7 +75,7 @@
       </div>
 
       <!-- Travel tips -->
-      <div ref="tipsRef" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-10" data-gsap>
+      <div ref="tipsRef" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
         <div v-for="tip in tips" :key="tip.title" class="tip-card">
           <div class="w-9 h-9 rounded-2 bg-olive-100 flex items-center justify-center text-olive-600 mb-3 flex-shrink-0" v-html="tip.icon"></div>
           <h5 class="text-small font-600 text-sand-800 mb-1">{{ tip.title }}</h5>
@@ -295,12 +295,6 @@ function closeRouteDetail() {
 
 onMounted(() => {
   if (!import.meta.client) return
-  const { revealUp } = useGsap()
-
-  const refs = [titleRef, coordRef, mapWrapRef, routesRef, ctaRef, tipsRef]
-  refs.forEach((r, i) => {
-    if (r.value) revealUp(r.value, { delay: i * 0.1 })
-  })
 
   // Lazy load map when section enters viewport
   if (mapWrapRef.value) {

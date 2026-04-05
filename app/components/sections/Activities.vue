@@ -3,15 +3,14 @@
     <div class="container">
       <div class="text-center mb-16">
         <span class="text-label text-olive-600 mb-4 block">Чем заняться</span>
-        <h2 ref="titleRef" class="text-h2 font-500 text-sand-900" data-gsap>
+        <h2 ref="titleRef" class="text-h2 font-500 text-sand-900">
           Активности <span class="section-title-accent">и впечатления</span>
         </h2>
       </div>
 
       <div ref="gridRef" class="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div v-for="(item, i) in activities" :key="i"
-             class="group relative aspect-3/2 rounded-3 overflow-hidden cursor-default"
-             data-gsap>
+             class="group relative aspect-3/2 rounded-3 overflow-hidden cursor-default">
           <img :src="item.image" :alt="item.title"
                class="absolute inset-0 w-full h-full object-cover"
                loading="lazy" />
@@ -55,17 +54,4 @@ const activities = [
   },
 ]
 
-onMounted(() => {
-  if (!import.meta.client) return
-  const { revealUp, staggerReveal } = useGsap()
-
-  if (titleRef.value) revealUp(titleRef.value)
-
-  const cards = gridRef.value?.querySelectorAll('[data-gsap]')
-  if (cards?.length) {
-    staggerReveal(Array.from(cards) as HTMLElement[], {
-      scrollTrigger: { trigger: gridRef.value, start: 'top 80%' },
-    })
-  }
-})
 </script>

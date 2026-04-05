@@ -4,27 +4,27 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
         <!-- Текст -->
         <div ref="textRef">
-          <span class="text-label text-olive-600 mb-4 block" data-gsap>О пансионате</span>
-          <h2 class="text-h2 font-500 text-sand-900 mb-6" data-gsap>
+          <span class="text-label text-olive-600 mb-4 block">О пансионате</span>
+          <h2 class="text-h2 font-500 text-sand-900 mb-6">
             Реликтовый лес<br>
             <span class="section-title-accent">на высоте 1600 метров</span>
           </h2>
-          <p class="text-body-lg text-sand-700 mb-6" data-gsap>
+          <p class="text-body-lg text-sand-700 mb-6">
             Пансионат Радде расположен в самом сердце Гунибского района Дагестана —
             среди вековых деревьев реликтового леса, вдали от городской суеты.
           </p>
-          <p class="text-body text-sand-600 mb-8" data-gsap>
+          <p class="text-body text-sand-600 mb-8">
             Здесь вас ждут тёплое горское гостеприимство, вкусная домашняя кухня,
             чистейший горный воздух и тишина, которую невозможно купить в городе.
             Идеальное место для семейного отдыха, перезагрузки и единения с природой.
           </p>
-          <a href="/blog/about" class="inline-flex items-center gap-2 font-body text-3.5 font-600 text-amber-600 hover:text-amber-700 transition-colors mb-10" data-gsap>
+          <a href="/blog/about" class="inline-flex items-center gap-2 font-body text-3.5 font-600 text-amber-600 hover:text-amber-700 transition-colors mb-10">
             Узнать больше о Радде
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
 
           <!-- Цифры -->
-          <div ref="statsRef" class="flex gap-10" data-gsap>
+          <div ref="statsRef" class="flex gap-10">
             <div>
               <span class="font-display font-500 text-sand-900 block leading-none" style="font-size: clamp(2rem, 4vw, 2.8rem)">12</span>
               <span class="text-small text-sand-400 mt-1 block">уютных номеров</span>
@@ -43,7 +43,7 @@
         </div>
 
         <!-- Галерея -->
-        <div ref="imageRef" class="relative" data-gsap>
+        <div ref="imageRef" class="relative">
           <div class="aspect-5/6 rounded-3 overflow-hidden shadow-xl relative">
             <transition-group name="gallery">
               <img
@@ -150,14 +150,6 @@ onMounted(() => {
   if (sectionRef.value) observer.observe(sectionRef.value)
   onUnmounted(() => observer.disconnect())
 
-  const { revealUp } = useGsap()
-
-  const elements = textRef.value?.querySelectorAll('[data-gsap]')
-  elements?.forEach((el, idx) => {
-    revealUp(el as HTMLElement, { delay: idx * 0.1 })
-  })
-
-  if (imageRef.value) revealUp(imageRef.value, { delay: 0.2 })
 })
 
 onUnmounted(() => {

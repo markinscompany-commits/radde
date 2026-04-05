@@ -2,16 +2,15 @@
   <section class="py-24 md:py-32 bg-sand-100">
     <div class="container">
       <div class="text-center mb-16">
-        <span class="text-label text-olive-600 mb-4 block" data-gsap>Почему выбирают нас</span>
-        <h2 ref="titleRef" class="text-h2 font-500 text-sand-900" data-gsap>
+        <span class="text-label text-olive-600 mb-4 block">Почему выбирают нас</span>
+        <h2 ref="titleRef" class="text-h2 font-500 text-sand-900">
           Что вас ждёт в <span class="section-title-accent">Радде</span>
         </h2>
       </div>
 
       <div ref="gridRef" class="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div v-for="(item, i) in usps" :key="i"
-             class="group relative aspect-4/3 rounded-3 overflow-hidden cursor-default"
-             data-gsap>
+             class="group relative aspect-4/3 rounded-3 overflow-hidden cursor-default">
           <!-- Background photo -->
           <img :src="item.image" :alt="item.title"
                class="absolute inset-0 w-full h-full object-cover"
@@ -62,17 +61,4 @@ const usps = [
   },
 ]
 
-onMounted(() => {
-  if (!import.meta.client) return
-  const { revealUp, staggerReveal } = useGsap()
-
-  if (titleRef.value) revealUp(titleRef.value)
-
-  const cards = gridRef.value?.querySelectorAll('[data-gsap]')
-  if (cards?.length) {
-    staggerReveal(Array.from(cards) as HTMLElement[], {
-      scrollTrigger: { trigger: gridRef.value, start: 'top 80%' },
-    })
-  }
-})
 </script>

@@ -4,15 +4,14 @@
       <div class="max-w-160 mx-auto">
         <div class="text-center mb-14">
           <span class="text-label text-olive-600 mb-4 block">Вопросы</span>
-          <h2 ref="titleRef" class="text-h2 font-500 text-sand-900" data-gsap>
+          <h2 ref="titleRef" class="text-h2 font-500 text-sand-900">
             Перед <span class="section-title-accent">поездкой</span>
           </h2>
         </div>
 
         <div ref="listRef" class="space-y-3">
           <div v-for="(item, i) in faqs" :key="i"
-               class="bg-white rounded-2.5 border border-sand-200 overflow-hidden shadow-sm"
-               data-gsap>
+               class="bg-white rounded-2.5 border border-sand-200 overflow-hidden shadow-sm">
             <button
               @click="toggle(i)"
               class="w-full flex items-center justify-between p-5 md:p-6 text-left bg-transparent border-none cursor-pointer transition-colors hover:bg-sand-50/50">
@@ -70,20 +69,6 @@ const faqs = [
   },
 ]
 
-onMounted(() => {
-  if (!import.meta.client) return
-  const { revealUp, staggerReveal } = useGsap()
-
-  if (titleRef.value) revealUp(titleRef.value)
-
-  const items = listRef.value?.querySelectorAll('[data-gsap]')
-  if (items?.length) {
-    staggerReveal(Array.from(items) as HTMLElement[], {
-      stagger: 0.08,
-      scrollTrigger: { trigger: listRef.value, start: 'top 85%' },
-    })
-  }
-})
 </script>
 
 <style scoped>

@@ -5,13 +5,13 @@
       <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-14">
         <div>
           <span class="text-label text-olive-600 mb-4 block">Отзывы гостей</span>
-          <h2 ref="titleRef" class="text-h2 font-500 text-sand-900" data-gsap>
+          <h2 ref="titleRef" class="text-h2 font-500 text-sand-900">
             Что говорят <span class="section-title-accent">наши гости</span>
           </h2>
         </div>
 
         <!-- Rating mini-widgets -->
-        <div ref="widgetsRef" class="flex flex-col sm:flex-row gap-3" data-gsap>
+        <div ref="widgetsRef" class="flex flex-col sm:flex-row gap-3">
           <!-- Yandex Maps -->
           <div class="rating-widget">
             <div class="flex items-center gap-3">
@@ -415,11 +415,6 @@ onMounted(() => {
 
   carouselWrapRef.value?.addEventListener('mouseenter', () => stopAutoplay())
   carouselWrapRef.value?.addEventListener('mouseleave', () => { if (isVisible.value) startAutoplay() })
-
-  const { revealUp } = useGsap()
-  if (titleRef.value) revealUp(titleRef.value)
-  if (widgetsRef.value) revealUp(widgetsRef.value, { delay: 0.15 })
-  if (carouselWrapRef.value) revealUp(carouselWrapRef.value, { delay: 0.25 })
 
   const hash = window.location.hash
   if (hash.startsWith('#review-')) {

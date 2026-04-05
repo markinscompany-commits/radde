@@ -3,7 +3,7 @@
     <div class="container">
       <div class="text-center mb-16">
         <span class="text-label text-olive-600 mb-4 block">Галерея</span>
-        <h2 ref="titleRef" class="text-h2 font-500 text-sand-900" data-gsap>
+        <h2 ref="titleRef" class="text-h2 font-500 text-sand-900">
           Фотографии <span class="section-title-accent">пансионата</span>
         </h2>
       </div>
@@ -11,7 +11,6 @@
       <div ref="gridRef" class="gallery-grid">
         <div v-for="(src, i) in photos" :key="i"
              class="gallery-item rounded-2 overflow-hidden cursor-pointer group"
-             data-gsap
              @click="openLightbox(i)">
           <img :src="src"
                :alt="`Пансионат Радде — фото ${i + 1}`"
@@ -127,20 +126,6 @@ if (import.meta.client) {
   })
 }
 
-onMounted(() => {
-  if (!import.meta.client) return
-  const { revealUp, staggerReveal } = useGsap()
-
-  if (titleRef.value) revealUp(titleRef.value)
-
-  const items = gridRef.value?.querySelectorAll('[data-gsap]')
-  if (items?.length) {
-    staggerReveal(Array.from(items) as HTMLElement[], {
-      stagger: 0.06,
-      scrollTrigger: { trigger: gridRef.value, start: 'top 85%' },
-    })
-  }
-})
 </script>
 
 <style scoped>
