@@ -202,13 +202,12 @@ async function waitForReady(): Promise<void> {
   }
 }
 
-/* Exit transition — slide up + fade */
+/* Exit transition — soft dissolve */
 .preloader-leave-active {
-  transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.5s ease;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .preloader-leave-to {
-  transform: translateY(-100%);
   opacity: 0;
 }
 </style>
