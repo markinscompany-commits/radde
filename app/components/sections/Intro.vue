@@ -1,5 +1,5 @@
 <template>
-  <section id="about" class="bg-sand-50 py-24 md:py-32">
+  <section id="about" ref="sectionRef" class="bg-sand-50 py-24 md:py-32">
     <div class="container">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
         <!-- Текст -->
@@ -91,9 +91,11 @@
 <script setup lang="ts">
 const base = useRuntimeConfig().app.baseURL || '/'
 
+const sectionRef = ref<HTMLElement>()
 const textRef = ref<HTMLElement>()
 const imageRef = ref<HTMLElement>()
 const statsRef = ref<HTMLElement>()
+const isVisible = ref(false)
 
 const galleryImages = [
   `${base}images/hero/hero-2.jpg`,
@@ -120,17 +122,33 @@ function prevSlide() {
   restartInterval()
 }
 
-function restartInterval() {
-  if (slideInterval) clearInterval(slideInterval)
+function startAutoplay() {
+  if (slideInterval) return
   slideInterval = setInterval(() => {
     currentSlide.value = (currentSlide.value + 1) % galleryImages.length
   }, 3000)
 }
 
+function stopAutoplay() {
+  if (slideInterval) { clearInterval(slideInterval); slideInterval = null }
+}
+
+function restartInterval() {
+  stopAutoplay()
+  if (isVisible.value) startAutoplay()
+}
+
 onMounted(() => {
   if (!import.meta.client) return
 
-  restartInterval()
+  // Autoplay only when visible
+  const observer = new IntersectionObserver(([entry]) => {
+    isVisible.value = entry.isIntersecting
+    if (entry.isIntersecting) startAutoplay()
+    else stopAutoplay()
+  }, { threshold: 0.1 })
+  if (sectionRef.value) observer.observe(sectionRef.value)
+  onUnmounted(() => observer.disconnect())
 
   const { revealUp } = useGsap()
 
@@ -143,7 +161,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  if (slideInterval) clearInterval(slideInterval)
+  stopAutoplay()
 })
 </script>
 

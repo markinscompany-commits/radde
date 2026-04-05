@@ -71,12 +71,6 @@ button {
   font-size: 1.3em !important;
 }
 
-/* Lazy rendering — sections below the fold skip layout until near viewport */
-section[id] {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 800px;
-}
-
 /* Selection */
 ::selection {
   background-color: #E8D5B7;

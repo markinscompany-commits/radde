@@ -1,5 +1,5 @@
 <template>
-  <section id="blog" class="py-24 md:py-32 bg-sand-100">
+  <section id="blog" ref="sectionRef" class="py-24 md:py-32 bg-sand-100">
     <!-- Header in container -->
     <div class="container">
       <div class="mb-12">
@@ -87,6 +87,7 @@
 <script setup lang="ts">
 const base = useRuntimeConfig().app.baseURL || '/'
 
+const sectionRef = ref<HTMLElement>()
 const titleRef = ref<HTMLElement>()
 const carouselWrapRef = ref<HTMLElement>()
 const trackRef = ref<HTMLElement>()
@@ -190,14 +191,20 @@ function prev() {
 function goTo(i: number) { slideTo(i); restartAutoplay() }
 
 let autoplayInterval: ReturnType<typeof setInterval> | null = null
+const isVisible = ref(false)
 
 function startAutoplay() {
+  if (autoplayInterval) return
   autoplayInterval = setInterval(() => { next() }, 8000)
 }
 
+function stopAutoplay() {
+  if (autoplayInterval) { clearInterval(autoplayInterval); autoplayInterval = null }
+}
+
 function restartAutoplay() {
-  if (autoplayInterval) clearInterval(autoplayInterval)
-  startAutoplay()
+  stopAutoplay()
+  if (isVisible.value) startAutoplay()
 }
 
 onMounted(() => {
@@ -207,12 +214,17 @@ onMounted(() => {
 
   window.addEventListener('resize', () => { updateSizes(); slideTo(currentIndex.value) })
 
-  startAutoplay()
+  // Autoplay only when visible
+  const observer = new IntersectionObserver(([entry]) => {
+    isVisible.value = entry.isIntersecting
+    if (entry.isIntersecting) startAutoplay()
+    else stopAutoplay()
+  }, { threshold: 0.1 })
+  if (sectionRef.value) observer.observe(sectionRef.value)
+  onUnmounted(() => observer.disconnect())
 
-  carouselWrapRef.value?.addEventListener('mouseenter', () => {
-    if (autoplayInterval) clearInterval(autoplayInterval)
-  })
-  carouselWrapRef.value?.addEventListener('mouseleave', startAutoplay)
+  carouselWrapRef.value?.addEventListener('mouseenter', () => stopAutoplay())
+  carouselWrapRef.value?.addEventListener('mouseleave', () => { if (isVisible.value) startAutoplay() })
 
   const { revealUp, staggerReveal } = useGsap()
   if (titleRef.value) revealUp(titleRef.value)

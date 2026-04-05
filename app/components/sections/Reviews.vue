@@ -1,5 +1,5 @@
 <template>
-  <section id="reviews" class="py-24 md:py-32 bg-sand-50 relative overflow-hidden">
+  <section id="reviews" ref="sectionRef" class="py-24 md:py-32 bg-sand-50 relative overflow-hidden">
     <div class="container">
       <!-- Header row: title left, rating widgets right -->
       <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-14">
@@ -177,6 +177,8 @@
 
 <script setup lang="ts">
 const base = useRuntimeConfig().app.baseURL || '/'
+const sectionRef = ref<HTMLElement>()
+const isVisible = ref(false)
 
 interface Review {
   id: string
@@ -359,14 +361,17 @@ const activeDot = computed(() => ((currentIndex.value - cloneOffset) % reviews.l
 let autoplayInterval: ReturnType<typeof setInterval> | null = null
 
 function startAutoplay() {
-  autoplayInterval = setInterval(() => {
-    next()
-  }, 10000)
+  if (autoplayInterval) return
+  autoplayInterval = setInterval(() => { next() }, 10000)
+}
+
+function stopAutoplay() {
+  if (autoplayInterval) { clearInterval(autoplayInterval); autoplayInterval = null }
 }
 
 function restartAutoplay() {
-  if (autoplayInterval) clearInterval(autoplayInterval)
-  startAutoplay()
+  stopAutoplay()
+  if (isVisible.value) startAutoplay()
 }
 
 function openReview(review: Review) {
@@ -399,14 +404,17 @@ onMounted(() => {
   // Listen for transition end to silently reposition if needed
   trackRef.value?.addEventListener('transitionend', checkBounds)
 
-  startAutoplay()
+  // Autoplay only when visible
+  const observer = new IntersectionObserver(([entry]) => {
+    isVisible.value = entry.isIntersecting
+    if (entry.isIntersecting) startAutoplay()
+    else stopAutoplay()
+  }, { threshold: 0.1 })
+  if (sectionRef.value) observer.observe(sectionRef.value)
+  onUnmounted(() => observer.disconnect())
 
-  carouselWrapRef.value?.addEventListener('mouseenter', () => {
-    if (autoplayInterval) clearInterval(autoplayInterval)
-  })
-  carouselWrapRef.value?.addEventListener('mouseleave', () => {
-    startAutoplay()
-  })
+  carouselWrapRef.value?.addEventListener('mouseenter', () => stopAutoplay())
+  carouselWrapRef.value?.addEventListener('mouseleave', () => { if (isVisible.value) startAutoplay() })
 
   const { revealUp } = useGsap()
   if (titleRef.value) revealUp(titleRef.value)
@@ -422,7 +430,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  if (autoplayInterval) clearInterval(autoplayInterval)
+  stopAutoplay()
 })
 </script>
 
