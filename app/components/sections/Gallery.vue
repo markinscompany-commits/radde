@@ -67,6 +67,8 @@
 </template>
 
 <script setup lang="ts">
+const base = useRuntimeConfig().app.baseURL || '/'
+
 const titleRef = ref<HTMLElement>()
 const gridRef = ref<HTMLElement>()
 
@@ -75,15 +77,15 @@ const lightboxIndex = ref(0)
 const lightboxZoom = ref(1)
 
 const photos = [
-  '/images/hero/hero-1.jpg',
-  '/images/rooms/lux/1.jpg',
-  '/images/hero/hero-2.jpg',
-  '/images/usp/food/1.jpg',
-  '/images/rooms/panorama/1.jpg',
-  '/images/hero/hero-4.jpg',
-  '/images/rooms/vip/1.jpg',
-  '/images/usp/nature/1.jpg',
-  '/images/rooms/standard/1.jpg',
+  `${base}images/hero/hero-1.jpg`,
+  `${base}images/rooms/lux/1.jpg`,
+  `${base}images/hero/hero-2.jpg`,
+  `${base}images/usp/food/1.jpg`,
+  `${base}images/rooms/panorama/1.jpg`,
+  `${base}images/hero/hero-4.jpg`,
+  `${base}images/rooms/vip/1.jpg`,
+  `${base}images/usp/nature/1.jpg`,
+  `${base}images/rooms/standard/1.jpg`,
 ]
 
 function openLightbox(index: number) {

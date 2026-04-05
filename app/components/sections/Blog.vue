@@ -85,6 +85,8 @@
 </template>
 
 <script setup lang="ts">
+const base = useRuntimeConfig().app.baseURL || '/'
+
 const titleRef = ref<HTMLElement>()
 const carouselWrapRef = ref<HTMLElement>()
 const trackRef = ref<HTMLElement>()
@@ -101,7 +103,7 @@ const posts = [
     excerpt: 'Подробная инструкция: маршруты из Махачкалы, трансфер, что учесть в дороге по горному серпантину.',
     category: 'Путешествие',
     readTime: '5 мин чтения',
-    image: '/images/hero/hero-3.jpg',
+    image: `${base}images/hero/hero-3.jpg`,
     href: '/blog/kak-dobratsya',
   },
   {
@@ -109,7 +111,7 @@ const posts = [
     excerpt: 'Гунибская крепость, водопады, каньоны и другие места, которые стоит посетить рядом с Радде.',
     category: 'Что посмотреть',
     readTime: '7 мин чтения',
-    image: '/images/usp/landmarks/1.jpg',
+    image: `${base}images/usp/landmarks/1.jpg`,
     href: '/blog/dostoprimechatelnosti',
   },
   {
@@ -117,7 +119,7 @@ const posts = [
     excerpt: 'Чем заняться с детьми, безопасность, питание и всё, что нужно знать для комфортного отдыха всей семьёй.',
     category: 'Семейный отдых',
     readTime: '6 мин чтения',
-    image: '/images/usp/nature/1.jpg',
+    image: `${base}images/usp/nature/1.jpg`,
     href: '/blog/semeynyy-otdyh',
   },
   {
@@ -125,7 +127,7 @@ const posts = [
     excerpt: 'Хинкал, чуду, курзе, урбеч — гид по блюдам, которые нужно попробовать во время отдыха в горах.',
     category: 'Гастрономия',
     readTime: '4 мин чтения',
-    image: '/images/usp/food/1.jpg',
+    image: `${base}images/usp/food/1.jpg`,
     href: '/blog/dagestanskaya-kuhnya',
   },
   {
@@ -133,7 +135,7 @@ const posts = [
     excerpt: 'Снежные горы, тёплые номера, баня и тишина. Почему зима — лучшее время для перезагрузки в Радде.',
     category: 'Сезоны',
     readTime: '5 мин чтения',
-    image: '/images/hero/hero-1.jpg',
+    image: `${base}images/hero/hero-1.jpg`,
     href: '/blog/zimniy-dagestan',
   },
   {
@@ -141,7 +143,7 @@ const posts = [
     excerpt: 'Как проходит прогулка верхом, что нужно знать новичкам и почему это главное впечатление от Гуниба.',
     category: 'Активности',
     readTime: '4 мин чтения',
-    image: '/images/hero/hero-4.jpg',
+    image: `${base}images/hero/hero-4.jpg`,
     href: '/blog/konnye-progulki',
   },
 ]

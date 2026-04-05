@@ -15,7 +15,7 @@
           <!-- Yandex Maps -->
           <div class="rating-widget">
             <div class="flex items-center gap-3">
-              <img src="/images/icon-yandex-maps.svg" alt="Яндекс Карты" width="40" height="40" />
+              <img :src="`${base}images/icon-yandex-maps.svg`" alt="Яндекс Карты" width="40" height="40" />
               <div>
                 <div class="flex items-center gap-1.5">
                   <span class="font-display font-500 text-sand-900" style="font-size: 1.4rem; line-height: 1">{{ yandexRating.score }}</span>
@@ -35,7 +35,7 @@
           <!-- 2GIS -->
           <div class="rating-widget">
             <div class="flex items-center gap-3">
-              <img src="/images/icon-2gis.svg" alt="2ГИС" width="40" height="40" />
+              <img :src="`${base}images/icon-2gis.svg`" alt="2ГИС" width="40" height="40" />
               <div>
                 <div class="flex items-center gap-1.5">
                   <span class="font-display font-500 text-sand-900" style="font-size: 1.4rem; line-height: 1">{{ gisRating.score }}</span>
@@ -69,8 +69,8 @@
               <!-- Source badge + stars -->
               <div class="flex items-center justify-between mb-4">
                 <div class="review-source" :class="'review-source--' + review.source">
-                  <img v-if="review.source === 'yandex'" src="/images/icon-yandex-maps.svg" width="14" height="14" alt="" />
-                  <img v-else-if="review.source === '2gis'" src="/images/icon-2gis.svg" width="14" height="14" alt="" />
+                  <img v-if="review.source === 'yandex'" :src="`${base}images/icon-yandex-maps.svg`" width="14" height="14" alt="" />
+                  <img v-else-if="review.source === '2gis'" :src="`${base}images/icon-2gis.svg`" width="14" height="14" alt="" />
                   <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18l-6.921 -14.612a2.3 2.3 0 0 0 -4.158 0l-6.921 14.612" /><path d="M7.5 11l2 2.5l2.5 -2.5l2 3l2.5 -2" /></svg>
                   <span>{{ sourceLabel(review.source) }}</span>
                 </div>
@@ -143,8 +143,8 @@
               <!-- Source + stars -->
               <div class="flex items-center gap-3 mb-5">
                 <div class="review-source" :class="'review-source--' + activeReview.source">
-                  <img v-if="activeReview.source === 'yandex'" src="/images/icon-yandex-maps.svg" width="14" height="14" alt="" />
-                  <img v-else-if="activeReview.source === '2gis'" src="/images/icon-2gis.svg" width="14" height="14" alt="" />
+                  <img v-if="activeReview.source === 'yandex'" :src="`${base}images/icon-yandex-maps.svg`" width="14" height="14" alt="" />
+                  <img v-else-if="activeReview.source === '2gis'" :src="`${base}images/icon-2gis.svg`" width="14" height="14" alt="" />
                   <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18l-6.921 -14.612a2.3 2.3 0 0 0 -4.158 0l-6.921 14.612" /><path d="M7.5 11l2 2.5l2.5 -2.5l2 3l2.5 -2" /></svg>
                   <span>{{ sourceLabel(activeReview.source) }}</span>
                 </div>
@@ -176,6 +176,8 @@
 </template>
 
 <script setup lang="ts">
+const base = useRuntimeConfig().app.baseURL || '/'
+
 interface Review {
   id: string
   source: 'yandex' | '2gis' | 'site'

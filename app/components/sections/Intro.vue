@@ -89,15 +89,17 @@
 </template>
 
 <script setup lang="ts">
+const base = useRuntimeConfig().app.baseURL || '/'
+
 const textRef = ref<HTMLElement>()
 const imageRef = ref<HTMLElement>()
 const statsRef = ref<HTMLElement>()
 
 const galleryImages = [
-  '/images/hero/hero-2.jpg',
-  '/images/hero/hero-3.jpg',
-  '/images/hero/hero-4.jpg',
-  '/images/hero/hero-1.jpg',
+  `${base}images/hero/hero-2.jpg`,
+  `${base}images/hero/hero-3.jpg`,
+  `${base}images/hero/hero-4.jpg`,
+  `${base}images/hero/hero-1.jpg`,
 ]
 
 const currentSlide = ref(0)

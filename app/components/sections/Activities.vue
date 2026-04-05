@@ -27,6 +27,8 @@
 </template>
 
 <script setup lang="ts">
+const base = useRuntimeConfig().app.baseURL || '/'
+
 const titleRef = ref<HTMLElement>()
 const gridRef = ref<HTMLElement>()
 
@@ -34,22 +36,22 @@ const activities = [
   {
     title: 'Горные прогулки',
     description: 'Пешие маршруты по реликтовому лесу и горным тропам с панорамными видами.',
-    image: '/images/usp/nature/1.jpg',
+    image: `${base}images/usp/nature/1.jpg`,
   },
   {
     title: 'Конные прогулки',
     description: 'Верховая езда по горным маршрутам с опытными инструкторами.',
-    image: '/images/usp/landmarks/1.jpg',
+    image: `${base}images/usp/landmarks/1.jpg`,
   },
   {
     title: 'Достопримечательности',
     description: 'Гунибская крепость, водопады, каньоны и природные памятники в шаговой доступности.',
-    image: '/images/usp/landmarks/2.jpg',
+    image: `${base}images/usp/landmarks/2.jpg`,
   },
   {
     title: 'Смотровые площадки',
     description: 'Панорамные виды на горы и долины. Незабываемые закаты на высоте 1600 метров.',
-    image: '/images/hero/hero-4.jpg',
+    image: `${base}images/hero/hero-4.jpg`,
   },
 ]
 

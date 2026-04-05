@@ -5,7 +5,7 @@
         <!-- Logo & about -->
         <div>
           <div class="mb-5">
-            <img src="/images/logo-white.png" alt="Радде — Пансионат" class="h-14 w-auto" style="filter: brightness(1.2);" />
+            <img :src="`${base}images/logo-white.png`" alt="Радде — Пансионат" class="h-14 w-auto" style="filter: brightness(1.2);" />
           </div>
           <p class="text-small text-sand-500 leading-relaxed max-w-60">
             Отдых в горах Дагестана на высоте 1600 метров в реликтовом лесу Гунибского района.
@@ -48,7 +48,7 @@
               <span class="text-3.5">T</span>
             </a>
             <a href="#" class="w-9 h-9 rounded-full bg-sand-800 flex items-center justify-center text-sand-400 hover:text-white hover:bg-sand-700 transition-colors" title="Max">
-              <img src="/images/icon-max.svg" width="14" height="14" alt="Max" style="filter: brightness(0) invert(0.6);" />
+              <img :src="`${base}images/icon-max.svg`" width="14" height="14" alt="Max" style="filter: brightness(0) invert(0.6);" />
             </a>
             <a href="#" class="w-9 h-9 rounded-full bg-sand-800 flex items-center justify-center text-sand-400 hover:text-white hover:bg-sand-700 transition-colors" title="Instagram">
               <span class="text-3.5">I</span>
@@ -68,7 +68,7 @@
           </a>
           <a href="https://markins.ru" target="_blank" class="flex items-center gap-1.5 text-sand-600 hover:text-sand-400 transition-colors">
             <span class="text-2.5">Разработано</span>
-            <img src="/images/markins-text-white.svg" alt="markins" class="h-2.5 w-auto" style="filter: brightness(0) invert(0.7);" />
+            <img :src="`${base}images/markins-text-white.svg`" alt="markins" class="h-2.5 w-auto" style="filter: brightness(0) invert(0.7);" />
           </a>
         </div>
       </div>
@@ -79,3 +79,7 @@
     </div>
   </footer>
 </template>
+
+<script setup lang="ts">
+const base = useRuntimeConfig().app.baseURL || '/'
+</script>

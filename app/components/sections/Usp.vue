@@ -34,6 +34,8 @@
 </template>
 
 <script setup lang="ts">
+const base = useRuntimeConfig().app.baseURL || '/'
+
 const titleRef = ref<HTMLElement>()
 const gridRef = ref<HTMLElement>()
 
@@ -41,22 +43,22 @@ const usps = [
   {
     title: 'Гастрономия',
     description: 'Вкусные завтраки, обеды и ужины из местных продуктов. Домашняя кухня горного Дагестана.',
-    image: '/images/usp/food/1.jpg',
+    image: `${base}images/usp/food/1.jpg`,
   },
   {
     title: 'Эмоциональная перезагрузка',
     description: 'Расположены в заповедном парке — далеко от городской суеты. Тишина и чистый горный воздух.',
-    image: '/images/usp/nature/1.jpg',
+    image: `${base}images/usp/nature/1.jpg`,
   },
   {
     title: 'Точки притяжения',
     description: 'Природные и исторические памятники в шаговой доступности. Гунибская крепость, водопады, каньоны.',
-    image: '/images/usp/landmarks/1.jpg',
+    image: `${base}images/usp/landmarks/1.jpg`,
   },
   {
     title: 'Современная инфраструктура',
     description: 'Барбекю-зоны, детская площадка, смотровые площадки с видом на горы.',
-    image: '/images/usp/bbq/1.jpg',
+    image: `${base}images/usp/bbq/1.jpg`,
   },
 ]
 

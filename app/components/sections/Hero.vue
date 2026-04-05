@@ -78,11 +78,13 @@
 </template>
 
 <script setup lang="ts">
+const base = useRuntimeConfig().app.baseURL || '/'
+
 const labelRef = ref<HTMLElement>()
 const titleRef = ref<HTMLElement>()
 const bookingRef = ref<HTMLElement>()
 
-const heroImage = '/images/hero/hero-1.jpg'
+const heroImage = `${base}images/hero/hero-1.jpg`
 
 const today = computed(() => new Date().toISOString().split('T')[0])
 

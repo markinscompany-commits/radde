@@ -286,6 +286,8 @@
 </template>
 
 <script setup lang="ts">
+const base = useRuntimeConfig().app.baseURL || '/'
+
 const titleRef = ref<HTMLElement>()
 const roomsGrid = ref<HTMLElement>()
 const detailRoom = ref<typeof rooms[0] | null>(null)
@@ -370,7 +372,7 @@ const rooms = reactive([
     fullDescription: 'Уютный номер в тёплых природных тонах с видом на реликтовый лес. Всё необходимое для спокойного отдыха вдали от суеты — удобная кровать с ортопедическим матрасом, шкаф для одежды, рабочее место у окна. Из окна открывается вид на вековые деревья реликтового леса. Идеальный вариант для пар и путешественников, ценящих простоту и природу.',
     note: 'Санузел в коридоре — один на два номера',
     tags: ['Рабочее место', 'Шкаф', 'Вид на лес'],
-    images: ['/images/rooms/standard/1.jpg', '/images/rooms/standard/2.jpg', '/images/rooms/standard/3.jpg'],
+    images: [`${base}images/rooms/standard/1.jpg`, `${base}images/rooms/standard/2.jpg`, `${base}images/rooms/standard/3.jpg`],
     activePhoto: 0,
   },
   {
@@ -384,7 +386,7 @@ const rooms = reactive([
     fullDescription: 'Просторный номер с собственным санузлом и балконом. Большие окна наполняют пространство естественным светом и открывают вид на горные вершины. Интерьер в натуральных тонах создаёт атмосферу уюта — мягкая мебель, телевизор, мини-бар с прохладительными напитками. Балкон с видом на горы — идеальное место для утреннего кофе.',
     note: '',
     tags: ['Собственный санузел', 'Балкон', 'Телевизор', 'Мини-бар'],
-    images: ['/images/rooms/lux/1.jpg', '/images/rooms/lux/2.jpg', '/images/rooms/lux/3.jpg'],
+    images: [`${base}images/rooms/lux/1.jpg`, `${base}images/rooms/lux/2.jpg`, `${base}images/rooms/lux/3.jpg`],
     activePhoto: 0,
   },
   {
@@ -398,7 +400,7 @@ const rooms = reactive([
     fullDescription: 'Панорамные окна от пола до потолка превращают спальню в смотровую площадку. Просыпаетесь с видом на горные вершины и реликтовый лес — незабываемое начало каждого дня. Номер оснащён кроватью King-size с ортопедическим матрасом, собственным санузлом с дождевым душем, террасой для отдыха на свежем воздухе. Мини-бар, телевизор, кресло у окна — всё для полного комфорта.',
     note: '',
     tags: ['Панорамные окна', 'Терраса', 'Дождевой душ', 'Собственный санузел', 'Мини-бар', 'Кресло у окна'],
-    images: ['/images/rooms/panorama/1.jpg', '/images/rooms/panorama/2.jpg', '/images/rooms/panorama/3.jpg'],
+    images: [`${base}images/rooms/panorama/1.jpg`, `${base}images/rooms/panorama/2.jpg`, `${base}images/rooms/panorama/3.jpg`],
     activePhoto: 0,
   },
   {
@@ -412,7 +414,7 @@ const rooms = reactive([
     fullDescription: 'Максимальный комфорт для тех, кто ценит пространство и уединение. Отдельная гостиная с камином — идеальное место для вечерних посиделок. Спальня с панорамными окнами и кроватью King-size. Собственная терраса с видом на горы и долину. Санузел с дождевым душем и ванной. Халаты, тапочки, мини-бар, телевизор — всё продумано для безупречного отдыха.',
     note: '',
     tags: ['Гостиная', 'Камин', 'Терраса', 'Ванна', 'Дождевой душ', 'Халаты', 'Мини-бар'],
-    images: ['/images/rooms/vip/1.jpg', '/images/rooms/vip/2.jpg', '/images/rooms/vip/3.jpg'],
+    images: [`${base}images/rooms/vip/1.jpg`, `${base}images/rooms/vip/2.jpg`, `${base}images/rooms/vip/3.jpg`],
     activePhoto: 0,
   },
 ])
