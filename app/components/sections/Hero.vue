@@ -127,22 +127,28 @@ function handleBooking() {
   // TODO: интеграция с Bnovo — пока неактивна
 }
 
-onMounted(() => {
-  if (!import.meta.client) return
-  const { gsap } = useGsap()
+// Wait for preloader to finish before starting hero animations
+const preloaderDone = inject<Ref<boolean>>('preloaderDone', ref(true))
 
-  // Без задержки — анимация стартует сразу
+function startHeroAnimations() {
+  const { gsap } = useGsap()
   const tl = gsap.timeline()
   if (titleRef.value) tl.to(titleRef.value, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' })
   if (labelRef.value) tl.to(labelRef.value, { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out' }, '-=0.3')
-
-  // Форма бронирования: visibility + opacity + y
   if (bookingRef.value) {
-    tl.to(bookingRef.value, {
-      y: 0,
-      duration: 0.7,
-      ease: 'power3.out',
-    }, '-=0.2')
+    tl.to(bookingRef.value, { y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.2')
+  }
+}
+
+onMounted(() => {
+  if (!import.meta.client) return
+
+  if (preloaderDone.value) {
+    startHeroAnimations()
+  } else {
+    watch(preloaderDone, (done) => {
+      if (done) startHeroAnimations()
+    })
   }
 })
 </script>

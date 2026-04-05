@@ -1,5 +1,6 @@
 <template>
   <div ref="appRef">
+    <UiPreloader @done="onPreloaderDone" />
     <NuxtRouteAnnouncer />
     <NuxtPage />
     <UiCookieBanner />
@@ -10,6 +11,16 @@
 const appRef = ref<HTMLElement>()
 const { init, destroy } = useLenis()
 const { applyToElement } = useTypograf()
+
+// Preloader controls GSAP hero animations
+const preloaderDone = useState('preloaderDone', () => false)
+
+function onPreloaderDone() {
+  preloaderDone.value = true
+}
+
+// Provide to child components
+provide('preloaderDone', preloaderDone)
 
 onMounted(() => {
   init()
