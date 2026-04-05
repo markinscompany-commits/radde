@@ -9,6 +9,7 @@ export default defineNuxtConfig({
   modules: ['@unocss/nuxt'],
 
   app: {
+    baseURL: '/radde/',
     head: {
       htmlAttrs: { lang: 'ru' },
       title: 'Радде — Пансионат в горах Дагестана',
