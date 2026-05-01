@@ -77,7 +77,6 @@ const lightboxZoom = ref(1)
 
 const photos = [
   `${base}images/hero/hero-1.jpg`,
-  `${base}images/rooms/lux/1.jpg`,
   `${base}images/hero/hero-2.jpg`,
   `${base}images/usp/food/1.jpg`,
   `${base}images/rooms/panorama/1.jpg`,

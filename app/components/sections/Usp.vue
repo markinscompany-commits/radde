@@ -10,9 +10,9 @@
 
       <div ref="gridRef" class="grid grid-cols-1 md:grid-cols-12 gap-5">
         <div v-for="(item, i) in usps" :key="i"
-             class="group relative rounded-3 overflow-hidden cursor-default aspect-4/3 md:aspect-auto"
+             class="usp-card group relative rounded-3 overflow-hidden cursor-default"
              :class="[
-               (i === 0 || i === 3) ? 'md:col-span-7 md:aspect-5/4' : 'md:col-span-5',
+               (i === 0 || i === 3) ? 'md:col-span-7 usp-wide' : 'md:col-span-5 usp-narrow',
              ]">
           <!-- Background photo -->
           <img :src="item.image" :alt="item.title"
@@ -65,3 +65,17 @@ const usps = [
 ]
 
 </script>
+
+<style scoped>
+.usp-card {
+  aspect-ratio: 4 / 3;
+}
+@media (min-width: 768px) {
+  .usp-wide {
+    aspect-ratio: 1 / 1;
+  }
+  .usp-narrow {
+    aspect-ratio: auto;
+  }
+}
+</style>
