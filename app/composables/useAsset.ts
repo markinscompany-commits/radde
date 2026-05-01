@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Resolves public asset paths with baseURL prefix.
  * Use instead of hardcoded '/images/...' paths.
  */

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <footer class="bg-sand-900 py-16 md:py-20">
     <div class="container">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-16">
@@ -8,7 +8,7 @@
             <img :src="`${base}images/logo-white.png`" alt="Радде — Пансионат" class="h-14 w-auto" style="filter: brightness(1.2);" />
           </div>
           <p class="text-small text-sand-500 leading-relaxed max-w-60">
-            Отдых в горах Дагестана на высоте 1600 метров в реликтовом лесу Гунибского района.
+            Отдых в горах Дагестана на высоте 1700 метров в реликтовом лесу Гунибского района.
           </p>
         </div>
 

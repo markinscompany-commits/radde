@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <section id="blog" ref="sectionRef" class="py-24 md:py-32 bg-sand-100">
     <!-- Header in container -->
     <div class="container">

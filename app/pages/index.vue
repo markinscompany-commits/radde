@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div>
     <UiAppHeader @book="showForm = true" />
     <SectionsHero />

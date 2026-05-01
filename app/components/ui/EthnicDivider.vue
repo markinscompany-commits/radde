@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="py-8 md:py-12 flex justify-center" :class="bgClass">
     <svg width="240" height="32" viewBox="0 0 240 32" fill="none" xmlns="http://www.w3.org/2000/svg"
          :class="svgClass" class="opacity-60">

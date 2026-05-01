@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <section id="reviews" ref="sectionRef" class="py-24 md:py-32 bg-sand-50 relative overflow-hidden">
     <div class="container">
       <!-- Header row: title left, rating widgets right -->

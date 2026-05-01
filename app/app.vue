@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div ref="appRef">
     <UiPreloader @done="onPreloaderDone" />
     <NuxtRouteAnnouncer />

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="date-picker-wrap" ref="wrapRef">
     <div class="date-input" @click="open = !open">
       <span class="date-value" :class="{ 'date-placeholder': !modelValue }">

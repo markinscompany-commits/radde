@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="bg-sand-50 min-h-screen pt-32 pb-16">
     <UiAppHeader />
     <div class="container">
@@ -63,7 +63,7 @@
           <div>
             <span class="text-label text-sand-500 block mb-2">Body Large — Source Sans 3</span>
             <p class="text-body-lg text-sand-800 max-w-140">
-              Пансионат Радде расположен на высоте 1600 метров в реликтовом лесу Гунибского района.
+              Пансионат Радде расположен на высоте 1700 метров в реликтовом лесу Гунибского района.
               Идеальное место для семейного отдыха вдали от городской суеты.
             </p>
           </div>
@@ -88,7 +88,7 @@
             <span class="text-label text-sand-500 block mb-2">Цифры-акценты — Cormorant Garamond, Bold</span>
             <div class="flex gap-8">
               <div>
-                <span class="font-display font-700 text-8 text-amber-500 block">1600м</span>
+                <span class="font-display font-700 text-8 text-amber-500 block">1700м</span>
                 <span class="text-small text-sand-500">высота</span>
               </div>
               <div>

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <Teleport to="body">
     <Transition name="cookie">
       <div v-if="visible" class="cookie-banner">

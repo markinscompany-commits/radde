@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div>
     <!-- Contact section -->
     <section id="contacts" class="relative py-24 md:py-32 overflow-hidden">
@@ -88,7 +88,7 @@
           <div class="flex items-center gap-4">
             <img :src="`${base}images/logo-white.png`" alt="Радде" class="h-12 w-auto flex-shrink-0" style="filter: brightness(1.2);" />
             <p class="text-small text-sand-500 leading-relaxed max-w-85">
-              Отдых в горах Дагестана на высоте 1600 метров<br>в реликтовом лесу Гунибского района
+              Отдых в горах Дагестана на высоте 1700 метров<br>в реликтовом лесу Гунибского района
             </p>
           </div>
           <nav class="flex flex-wrap items-start justify-end gap-x-6 gap-y-2 md:max-w-100">

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div
     class="fixed top-0 left-0 right-0 z-50"
     :class="scrolled ? 'bg-sand-900/95 backdrop-blur-md shadow-lg shadow-sand-900/10' : 'bg-transparent'"

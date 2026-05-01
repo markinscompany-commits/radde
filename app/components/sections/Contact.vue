@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <section id="contacts" class="relative py-24 md:py-32 overflow-hidden">
     <!-- Background image -->
     <div class="absolute inset-0">

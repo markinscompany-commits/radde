@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <section class="relative min-h-screen overflow-hidden bg-sand-900">
     <!-- Фоновая фотография -->
     <img

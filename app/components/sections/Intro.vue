@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <section id="about" ref="sectionRef" class="bg-sand-50 py-24 md:py-32">
     <div class="container">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
@@ -7,16 +7,19 @@
           <span class="text-label text-olive-600 mb-4 block">О пансионате</span>
           <h2 class="text-h2 font-500 text-sand-900 mb-6">
             Реликтовый лес<br>
-            <span class="section-title-accent">на высоте 1600 метров</span>
+            <span class="section-title-accent">на высоте 1700 метров</span>
           </h2>
           <p class="text-body-lg text-sand-700 mb-6">
-            Пансионат Радде расположен в самом сердце Гунибского района Дагестана —
-            среди вековых деревьев реликтового леса, вдали от городской суеты.
+            Пансионат Радде расположен в природном парке «Верхний Гуниб» —
+            одном из самых живописных уголков Дагестана.
+          </p>
+          <p class="text-body text-sand-600 mb-6">
+            Здесь растёт реликтовая берёза Радде — эндемик Кавказа, занесённый в Красную книгу.
           </p>
           <p class="text-body text-sand-600 mb-8">
-            Здесь вас ждут тёплое горское гостеприимство, вкусная домашняя кухня,
-            чистейший горный воздух и тишина, которую невозможно купить в городе.
-            Идеальное место для семейного отдыха, перезагрузки и единения с природой.
+            Тёплое горское гостеприимство, чистейший горный воздух, панорамные виды,
+            домашняя кухня и полное единение с природой — лучший выбор для семейного
+            отдыха и перезагрузки.
           </p>
           <a href="/blog/about" class="inline-flex items-center gap-2 font-body text-3.5 font-600 text-amber-600 hover:text-amber-700 transition-colors mb-10">
             Узнать больше о Радде

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <Transition name="preloader" @after-leave="$emit('done')">
     <div v-if="visible" class="preloader">
       <!-- Mountain ornament SVG — draws itself -->

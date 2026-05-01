@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <section id="faq" class="py-24 md:py-32 bg-sand-50">
     <div class="container">
       <div class="max-w-160 mx-auto">

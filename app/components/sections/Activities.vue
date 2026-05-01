@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <section id="activities" class="py-24 md:py-32 bg-sand-100">
     <div class="container">
       <div class="text-center mb-16">
@@ -49,7 +49,7 @@ const activities = [
   },
   {
     title: 'Смотровые площадки',
-    description: 'Панорамные виды на горы и долины. Незабываемые закаты на высоте 1600 метров.',
+    description: 'Панорамные виды на горы и долины. Незабываемые закаты на высоте 1700 метров.',
     image: `${base}images/hero/hero-4.jpg`,
   },
 ]

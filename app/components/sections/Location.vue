@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <section id="location" class="py-24 md:py-32 bg-sand-50">
     <div class="container">
       <!-- Header -->
@@ -201,7 +201,7 @@ function copyCoords() {
 async function shareLocation() {
   const shareData = {
     title: 'Пансионат Радде',
-    text: 'Пансионат Радде — отдых в горах Дагестана на высоте 1600 метров',
+    text: 'Пансионат Радде — отдых в горах Дагестана на высоте 1700 метров',
     url: 'https://yandex.ru/maps/-/CPfFnT2P',
   }
   if (navigator.share) {
