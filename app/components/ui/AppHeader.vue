@@ -58,14 +58,14 @@
           <img :src="`${base}images/icon-max.svg`" width="16" height="16" alt="Max" style="filter: brightness(0) invert(1); opacity: 0.5;" />
         </a>
       </div>
-      <a href="tel:+79001234567" class="font-body text-3.5 font-500 text-white/80 hover:text-white transition-colors">
+      <a href="tel:+79001234567" class="font-body text-4 font-500 text-white/80 hover:text-white transition-colors">
         +7 (900) 123-45-67
       </a>
       <div class="w-px h-5 bg-white/20"></div>
-      <button @click="$emit('book')" class="text-small font-600 text-white/80 hover:text-white transition-colors cursor-pointer bg-transparent border-none">
+      <button @click="$emit('book')" class="font-body text-4 font-600 text-white/80 hover:text-white transition-colors cursor-pointer bg-transparent border-none">
         Оставить заявку
       </button>
-      <span class="bg-amber-500/50 text-white/60 font-body font-600 text-3.5 px-5 py-2 rounded-2 cursor-default no-underline">
+      <span class="bg-amber-500/50 text-white/60 font-body font-600 text-4 px-5 py-2 rounded-2 cursor-default no-underline">
         Забронировать
       </span>
     </div>
@@ -130,10 +130,10 @@ const mainNav: NavLink[] = [
   { href: '#services', label: 'Услуги', section: 'services' },
   { href: '#about', label: 'Локация', section: 'about' },
   { href: '#location', label: 'Как добраться', section: 'location' },
-  { href: '#gallery', label: 'Галерея', section: 'gallery' },
 ]
 
 const moreNav: NavLink[] = [
+  { href: '#gallery', label: 'Галерея', section: 'gallery' },
   { href: '#food', label: 'Питание', section: 'food' },
   { href: '#activities', label: 'Чем заняться', section: 'activities' },
   { href: '#about', label: 'О пансионате', section: 'about' },
@@ -231,7 +231,7 @@ onMounted(() => {
 <style scoped>
 .nav-link {
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.65);
   transition: color 0.2s;
@@ -281,7 +281,7 @@ onMounted(() => {
 .dropdown-link {
   display: block;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.6);
   padding: 8px 16px;

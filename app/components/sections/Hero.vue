@@ -16,13 +16,10 @@
 
       <!-- Заголовок по центру -->
       <div class="flex-1 flex flex-col items-center justify-center text-center px-5">
-        <h1 ref="titleRef" class="font-display font-500 text-white leading-none mb-6 hero-hidden"
-            style="font-size: clamp(2.4rem, 7vw, 5rem)">
-          Место силы<br><span class="font-accent italic font-500 text-sand-300 text-[1.3em]">в горах Дагестана</span>
+        <h1 ref="titleRef" class="font-display font-500 text-white leading-tight mb-6 hero-hidden max-w-1100px"
+            style="font-size: clamp(2.2rem, 6vw, 4.4rem)">
+          Пансионат Радде <span class="font-accent italic font-500 text-sand-300 text-[1.3em]">— реликтовый лес, горы и&nbsp;гармония</span>
         </h1>
-        <p ref="labelRef" class="font-body text-4 md:text-5 font-400 text-white/80 mt-8 hero-hidden">
-          Пансионат в Гунибе на высоте 1600 метров
-        </p>
       </div>
 
       <!-- Форма бронирования -->
@@ -80,7 +77,6 @@
 <script setup lang="ts">
 const base = useRuntimeConfig().app.baseURL || '/'
 
-const labelRef = ref<HTMLElement>()
 const titleRef = ref<HTMLElement>()
 const bookingRef = ref<HTMLElement>()
 
@@ -134,7 +130,6 @@ function startHeroAnimations() {
   const { gsap } = useGsap()
   const tl = gsap.timeline()
   if (titleRef.value) tl.to(titleRef.value, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' })
-  if (labelRef.value) tl.to(labelRef.value, { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out' }, '-=0.3')
   if (bookingRef.value) {
     tl.to(bookingRef.value, { y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.2')
   }
