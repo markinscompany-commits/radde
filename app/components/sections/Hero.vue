@@ -198,20 +198,25 @@ onMounted(() => {
   transform: translateY(20px);
 }
 
-/* Высота Hero: используем svh (small viewport height) чтобы блок
-   не "скакал" на iOS Safari при появлении/скрытии адресной строки.
-   100vh учитывает динамическую панель, 100svh — нет. */
+/* Высота Hero: фиксируем через CSS var --app-height, которую
+   проставляет JS в app.vue один раз при загрузке (и при повороте).
+   При скролле iOS Safari меняет 100vh, но --app-height остаётся
+   стабильной — никакого прыжка. svh — fallback для современных
+   браузеров без JS. 100vh — последний fallback (старые движки). */
 .hero-section {
-  min-height: 100vh; /* fallback */
+  min-height: 100vh;
   min-height: 100svh;
+  min-height: var(--app-height, 100svh);
 }
 .hero-content {
-  min-height: 100vh; /* fallback */
+  min-height: 100vh;
   min-height: 100svh;
+  min-height: var(--app-height, 100svh);
 }
 .hero-title-wrap {
-  padding-top: 20vh; /* fallback */
+  padding-top: 20vh;
   padding-top: 20svh;
+  padding-top: calc(var(--app-height, 100svh) * 0.2);
 }
 @media (min-width: 768px) {
   .hero-title-wrap {
