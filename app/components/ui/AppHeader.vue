@@ -129,7 +129,6 @@ const moreNav: NavLink[] = [
   { href: '#location', label: 'Как добраться', section: 'location' },
   { href: '#gallery', label: 'Галерея', section: 'gallery' },
   { href: '#food', label: 'Питание', section: 'food' },
-  { href: '#activities', label: 'Чем заняться', section: 'activities' },
   { href: '#about', label: 'О пансионате', section: 'about' },
   { href: '/contacts', label: 'Контакты', section: 'contacts' },
 ]

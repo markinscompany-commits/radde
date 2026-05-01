@@ -12,12 +12,10 @@
     <UiEthnicDivider variant="medium" />
     <SectionsReviews />
     <UiEthnicDivider variant="light" />
-    <SectionsActivities />
+    <SectionsGallery />
     <UiEthnicDivider variant="medium" />
     <SectionsLocation />
     <UiEthnicDivider variant="light" />
-    <SectionsGallery />
-    <UiEthnicDivider variant="medium" />
     <SectionsFaq />
     <UiEthnicDivider variant="light" />
     <SectionsBlog />

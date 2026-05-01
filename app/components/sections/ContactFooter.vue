@@ -98,7 +98,6 @@
             <a href="#about" class="footer-link">Локация</a>
             <a href="#location" class="footer-link">Как добраться</a>
             <a href="#gallery" class="footer-link">Галерея</a>
-            <a href="#activities" class="footer-link">Чем заняться</a>
             <a href="/contacts" class="footer-link">Контакты</a>
             <a href="/blog" class="footer-link">Блог</a>
           </nav>

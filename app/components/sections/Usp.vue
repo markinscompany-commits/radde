@@ -8,9 +8,12 @@
         </h2>
       </div>
 
-      <div ref="gridRef" class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div ref="gridRef" class="grid grid-cols-1 md:grid-cols-12 gap-5">
         <div v-for="(item, i) in usps" :key="i"
-             class="group relative aspect-4/3 rounded-3 overflow-hidden cursor-default">
+             class="group relative rounded-3 overflow-hidden cursor-default aspect-4/3 md:aspect-auto"
+             :class="[
+               (i === 0 || i === 3) ? 'md:col-span-7 md:aspect-3/2' : 'md:col-span-5',
+             ]">
           <!-- Background photo -->
           <img :src="item.image" :alt="item.title"
                class="absolute inset-0 w-full h-full object-cover"
