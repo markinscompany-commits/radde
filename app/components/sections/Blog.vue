@@ -1,5 +1,5 @@
 ﻿<template>
-  <section id="blog" ref="sectionRef" class="py-24 md:py-32 bg-sand-100">
+  <section id="blog" ref="sectionRef" class="py-20 md:py-26 bg-sand-100">
     <!-- Header in container -->
     <div class="container">
       <div class="mb-12">
@@ -8,7 +8,7 @@
           <h2 ref="titleRef" class="text-h2 font-500 text-sand-900">
             Полезное <span class="section-title-accent">о Радде</span>
           </h2>
-          <a href="/blog" class="hidden md:inline-flex items-center gap-2 font-body text-3.5 font-600 text-amber-600 hover:text-amber-700 transition-colors">
+          <a href="/blog" class="hidden md:inline-flex items-center gap-2 font-body text-4 font-600 text-amber-600 hover:text-amber-700 transition-colors">
           Все статьи
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
@@ -36,9 +36,9 @@
             <!-- Content -->
             <div class="p-5 flex flex-col flex-1">
               <h3 class="font-display font-500 text-sand-900 mb-2 leading-snug group-hover:text-amber-700 transition-colors" style="font-size: clamp(1.05rem, 1.8vw, 1.25rem)">{{ post.title }}</h3>
-              <p class="text-small text-sand-500 leading-relaxed blog-excerpt mb-4">{{ post.excerpt }}</p>
+              <p class="text-small text-sand-700 leading-relaxed blog-excerpt mb-4">{{ post.excerpt }}</p>
               <div class="mt-auto flex items-center justify-between">
-                <span class="text-caption text-sand-500">{{ post.readTime }}</span>
+                <span class="text-small text-sand-700">{{ post.readTime }}</span>
                 <span class="text-small font-600 text-amber-600 group-hover:text-amber-700 transition-colors flex items-center gap-1">
                   Читать
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -264,18 +264,20 @@ onUnmounted(() => {
 
 .blog-badge {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 14px;
+  left: 14px;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: white;
-  background: rgba(44, 36, 22, 0.75);
+  background: rgba(44, 36, 22, 0.85);
   /* no backdrop-filter for performance */
-  padding: 4px 12px;
+  padding: 5px 12px;
   border-radius: 999px;
   letter-spacing: 0.02em;
 }
+/* blog-badge — намеренное исключение из min 16px:
+   мини-бейдж категории на фото, иначе занимает половину снимка */
 
 .blog-excerpt {
   display: -webkit-box;

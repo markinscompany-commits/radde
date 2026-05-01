@@ -116,7 +116,7 @@ input::-webkit-credentials-auto-fill-button {
   border: 1.5px solid #E0D5C8;
   border-radius: 10px;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   color: #2C2416;
   transition: border-color 0.2s, box-shadow 0.2s;
   outline: none !important;
@@ -146,7 +146,7 @@ textarea.input-light {
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 8px;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   color: white;
   transition: border-color 0.2s;
   outline: none !important;
@@ -174,7 +174,7 @@ textarea.input-dark {
 .label-light {
   display: block;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: #6B5B4A;
   margin-bottom: 6px;
@@ -183,11 +183,11 @@ textarea.input-dark {
 .label-dark {
   display: block;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.7);
   margin-bottom: 8px;
 }
 

@@ -74,19 +74,19 @@ function decline() {
 .cookie-text {
   flex: 1;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 13px;
-  color: rgba(250, 246, 240, 0.6);
+  font-size: 16px;
+  color: rgba(250, 246, 240, 0.85);
   line-height: 1.5;
 }
 
 .cookie-link {
-  color: rgba(250, 246, 240, 0.8);
+  color: white;
   text-decoration: underline;
   text-underline-offset: 2px;
   transition: color 0.2s;
 }
 .cookie-link:hover {
-  color: #C17F3E;
+  color: #D4944A;
 }
 
 .cookie-actions {
@@ -97,11 +97,11 @@ function decline() {
 
 .cookie-btn {
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 600;
   border: none;
   border-radius: 8px;
-  padding: 8px 20px;
+  padding: 9px 22px;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -116,11 +116,11 @@ function decline() {
 
 .cookie-decline {
   background: rgba(255, 255, 255, 0.08);
-  color: rgba(250, 246, 240, 0.5);
+  color: rgba(250, 246, 240, 0.75);
 }
 .cookie-decline:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: rgba(250, 246, 240, 0.8);
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
 }
 
 /* Transition */

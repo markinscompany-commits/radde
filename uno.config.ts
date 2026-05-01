@@ -64,18 +64,18 @@ export default defineConfig({
   shortcuts: {
     // Layout
     'container': 'max-w-1100px mx-auto px-5 md:px-8',
-    'section-padding': 'py-24 md:py-32',
+    'section-padding': 'py-20 md:py-26',
 
-    // Typography — иерархия размеров
+    // Typography — иерархия размеров (минимум 16px по требованию заказчика)
     'text-display': 'font-display font-500 leading-tight',
     'text-h1': 'text-display text-8 md:text-12 lg:text-14',
     'text-h2': 'text-display text-6 md:text-8 lg:text-10',
     'text-h3': 'text-display text-4.5 md:text-5.5',
     'text-body': 'font-body text-4 leading-relaxed',           // 16px — основной текст
     'text-body-lg': 'font-body text-4.5 leading-relaxed',     // 18px — акцентный текст
-    'text-small': 'font-body text-3.5 leading-normal',        // 14px — вторичный текст (минимум для контента)
-    'text-caption': 'font-body text-3 leading-normal',        // 12px — только копирайт, даты, мета
-    'text-label': 'font-body text-3 font-600 tracking-widest uppercase', // 12px uppercase — секционные лейблы
+    'text-small': 'font-body text-4 leading-normal',          // 16px — вторичный текст (бывший 14px)
+    'text-caption': 'font-body text-4 leading-snug',          // 16px — копирайт/даты/мета (бывший 12px)
+    'text-label': 'font-body text-3.5 font-600 tracking-widest uppercase', // 14px uppercase — секционные лейблы (исключение: uppercase + letter-spacing читается крупнее)
 
     // Buttons
     'btn': 'inline-flex items-center justify-center font-body font-600 rounded-2 transition-all duration-300 cursor-pointer border-none',

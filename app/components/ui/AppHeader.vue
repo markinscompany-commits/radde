@@ -55,13 +55,13 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
         </a>
         <a href="#" target="_blank" title="Max" class="messenger-icon">
-          <img :src="`${base}images/icon-max.svg`" width="16" height="16" alt="Max" style="filter: brightness(0) invert(1); opacity: 0.5;" />
+          <img :src="`${base}images/icon-max.svg`" width="16" height="16" alt="Max" style="filter: brightness(0) invert(1); opacity: 0.7;" />
         </a>
       </div>
       <a href="tel:+79001234567" class="font-body text-4.5 font-500 text-white/80 hover:text-white transition-colors">
         +7 (900) 123-45-67
       </a>
-      <span class="bg-amber-500/50 text-white/60 font-body font-600 text-4.5 px-5 py-2.5 rounded-2 cursor-default no-underline">
+      <span class="bg-amber-500/50 text-white/80 font-body font-600 text-4.5 px-5 py-2.5 rounded-2 cursor-default no-underline">
         Забронировать
       </span>
     </div>
@@ -96,7 +96,7 @@
       </a>
 
       <div class="flex gap-3">
-        <span class="flex-1 bg-amber-500/50 text-white/60 font-body font-600 text-3.5 py-3 rounded-2 text-center cursor-default">
+        <span class="flex-1 bg-amber-500/50 text-white/80 font-body font-600 text-4 py-3 rounded-2 text-center cursor-default">
           Забронировать
         </span>
       </div>
@@ -225,7 +225,7 @@ onMounted(() => {
   font-family: 'Source Sans 3', sans-serif;
   font-size: 18px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.85);
   transition: color 0.2s;
   text-decoration: none;
   white-space: nowrap;
@@ -244,7 +244,7 @@ onMounted(() => {
   width: 28px;
   height: 28px;
   border-radius: 6px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.7);
   transition: all 0.2s;
 }
 .messenger-icon:hover {
@@ -275,7 +275,7 @@ onMounted(() => {
   font-family: 'Source Sans 3', sans-serif;
   font-size: 18px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.8);
   padding: 8px 16px;
   text-decoration: none;
   transition: all 0.15s;

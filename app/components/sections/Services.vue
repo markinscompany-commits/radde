@@ -1,5 +1,5 @@
 ﻿<template>
-  <section id="services" class="py-24 md:py-32 bg-sand-50 relative overflow-hidden">
+  <section id="services" class="py-20 md:py-26 bg-sand-50 relative overflow-hidden">
     <!-- Subtle texture -->
     <div class="absolute inset-0 opacity-3 pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%236B5B4A&quot; fill-opacity=&quot;0.4&quot;%3E%3Ccircle cx=&quot;1&quot; cy=&quot;1&quot; r=&quot;1&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
 
@@ -51,26 +51,26 @@
 
             <!-- Content -->
             <h3 class="font-display font-500 text-sand-900 mb-2" style="font-size: clamp(1.15rem, 2vw, 1.35rem)">{{ service.title }}</h3>
-            <p class="font-body text-3.3 text-sand-500 leading-relaxed mb-4 service-desc">{{ service.description }}</p>
+            <p class="font-body text-4 text-sand-700 leading-relaxed mb-4 service-desc">{{ service.description }}</p>
 
             <!-- Meta row -->
-            <div v-if="service.duration || service.format" class="flex flex-wrap items-center gap-3 mb-5 text-sand-400">
-              <span v-if="service.duration" class="flex items-center gap-1.5 font-body text-3.5 font-500">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 7v5l3 3" /></svg>
+            <div v-if="service.duration || service.format" class="flex flex-wrap items-center gap-3 mb-5 text-sand-600">
+              <span v-if="service.duration" class="flex items-center gap-1.5 font-body text-4 font-500">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 7v5l3 3" /></svg>
                 {{ service.duration }}
               </span>
-              <span v-if="service.format" class="flex items-center gap-1.5 font-body text-3.5 font-500">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="5.5" r="3" /><path d="M3 16c0-3.3 2.7-6 6-6s6 2.7 6 6" /></svg>
+              <span v-if="service.format" class="flex items-center gap-1.5 font-body text-4 font-500">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="5.5" r="3" /><path d="M3 16c0-3.3 2.7-6 6-6s6 2.7 6 6" /></svg>
                 {{ service.format }}
               </span>
             </div>
 
             <!-- CTA -->
             <div class="mt-auto pt-4 border-t border-sand-100 flex items-center justify-between">
-              <button @click="openDetail(service)" class="font-body text-3 font-600 text-amber-600 hover:text-amber-700 transition-colors bg-transparent border-none cursor-pointer p-0">
+              <button @click="openDetail(service)" class="font-body text-4 font-600 text-amber-600 hover:text-amber-700 transition-colors bg-transparent border-none cursor-pointer p-0">
                 Подробнее
               </button>
-              <button v-if="!service.included" class="font-body text-3.5 font-600 text-sand-400 bg-sand-100 hover:bg-sand-200 px-3.5 py-1.5 rounded-full border-none cursor-pointer transition-colors" disabled>
+              <button v-if="!service.included" class="font-body text-4 font-600 text-sand-700 bg-sand-100 hover:bg-sand-200 px-3.5 py-1.5 rounded-full border-none cursor-pointer transition-colors" disabled>
                 Добавить к брони
               </button>
             </div>
@@ -109,24 +109,24 @@
 
             <!-- Body -->
             <div class="px-7 md:px-9 py-6">
-              <p class="font-body text-3.5 text-sand-700 leading-relaxed mb-6">{{ detailService.fullDescription }}</p>
+              <p class="font-body text-4 text-sand-800 leading-relaxed mb-6">{{ detailService.fullDescription }}</p>
 
               <!-- Dynamic sections -->
               <div v-for="(section, si) in detailService.sections" :key="si" class="mb-6 last:mb-0">
                 <h4 class="font-display font-500 text-4.5 text-sand-800 mb-2">{{ section.title }}</h4>
-                <p class="font-body text-3.3 text-sand-600 leading-relaxed whitespace-pre-line">{{ section.content }}</p>
+                <p class="font-body text-4 text-sand-700 leading-relaxed whitespace-pre-line">{{ section.content }}</p>
               </div>
 
               <!-- Meta info — styled block like room specs -->
               <div v-if="detailService.duration || detailService.format" class="flex flex-wrap items-center gap-3 mt-6 bg-olive-50 border border-olive-100 rounded-2.5 px-4 py-3">
                 <span v-if="detailService.duration" class="flex items-center gap-2">
                   <svg class="text-olive-500" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 7v5l3 3" /></svg>
-                  <span class="font-body text-3 font-600 text-olive-700">{{ detailService.duration }}</span>
+                  <span class="font-body text-4 font-600 text-olive-700">{{ detailService.duration }}</span>
                 </span>
                 <div v-if="detailService.duration && detailService.format" class="w-px h-3.5 bg-olive-200"></div>
                 <span v-if="detailService.format" class="flex items-center gap-2">
                   <svg class="text-olive-500" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="5.5" r="3" /><path d="M3 16c0-3.3 2.7-6 6-6s6 2.7 6 6" /></svg>
-                  <span class="font-body text-3 font-600 text-olive-700">{{ detailService.format }}</span>
+                  <span class="font-body text-4 font-600 text-olive-700">{{ detailService.format }}</span>
                 </span>
               </div>
             </div>
@@ -137,7 +137,7 @@
                 <span class="font-display font-500 text-sand-900" style="font-size: clamp(1.2rem, 2vw, 1.5rem)">{{ detailService.price }}</span>
               </div>
               <div v-else>
-                <span class="font-body text-3.5 font-600 text-olive-600">Включено в стоимость проживания</span>
+                <span class="font-body text-4 font-600 text-olive-700">Включено в стоимость проживания</span>
               </div>
               <button class="btn-primary opacity-50 cursor-default" disabled>Добавить к брони</button>
             </div>
@@ -497,13 +497,13 @@ onMounted(() => {
   align-items: center;
   gap: 6px;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 600;
-  color: #8B6F47;
+  color: #6B5B4A;
   background: transparent;
   border: 1.5px solid #E8D5B7;
   border-radius: 999px;
-  padding: 8px 16px;
+  padding: 9px 18px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
@@ -636,12 +636,14 @@ onMounted(() => {
 /* Badges */
 .badge {
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
-  padding: 4px 10px;
+  padding: 5px 12px;
   border-radius: 999px;
   letter-spacing: 0.02em;
 }
+/* badge — намеренное исключение из правила min 16px:
+   мини-бейдж в углу карточки, иначе ломает layout */
 .badge--included {
   background: #E8F0E0;
   color: #4A6330;

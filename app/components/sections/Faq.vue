@@ -1,5 +1,5 @@
 ﻿<template>
-  <section id="faq" class="py-24 md:py-32 bg-sand-50">
+  <section id="faq" class="py-20 md:py-26 bg-sand-50">
     <div class="container">
       <div class="max-w-160 mx-auto">
         <div class="text-center mb-14">
@@ -23,7 +23,7 @@
             </button>
             <div class="faq-body" :class="openIndex === i ? 'faq-open' : ''">
               <div class="px-5 md:px-6 pb-5 md:pb-6">
-                <p class="text-body text-sand-600">{{ item.answer }}</p>
+                <p class="text-body text-sand-700">{{ item.answer }}</p>
               </div>
             </div>
           </div>

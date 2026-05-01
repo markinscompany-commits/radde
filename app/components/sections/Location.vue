@@ -1,5 +1,5 @@
 ﻿<template>
-  <section id="location" class="py-24 md:py-32 bg-sand-50">
+  <section id="location" class="py-20 md:py-26 bg-sand-50">
     <div class="container">
       <!-- Header -->
       <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
@@ -12,7 +12,7 @@
         </div>
         <!-- Coordinates -->
         <div ref="coordRef" class="flex items-center gap-3 flex-wrap">
-          <span class="text-small text-sand-500 font-500">42.3949°N, 46.9366°E</span>
+          <span class="text-small text-sand-700 font-500">42.3949°N, 46.9366°E</span>
           <button @click="copyCoords" class="loc-small-btn">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
             {{ coordsCopied ? 'Скопировано' : 'Скопировать' }}
@@ -40,7 +40,7 @@
           title="Пансионат Радде на карте"
         ></iframe>
         <div v-else class="w-full bg-sand-200 flex items-center justify-center" style="height: 420px;">
-          <span class="font-body text-3.5 text-sand-400">Загрузка карты...</span>
+          <span class="font-body text-4 text-sand-700">Загрузка карты...</span>
         </div>
         <div v-if="mapGuardVisible" class="map-guard" @click="dismissGuard" @mouseenter="mapHintVisible = true" @mouseleave="mapHintVisible = false" :class="mapHintVisible ? 'map-guard--hover' : ''">
           <span class="map-hint" :class="mapHintVisible ? 'opacity-100' : 'opacity-0'">
@@ -55,11 +55,11 @@
           <div class="flex items-start gap-4">
             <div class="w-10 h-10 rounded-2.5 flex items-center justify-center flex-shrink-0" :class="route.iconBg" v-html="route.icon"></div>
             <div class="flex-1 min-w-0">
-              <h4 class="font-body text-3.5 font-600 text-sand-900 mb-1">{{ route.label }}</h4>
-              <p class="text-small text-sand-500 leading-relaxed mb-3">{{ route.summary }}</p>
+              <h4 class="font-body text-4.5 font-600 text-sand-900 mb-1.5">{{ route.label }}</h4>
+              <p class="text-small text-sand-700 leading-relaxed mb-3">{{ route.summary }}</p>
               <div class="flex flex-wrap items-center gap-3">
-                <span v-if="route.time" class="flex items-center gap-1.5 text-small font-600 text-sand-500">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0-18 0"/><path d="M12 7v5l3 3"/></svg>
+                <span v-if="route.time" class="flex items-center gap-1.5 text-small font-600 text-sand-700">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0-18 0"/><path d="M12 7v5l3 3"/></svg>
                   {{ route.time }}
                 </span>
               </div>
@@ -73,7 +73,7 @@
       <div ref="ctaRef" class="mt-10 bg-amber-500/8 border border-amber-400/20 rounded-3 p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
         <div>
           <h4 class="font-display font-500 text-sand-900 mb-1.5" style="font-size: clamp(1.1rem, 2vw, 1.4rem)">Организуем трансфер из аэропорта</h4>
-          <p class="text-small text-sand-500">Напишите заранее — встретим с табличкой, опытный водитель знает горные дороги</p>
+          <p class="text-small text-sand-700">Напишите заранее — встретим с табличкой, опытный водитель знает горные дороги</p>
         </div>
         <button @click="showTransfer = true" class="btn-primary flex-shrink-0 whitespace-nowrap">Заказать трансфер</button>
       </div>
@@ -82,8 +82,8 @@
       <div ref="tipsRef" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
         <div v-for="tip in tips" :key="tip.title" class="tip-card">
           <div class="w-9 h-9 rounded-2 bg-olive-100 flex items-center justify-center text-olive-600 mb-3 flex-shrink-0" v-html="tip.icon"></div>
-          <h5 class="text-small font-600 text-sand-800 mb-1">{{ tip.title }}</h5>
-          <p class="text-small text-sand-500 leading-relaxed">{{ tip.text }}</p>
+          <h5 class="text-body font-600 text-sand-800 mb-1">{{ tip.title }}</h5>
+          <p class="text-small text-sand-700 leading-relaxed">{{ tip.text }}</p>
         </div>
       </div>
     </div>
@@ -115,7 +115,7 @@
             </button>
             <div v-if="!transferSuccess" class="px-7 md:px-9 pt-10 pb-8">
               <h2 class="font-display font-500 text-sand-900 mb-2" style="font-size: clamp(1.5rem, 3vw, 1.8rem)">Заявка на трансфер</h2>
-              <p class="font-body text-3.5 text-sand-500 leading-relaxed mb-7">Укажите контакты и дату прилёта — мы свяжемся для уточнения деталей</p>
+              <p class="font-body text-4 text-sand-700 leading-relaxed mb-7">Укажите контакты и дату прилёта — мы свяжемся для уточнения деталей</p>
               <form @submit.prevent="submitTransfer" class="flex flex-col gap-4">
                 <div>
                   <label class="label-light">Имя</label>
@@ -126,14 +126,14 @@
                   <input :value="transferForm.phone" @input="handleTransferPhone" @keydown="phoneMaskKeydown" type="tel" placeholder="+7 (900) 000-00-00" class="input-light" required />
                 </div>
                 <div>
-                  <label class="label-light">Дата и рейс <span class="text-sand-400 font-400">(необязательно)</span></label>
+                  <label class="label-light">Дата и рейс <span class="text-sand-600 font-400">(необязательно)</span></label>
                   <input v-model="transferForm.flight" type="text" placeholder="Например: 15 мая, рейс S7 1234" class="input-light" />
                 </div>
                 <button type="submit" class="btn-primary w-full text-center py-3.5 mt-2" :disabled="transferSubmitting">
                   {{ transferSubmitting ? 'Отправляем...' : 'Отправить заявку' }}
                 </button>
-                <p class="text-caption text-sand-500 text-center">
-                  Нажимая кнопку, вы соглашаетесь с <a href="/privacy" class="text-sand-500 underline underline-offset-2 hover:text-amber-600 transition-colors">политикой конфиденциальности</a>
+                <p class="text-small text-sand-700 text-center">
+                  Нажимая кнопку, вы соглашаетесь с <a href="/privacy" class="text-sand-800 underline underline-offset-2 hover:text-amber-600 transition-colors">политикой конфиденциальности</a>
                 </p>
               </form>
             </div>
@@ -142,7 +142,7 @@
                 <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><path d="M10 16.5L14.5 21L22 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </div>
               <h2 class="font-display font-500 text-sand-900 mb-2" style="font-size: clamp(1.5rem, 3vw, 1.8rem)">Заявка отправлена</h2>
-              <p class="font-body text-3.5 text-sand-500 mb-6">Спасибо, {{ transferForm.name }}! Мы свяжемся с вами для уточнения деталей трансфера.</p>
+              <p class="font-body text-4 text-sand-700 mb-6">Спасибо, {{ transferForm.name }}! Мы свяжемся с вами для уточнения деталей трансфера.</p>
               <button @click="closeTransfer" class="btn-primary px-10 py-3.5">Закрыть</button>
             </div>
           </div>
@@ -330,12 +330,12 @@ onMounted(() => {
 
 <style scoped>
 .map-hint {
-  background: rgba(44, 36, 22, 0.75);
+  background: rgba(44, 36, 22, 0.85);
   color: #FAF6F0;
-  padding: 8px 18px;
+  padding: 10px 20px;
   border-radius: 10px;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 500;
   pointer-events: none;
   transition: opacity 0.25s;
@@ -344,36 +344,37 @@ onMounted(() => {
 .loc-small-btn {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 600;
-  color: #8B6F47;
+  color: #6B5B4A;
   background: #FAF6F0;
   border: 1px solid #E8D5B7;
   border-radius: 8px;
-  padding: 6px 12px;
+  padding: 8px 14px;
   cursor: pointer;
   transition: all 0.2s;
   text-decoration: none;
 }
 .loc-small-btn:hover {
   background: #F0E6D6;
-  border-color: #D4BC96;
+  border-color: #C1A376;
+  color: #2C2416;
 }
 
 .loc-share-btn {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 600;
   color: white;
   background: #C17F3E;
   border: 1px solid #A66B32;
   border-radius: 8px;
-  padding: 6px 12px;
+  padding: 8px 14px;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -434,15 +435,15 @@ onMounted(() => {
 }
 :deep(.route-detail-content) li {
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 14px;
-  color: #6B5B4A;
+  font-size: 16px;
+  color: #4A3F30;
   line-height: 1.6;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 :deep(.route-detail-content) p {
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 14px;
-  color: #6B5B4A;
+  font-size: 16px;
+  color: #4A3F30;
   line-height: 1.6;
   margin: 0.5rem 0;
 }
@@ -451,13 +452,13 @@ onMounted(() => {
   font-weight: 600;
 }
 :deep(.route-detail-content) .route-warning {
-  background: rgba(212, 148, 74, 0.08);
-  border: 1px solid rgba(212, 148, 74, 0.2);
+  background: rgba(212, 148, 74, 0.1);
+  border: 1px solid rgba(212, 148, 74, 0.25);
   border-radius: 10px;
-  padding: 12px 16px;
+  padding: 14px 18px;
   margin: 1rem 0;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 500;
   color: #8B5728;
   line-height: 1.5;

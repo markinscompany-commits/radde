@@ -191,14 +191,14 @@ onMounted(() => {
 }
 .date-value {
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   color: white;
 }
 .date-placeholder {
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.55);
 }
 .date-icon {
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.55);
   flex-shrink: 0;
 }
 
@@ -228,7 +228,7 @@ onMounted(() => {
 
 .cal-title {
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: #FAF6F0;
 }
@@ -241,8 +241,8 @@ onMounted(() => {
   justify-content: center;
   background: transparent;
   border: none;
-  color: rgba(250, 246, 240, 0.5);
-  font-size: 14px;
+  color: rgba(250, 246, 240, 0.7);
+  font-size: 16px;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s;
@@ -261,11 +261,13 @@ onMounted(() => {
 .cal-weekdays span {
   text-align: center;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
-  color: rgba(250, 246, 240, 0.3);
+  color: rgba(250, 246, 240, 0.55);
   padding: 4px 0;
 }
+/* cal-weekdays — намеренное исключение из min 16px:
+   подписи Пн/Вт/Ср... в календаре, иначе грид с числами раздувается */
 
 .cal-days {
   display: grid;
@@ -280,7 +282,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   color: #FAF6F0;
   background: transparent;
   border: none;
@@ -288,6 +290,8 @@ onMounted(() => {
   cursor: pointer;
   transition: all 0.15s;
 }
+/* cal-day — намеренное исключение из min 16px:
+   календарь имеет ширину 280px, при 16px числа не помещаются в ячейки 7x7 */
 .cal-day:hover:not(.cal-disabled):not(.cal-empty) {
   background: rgba(193, 127, 62, 0.2);
 }

@@ -1,5 +1,5 @@
 ﻿<template>
-  <section class="py-24 md:py-32 bg-sand-100">
+  <section class="py-20 md:py-26 bg-sand-100">
     <div class="container">
       <div class="text-center mb-16">
         <span class="text-label text-olive-600 mb-4 block">Почему выбирают нас</span>
@@ -25,7 +25,7 @@
             <h3 class="font-display font-500 text-5 md:text-6 text-white mb-2 leading-tight">
               {{ item.title }}
             </h3>
-            <p class="font-body text-3.5 text-white/70 leading-relaxed max-w-80">
+            <p class="font-body text-4 text-white/85 leading-relaxed max-w-80">
               {{ item.description }}
             </p>
           </div>

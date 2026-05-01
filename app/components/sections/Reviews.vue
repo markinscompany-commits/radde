@@ -1,5 +1,5 @@
 ﻿<template>
-  <section id="reviews" ref="sectionRef" class="py-24 md:py-32 bg-sand-50 relative overflow-hidden">
+  <section id="reviews" ref="sectionRef" class="py-20 md:py-26 bg-sand-50 relative overflow-hidden">
     <div class="container">
       <!-- Header row: title left, rating widgets right -->
       <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-14">
@@ -23,7 +23,7 @@
                     <span v-for="n in 5" :key="'y'+n" class="text-3" :class="n <= Math.round(yandexRating.score) ? 'text-amber-500' : 'text-sand-200'">&#9733;</span>
                   </div>
                 </div>
-                <span class="text-caption text-sand-500 block mt-0.5">{{ yandexRating.count }} отзывов</span>
+                <span class="text-small text-sand-700 block mt-0.5">{{ yandexRating.count }} отзывов</span>
               </div>
             </div>
             <a :href="yandexRating.reviewUrl" target="_blank" rel="noopener" class="rating-widget-btn">
@@ -43,7 +43,7 @@
                     <span v-for="n in 5" :key="'g'+n" class="text-3" :class="n <= Math.round(gisRating.score) ? 'text-amber-500' : 'text-sand-200'">&#9733;</span>
                   </div>
                 </div>
-                <span class="text-caption text-sand-500 block mt-0.5">{{ gisRating.count }} отзывов</span>
+                <span class="text-small text-sand-700 block mt-0.5">{{ gisRating.count }} отзывов</span>
               </div>
             </div>
             <a :href="gisRating.reviewUrl" target="_blank" rel="noopener" class="rating-widget-btn">
@@ -80,7 +80,7 @@
               </div>
 
               <!-- Text (truncated) -->
-              <p class="font-body text-3.5 text-sand-700 leading-relaxed mb-4 review-text">
+              <p class="font-body text-4 text-sand-800 leading-relaxed mb-4 review-text">
                 &laquo;{{ review.text }}&raquo;
               </p>
 
@@ -94,12 +94,12 @@
               <div class="mt-auto flex items-center justify-between pt-4 border-t border-sand-100">
                 <div class="flex items-center gap-3">
                   <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
-                       :class="review.source === 'yandex' ? 'bg-red-50 text-red-400' : review.source === '2gis' ? 'bg-green-50 text-green-500' : 'bg-sand-200 text-sand-500'">
-                    <span class="font-display font-500 text-3.5">{{ review.author[0] }}</span>
+                       :class="review.source === 'yandex' ? 'bg-red-50 text-red-500' : review.source === '2gis' ? 'bg-green-50 text-green-600' : 'bg-sand-200 text-sand-700'">
+                    <span class="font-display font-500 text-4">{{ review.author[0] }}</span>
                   </div>
                   <span class="text-small font-600 text-sand-800">{{ review.author }}</span>
                 </div>
-                <span class="text-caption text-sand-500">{{ review.date }}</span>
+                <span class="text-small text-sand-700">{{ review.date }}</span>
               </div>
             </div>
           </div>
@@ -160,13 +160,13 @@
                   <span class="font-display font-500 text-5">{{ activeReview.author[0] }}</span>
                 </div>
                 <div>
-                  <span class="font-body text-3.5 font-600 text-sand-900 block">{{ activeReview.author }}</span>
-                  <span class="font-body text-3 text-sand-400">{{ activeReview.date }}</span>
+                  <span class="font-body text-4 font-600 text-sand-900 block">{{ activeReview.author }}</span>
+                  <span class="font-body text-4 text-sand-700">{{ activeReview.date }}</span>
                 </div>
               </div>
 
               <!-- Full text -->
-              <p class="font-body text-3.5 text-sand-700 leading-relaxed whitespace-pre-line">{{ activeReview.fullText || activeReview.text }}</p>
+              <p class="font-body text-4 text-sand-800 leading-relaxed whitespace-pre-line">{{ activeReview.fullText || activeReview.text }}</p>
             </div>
           </div>
         </div>
@@ -448,13 +448,13 @@ onUnmounted(() => {
   justify-content: center;
   gap: 6px;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 600;
-  color: #8B6F47;
+  color: #6B5B4A;
   background: #FAF6F0;
   border: 1px solid #E8D5B7;
   border-radius: 8px;
-  padding: 7px 14px;
+  padding: 8px 16px;
   text-decoration: none;
   transition: all 0.2s;
   cursor: pointer;
@@ -487,12 +487,14 @@ onUnmounted(() => {
   align-items: center;
   gap: 5px;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
-  padding: 4px 10px;
+  padding: 5px 12px;
   border-radius: 999px;
   letter-spacing: 0.01em;
 }
+/* review-source — намеренное исключение из min 16px:
+   мини-бейдж источника отзыва, иначе ломает layout карточки */
 .review-source--yandex { background: #FFF0EE; color: #CC3326; }
 .review-source--2gis { background: #EEFBEE; color: #2D8A30; }
 .review-source--site { background: #F4F6EE; color: #5B7A3A; }

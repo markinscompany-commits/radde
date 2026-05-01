@@ -15,7 +15,7 @@
           <!-- Form -->
           <div v-if="!isSuccess" class="px-7 md:px-9 pt-10 pb-8">
             <h2 class="font-display font-500 text-sand-900 mb-2" style="font-size: clamp(1.5rem, 3vw, 1.8rem)">Оставить заявку</h2>
-            <p class="font-body text-3.5 text-sand-500 leading-relaxed mb-7">Оставьте контакты, и мы свяжемся с вами в течение 15 минут</p>
+            <p class="font-body text-4 text-sand-700 leading-relaxed mb-7">Оставьте контакты, и мы свяжемся с вами в течение 15 минут</p>
 
             <form @submit.prevent="submit" class="flex flex-col gap-4">
               <div>
@@ -46,9 +46,9 @@
                 {{ submitting ? 'Отправляем...' : 'Отправить заявку' }}
               </button>
 
-              <p class="text-caption text-sand-400 text-center leading-snug">
+              <p class="text-small text-sand-700 text-center leading-snug">
                 Нажимая кнопку, вы соглашаетесь с
-                <a href="/privacy" class="text-sand-500 underline underline-offset-2 hover:text-amber-600 transition-colors">политикой конфиденциальности</a>
+                <a href="/privacy" class="text-sand-800 underline underline-offset-2 hover:text-amber-600 transition-colors">политикой конфиденциальности</a>
               </p>
             </form>
           </div>
@@ -59,7 +59,7 @@
               <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><path d="M10 16.5L14.5 21L22 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
             <h2 class="font-display font-500 text-sand-900 mb-2" style="font-size: clamp(1.5rem, 3vw, 1.8rem)">Заявка отправлена</h2>
-            <p class="font-body text-3.5 text-sand-500 mb-6">Спасибо, {{ form.name }}! Мы свяжемся с вами в ближайшее время.</p>
+            <p class="font-body text-4 text-sand-700 mb-6">Спасибо, {{ form.name }}! Мы свяжемся с вами в ближайшее время.</p>
             <button @click="close" class="btn-primary px-10 py-3.5">Закрыть</button>
           </div>
         </div>

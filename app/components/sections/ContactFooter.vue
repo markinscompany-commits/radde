@@ -1,7 +1,7 @@
 ﻿<template>
   <div>
     <!-- Contact section -->
-    <section id="contacts" class="relative py-24 md:py-32 overflow-hidden">
+    <section id="contacts" class="relative py-20 md:py-26 overflow-hidden">
       <div class="absolute inset-0 bg-sand-900" :style="{ backgroundImage: `url(${base}images/hero/hero-3.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center' }">
         <div class="absolute inset-0 bg-sand-900/85"></div>
       </div>
@@ -15,25 +15,25 @@
               Связаться<br>
               <span class="font-accent italic font-500 text-sand-400 text-[1.3em]">с нами</span>
             </h2>
-            <p class="text-body text-white/50 mb-8 max-w-90">
+            <p class="text-body text-white/75 mb-8 max-w-90">
               Мы рады ответить на любые вопросы и помочь с выбором номера, маршрутом и организацией отдыха.
             </p>
 
             <a href="tel:+78001234567" class="block mb-4">
-              <span class="text-small text-white/40 block mb-1">Телефон</span>
+              <span class="text-small text-white/65 block mb-1">Телефон</span>
               <span class="font-display font-500 text-white leading-none" style="font-size: clamp(1.8rem, 4vw, 3rem)">
                 +7 (800) 123-45-67
               </span>
             </a>
 
             <a href="mailto:info@radde.ru" class="block mb-4">
-              <span class="text-small text-white/40 block mb-1">Email</span>
-              <span class="font-body text-4 text-white/80">info@radde.ru</span>
+              <span class="text-small text-white/65 block mb-1">Email</span>
+              <span class="font-body text-4 text-white/90">info@radde.ru</span>
             </a>
 
             <div class="mb-8">
-              <span class="text-small text-white/40 block mb-1">Адрес</span>
-              <a href="https://yandex.ru/maps/-/CPfFnT2P" target="_blank" rel="noopener" class="font-body text-3.5 text-white/60 hover:text-white transition-colors">Республика Дагестан, Гунибский район</a>
+              <span class="text-small text-white/65 block mb-1">Адрес</span>
+              <a href="https://yandex.ru/maps/-/CPfFnT2P" target="_blank" rel="noopener" class="font-body text-4 text-white/85 hover:text-white transition-colors">Республика Дагестан, Гунибский район</a>
             </div>
 
             <div class="flex gap-4">
@@ -71,8 +71,8 @@
                 </div>
               </div>
               <button type="submit" class="btn-primary w-full text-center py-4">Отправить заявку</button>
-              <p class="text-3 text-white/30 mt-4 text-center">
-                Нажимая кнопку, вы соглашаетесь с <a href="/privacy" class="text-white/50 underline underline-offset-2 hover:text-white/70 transition-colors">политикой конфиденциальности</a>
+              <p class="text-small text-white/65 mt-4 text-center">
+                Нажимая кнопку, вы соглашаетесь с <a href="/privacy" class="text-white/85 underline underline-offset-2 hover:text-white transition-colors">политикой конфиденциальности</a>
               </p>
             </form>
           </div>
@@ -87,7 +87,7 @@
         <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-8 mb-8">
           <div class="flex items-center gap-4">
             <img :src="`${base}images/logo-white.png`" alt="Радде" class="h-12 w-auto flex-shrink-0" style="filter: brightness(1.2);" />
-            <p class="text-small text-sand-500 leading-relaxed max-w-85">
+            <p class="text-small text-sand-300 leading-relaxed max-w-85">
               Отдых в горах Дагестана на высоте 1700 метров<br>в реликтовом лесу Гунибского района
             </p>
           </div>
@@ -109,13 +109,13 @@
         <!-- Bottom row: copyright | meta disclaimer | markins -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div class="flex flex-wrap items-center gap-x-5 gap-y-1">
-            <span class="text-caption text-sand-600">&copy; {{ new Date().getFullYear() }} Пансионат Радде</span>
-            <a href="/privacy" class="text-caption text-sand-600 hover:text-sand-400 transition-colors">Политика конфиденциальности</a>
+            <span class="text-caption text-sand-300">&copy; {{ new Date().getFullYear() }} Пансионат Радде</span>
+            <a href="/privacy" class="text-caption text-sand-300 hover:text-white transition-colors">Политика конфиденциальности</a>
           </div>
-          <span class="text-caption text-sand-600">*Meta признана экстремистской организацией и запрещена на территории России</span>
-          <a href="https://markins.ru?utm_source=radde.ru&utm_medium=footer&utm_campaign=credits" target="_blank" class="flex items-center gap-1.5 text-sand-600 hover:text-sand-400 transition-colors">
-            <span class="text-3">Разработано</span>
-            <img :src="`${base}images/markins-text-white.svg`" alt="markins" class="h-2.5 w-auto" style="filter: brightness(0) invert(0.55);" />
+          <span class="text-caption text-sand-300">*Meta признана экстремистской организацией и запрещена на территории России</span>
+          <a href="https://markins.ru?utm_source=radde.ru&utm_medium=footer&utm_campaign=credits" target="_blank" class="flex items-center gap-1.5 text-sand-300 hover:text-white transition-colors">
+            <span class="text-caption">Разработано</span>
+            <img :src="`${base}images/markins-text-white.svg`" alt="markins" class="h-3 w-auto" style="filter: brightness(0) invert(0.85);" />
           </a>
         </div>
       </div>
@@ -139,13 +139,13 @@ function handlePhone(e: Event) {
 <style scoped>
 .footer-link {
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.75);
   text-decoration: none;
   transition: color 0.2s;
 }
 .footer-link:hover {
-  color: rgba(255, 255, 255, 0.75);
+  color: white;
 }
 </style>

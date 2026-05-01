@@ -1,5 +1,5 @@
 ﻿<template>
-  <section id="rooms" class="py-24 md:py-32 bg-sand-100">
+  <section id="rooms" class="py-20 md:py-26 bg-sand-100">
     <div class="container">
       <div class="text-center mb-16">
         <span class="text-label text-olive-600 mb-4 block">Размещение</span>
@@ -76,7 +76,7 @@
                     <rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.3"/>
                     <path d="M2 7h14M7 2v14" stroke="currentColor" stroke-width="1.3"/>
                   </svg>
-                  <span class="font-body text-3.5 font-600 text-olive-700">{{ room.area }} м²</span>
+                  <span class="font-body text-4 font-600 text-olive-700">{{ room.area }} м²</span>
                 </div>
                 <div class="w-px h-3.5 bg-olive-200"></div>
                 <div class="flex items-center gap-2">
@@ -85,7 +85,7 @@
                     <path d="M3 8V6a3 3 0 016 0v2M9 8V6a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.3"/>
                     <path d="M1.5 11.5h15" stroke="currentColor" stroke-width="1.3"/>
                   </svg>
-                  <span class="font-body text-3.5 font-600 text-olive-700">{{ room.bed }}</span>
+                  <span class="font-body text-4 font-600 text-olive-700">{{ room.bed }}</span>
                 </div>
                 <div class="w-px h-3.5 bg-olive-200"></div>
                 <div class="flex items-center gap-2">
@@ -93,7 +93,7 @@
                     <circle cx="9" cy="5.5" r="3" stroke="currentColor" stroke-width="1.3"/>
                     <path d="M3 16c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
                   </svg>
-                  <span class="font-body text-3.5 font-600 text-olive-700">до {{ room.guests }} гостей</span>
+                  <span class="font-body text-4 font-600 text-olive-700">до {{ room.guests }} гостей</span>
                 </div>
                 <div class="w-px h-3.5 bg-olive-200"></div>
                 <div class="flex items-center gap-2">
@@ -102,12 +102,12 @@
                     <path d="M1 15h16" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
                     <circle cx="13" cy="4" r="2" stroke="currentColor" stroke-width="1.3"/>
                   </svg>
-                  <span class="font-body text-3.5 font-600 text-olive-700">{{ room.view }}</span>
+                  <span class="font-body text-4 font-600 text-olive-700">{{ room.view }}</span>
                 </div>
               </div>
 
               <!-- Description (max 3 lines, truncated) -->
-              <p class="font-body text-3.5 text-sand-600 leading-relaxed mb-4 room-desc">
+              <p class="font-body text-4 text-sand-700 leading-relaxed mb-4 room-desc">
                 {{ room.description }}
               </p>
 
@@ -120,12 +120,12 @@
               <!-- Unique amenities -->
               <div class="flex flex-wrap gap-2 mb-auto pb-5">
                 <span v-for="(tag, ti) in room.tags.slice(0, 4)" :key="ti"
-                      class="text-caption font-500 text-sand-600 bg-sand-100 px-3 py-1.5 rounded-full">
+                      class="font-body text-4 font-500 text-sand-700 bg-sand-100 px-3.5 py-1.5 rounded-full">
                   {{ tag }}
                 </span>
                 <button v-if="room.tags.length > 4"
                         @click="openDetails(room)"
-                        class="text-caption font-500 text-amber-600 bg-amber-400/8 px-3 py-1.5 rounded-full border-none cursor-pointer hover:bg-amber-400/15 transition-colors">
+                        class="font-body text-4 font-500 text-amber-700 bg-amber-400/12 px-3.5 py-1.5 rounded-full border-none cursor-pointer hover:bg-amber-400/20 transition-colors">
                   ещё {{ room.tags.length - 4 }}
                 </button>
               </div>
@@ -134,8 +134,8 @@
               <div class="pt-4 border-t border-sand-100">
                 <div class="text-left mb-4">
                   <span class="font-display font-500 text-sand-900" style="font-size: clamp(1.3rem, 2vw, 1.6rem)">от {{ room.price }} ₽</span>
-                  <span class="text-small text-sand-400 ml-1">/ ночь</span>
-                  <span class="block text-caption text-sand-400 mt-0.5">за 2 взрослых</span>
+                  <span class="text-small text-sand-600 ml-1">/ ночь</span>
+                  <span class="block text-small text-sand-600 mt-0.5">за 2 взрослых</span>
                 </div>
                 <div class="flex items-center justify-end gap-3">
                   <button v-if="room.fullDescription"
@@ -202,36 +202,36 @@
               <div class="flex flex-wrap items-center gap-3 mb-6 bg-olive-50 border border-olive-100 rounded-2.5 px-5 py-3.5">
                 <div class="flex items-center gap-2">
                   <svg class="text-olive-500" width="16" height="16" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M2 7h14M7 2v14" stroke="currentColor" stroke-width="1.3"/></svg>
-                  <span class="font-body text-3.5 font-600 text-olive-700">{{ detailRoom.area }} м²</span>
+                  <span class="font-body text-4 font-600 text-olive-700">{{ detailRoom.area }} м²</span>
                 </div>
                 <div class="w-px h-3.5 bg-olive-200"></div>
                 <div class="flex items-center gap-2">
                   <svg class="text-olive-500" width="16" height="16" viewBox="0 0 18 18" fill="none"><rect x="1.5" y="8" width="15" height="7" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M3 8V6a3 3 0 016 0v2M9 8V6a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 11.5h15" stroke="currentColor" stroke-width="1.3"/></svg>
-                  <span class="font-body text-3.5 font-600 text-olive-700">{{ detailRoom.bed }}</span>
+                  <span class="font-body text-4 font-600 text-olive-700">{{ detailRoom.bed }}</span>
                 </div>
                 <div class="w-px h-3.5 bg-olive-200"></div>
                 <div class="flex items-center gap-2">
                   <svg class="text-olive-500" width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="5.5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M3 16c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-                  <span class="font-body text-3.5 font-600 text-olive-700">до {{ detailRoom.guests }} гостей</span>
+                  <span class="font-body text-4 font-600 text-olive-700">до {{ detailRoom.guests }} гостей</span>
                 </div>
                 <div class="w-px h-3.5 bg-olive-200"></div>
                 <div class="flex items-center gap-2">
                   <svg class="text-olive-500" width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M2 13c2-4 4.5-7 7-7s5 2 7 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M1 15h16" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="13" cy="4" r="2" stroke="currentColor" stroke-width="1.3"/></svg>
-                  <span class="font-body text-3.5 font-600 text-olive-700">{{ detailRoom.view }}</span>
+                  <span class="font-body text-4 font-600 text-olive-700">{{ detailRoom.view }}</span>
                 </div>
               </div>
 
-              <p class="font-body text-3.5 text-sand-700 leading-relaxed mb-6">{{ detailRoom.fullDescription }}</p>
+              <p class="font-body text-4 text-sand-800 leading-relaxed mb-6">{{ detailRoom.fullDescription }}</p>
 
               <div v-if="detailRoom.note" class="flex items-start gap-2.5 bg-amber-400/8 border border-amber-400/20 rounded-2 px-4 py-3 mb-6">
                 <svg class="flex-shrink-0 mt-0.5 text-amber-500" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v3.5M8 10.5h.007" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-                <span class="font-body text-3.5 text-amber-700 font-500">{{ detailRoom.note }}</span>
+                <span class="font-body text-4 text-amber-700 font-500">{{ detailRoom.note }}</span>
               </div>
 
-              <h4 class="text-label text-sand-500 mb-3">Удобства в номере</h4>
+              <h4 class="text-label text-sand-700 mb-3">Удобства в номере</h4>
               <div class="flex flex-wrap gap-2 mb-8">
                 <span v-for="tag in detailRoom.tags" :key="tag"
-                      class="text-caption font-500 text-sand-600 bg-sand-200 px-3 py-1.5 rounded-full">
+                      class="font-body text-4 font-500 text-sand-700 bg-sand-200 px-3.5 py-1.5 rounded-full">
                   {{ tag }}
                 </span>
               </div>
@@ -239,8 +239,8 @@
               <div class="flex items-center justify-between pt-5 border-t border-sand-200">
                 <div>
                   <span class="font-display font-500 text-6 text-sand-900">от {{ detailRoom.price }} ₽</span>
-                  <span class="text-small text-sand-400 ml-1">/ ночь</span>
-                  <span class="block text-caption text-sand-400 mt-0.5">за 2 взрослых</span>
+                  <span class="text-small text-sand-600 ml-1">/ ночь</span>
+                  <span class="block text-small text-sand-600 mt-0.5">за 2 взрослых</span>
                 </div>
                 <button class="btn-primary opacity-50 cursor-default" disabled>Забронировать</button>
               </div>

@@ -63,7 +63,7 @@
             <div class="col-span-2 lg:col-span-2">
               <button
                 @click="handleBooking"
-                class="w-full bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white font-body font-600 text-3.5 rounded-2 py-3.5 transition-all duration-300 shadow-lg shadow-amber-500/20 cursor-pointer border-none">
+                class="w-full bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white font-body font-600 text-4 rounded-2 py-3.5 transition-all duration-300 shadow-lg shadow-amber-500/20 cursor-pointer border-none">
                 Забронировать
               </button>
             </div>
@@ -167,7 +167,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.7);
   font-size: 18px;
   font-weight: 300;
   background: transparent;
@@ -187,7 +187,7 @@ onMounted(() => {
   flex: 1;
   text-align: center;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: white;
 }
