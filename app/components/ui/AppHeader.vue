@@ -300,6 +300,12 @@ onMounted(() => {
   background: rgba(255, 255, 255, 0.14);
   border-color: rgba(255, 255, 255, 0.2);
 }
+/* На десктопе scoped-стиль перебивал UnoCSS lg:hidden — фиксим явно */
+@media (min-width: 1024px) {
+  .mobile-action-btn {
+    display: none;
+  }
+}
 
 .mobile-social-icon {
   display: flex;

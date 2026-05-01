@@ -79,8 +79,8 @@
         </Transition>
       </div>
 
-      <!-- Mobile scroll hint -->
-      <div class="services-scroll-hint md:hidden">
+      <!-- Mobile scroll hint — show only when list actually overflows -->
+      <div v-show="showScrollHint" class="services-scroll-hint md:hidden">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         Скролльте, чтобы увидеть все услуги
       </div>
@@ -180,7 +180,10 @@ const gridRef = ref<HTMLElement>()
 const activeTab = ref('included')
 const expanded = ref(false)
 const isMobile = ref(false)
+const hasOverflow = ref(false)
 const detailService = ref<Service | null>(null)
+
+const showScrollHint = computed(() => isMobile.value && hasOverflow.value)
 
 // Reset expanded when tab changes
 watch(activeTab, () => { expanded.value = false })
@@ -481,6 +484,16 @@ function closeDetail() {
   history.replaceState(null, '', window.location.pathname)
 }
 
+function checkOverflow() {
+  if (!gridRef.value) return
+  hasOverflow.value = gridRef.value.scrollWidth > gridRef.value.clientWidth + 1
+}
+
+// Recheck when content/tab/expanded changes
+watch([activeTab, expanded, isMobile, () => visibleServices.value.length], () => {
+  nextTick(checkOverflow)
+})
+
 onMounted(() => {
   if (!import.meta.client) return
 
@@ -490,6 +503,12 @@ onMounted(() => {
   const onMqChange = (e: MediaQueryListEvent) => { isMobile.value = e.matches }
   mq.addEventListener('change', onMqChange)
   onUnmounted(() => mq.removeEventListener('change', onMqChange))
+
+  // Initial overflow check + on resize
+  nextTick(checkOverflow)
+  const ro = new ResizeObserver(() => checkOverflow())
+  if (gridRef.value) ro.observe(gridRef.value)
+  onUnmounted(() => ro.disconnect())
 
   // Open service modal from URL hash
   const hash = window.location.hash

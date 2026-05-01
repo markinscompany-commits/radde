@@ -20,8 +20,8 @@
         </div>
       </div>
 
-      <!-- Mobile scroll hint -->
-      <div class="md:hidden flex justify-center mt-5">
+      <!-- Mobile scroll hint — show only when grid actually overflows -->
+      <div v-show="showScrollHint" class="md:hidden flex justify-center mt-5">
         <div class="gallery-scroll-hint">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
           Скролльте, чтобы увидеть все фото
@@ -83,6 +83,15 @@ const lightboxOpen = ref(false)
 const lightboxIndex = ref(0)
 const lightboxZoom = ref(1)
 
+const isMobile = ref(false)
+const hasOverflow = ref(false)
+const showScrollHint = computed(() => isMobile.value && hasOverflow.value)
+
+function checkOverflow() {
+  if (!gridRef.value) return
+  hasOverflow.value = gridRef.value.scrollWidth > gridRef.value.clientWidth + 1
+}
+
 const photos = [
   `${base}images/hero/hero-1.jpg`,
   `${base}images/hero/hero-2.jpg`,
@@ -132,6 +141,29 @@ if (import.meta.client) {
   })
 }
 
+onMounted(() => {
+  if (!import.meta.client) return
+
+  // Track mobile viewport
+  const mq = window.matchMedia('(max-width: 767px)')
+  isMobile.value = mq.matches
+  const onMqChange = (e: MediaQueryListEvent) => { isMobile.value = e.matches }
+  mq.addEventListener('change', onMqChange)
+  onUnmounted(() => mq.removeEventListener('change', onMqChange))
+
+  // Check overflow (initial + on resize). Recheck after images load
+  // (paint may shift width once images settle).
+  nextTick(checkOverflow)
+  const ro = new ResizeObserver(() => checkOverflow())
+  if (gridRef.value) ro.observe(gridRef.value)
+  onUnmounted(() => ro.disconnect())
+
+  if (gridRef.value) {
+    gridRef.value.querySelectorAll('img').forEach((img) => {
+      if (!img.complete) img.addEventListener('load', checkOverflow, { once: true })
+    })
+  }
+})
 </script>
 
 <style scoped>

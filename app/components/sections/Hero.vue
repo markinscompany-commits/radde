@@ -1,5 +1,5 @@
 ﻿<template>
-  <section class="relative min-h-screen overflow-hidden bg-sand-900">
+  <section class="hero-section relative overflow-hidden bg-sand-900">
     <!-- Фоновая фотография -->
     <img
       :src="heroImage"
@@ -10,7 +10,7 @@
     <div class="absolute inset-0 bg-sand-900/70"></div>
 
     <!-- Заголовок: выше на мобильной (чтобы не уходил за форму бронирования), по центру на md+ -->
-    <div class="absolute inset-0 z-10 flex items-start md:items-center justify-center text-center px-5 pt-[20vh] md:pt-0">
+    <div class="hero-title-wrap absolute inset-0 z-10 flex items-start md:items-center justify-center text-center px-5 md:pt-0">
       <h1 ref="titleRef" class="font-display font-500 text-white hero-hidden max-w-1100px"
           style="font-size: clamp(2.2rem, 6vw, 4.4rem); line-height: 1.05">
         Пансионат Радде<br><span class="font-accent italic font-500 text-sand-300 text-[1.2em]">реликтовый лес, горы и&nbsp;гармония</span>
@@ -18,7 +18,7 @@
     </div>
 
     <!-- Content -->
-    <div class="relative z-10 min-h-screen flex flex-col">
+    <div class="hero-content relative z-10 flex flex-col">
       <!-- Spacer to push booking form to bottom -->
       <div class="flex-1"></div>
 
@@ -198,4 +198,24 @@ onMounted(() => {
   transform: translateY(20px);
 }
 
+/* Высота Hero: используем svh (small viewport height) чтобы блок
+   не "скакал" на iOS Safari при появлении/скрытии адресной строки.
+   100vh учитывает динамическую панель, 100svh — нет. */
+.hero-section {
+  min-height: 100vh; /* fallback */
+  min-height: 100svh;
+}
+.hero-content {
+  min-height: 100vh; /* fallback */
+  min-height: 100svh;
+}
+.hero-title-wrap {
+  padding-top: 20vh; /* fallback */
+  padding-top: 20svh;
+}
+@media (min-width: 768px) {
+  .hero-title-wrap {
+    padding-top: 0;
+  }
+}
 </style>
