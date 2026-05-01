@@ -62,9 +62,6 @@
         +7 (900) 123-45-67
       </a>
       <div class="w-px h-5 bg-white/20"></div>
-      <button @click="$emit('book')" class="font-body text-4 font-600 text-white/80 hover:text-white transition-colors cursor-pointer bg-transparent border-none">
-        Оставить заявку
-      </button>
       <span class="bg-amber-500/50 text-white/60 font-body font-600 text-4 px-5 py-2 rounded-2 cursor-default no-underline">
         Забронировать
       </span>
@@ -100,9 +97,6 @@
       </a>
 
       <div class="flex gap-3">
-        <button @click="$emit('book'); closeMobile()" class="flex-1 bg-white/10 border border-white/20 text-white font-body font-600 text-3.5 py-3 rounded-2 cursor-pointer transition-colors hover:bg-white/20">
-          Оставить заявку
-        </button>
         <span class="flex-1 bg-amber-500/50 text-white/60 font-body font-600 text-3.5 py-3 rounded-2 text-center cursor-default">
           Забронировать
         </span>

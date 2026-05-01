@@ -16,9 +16,9 @@
 
       <!-- Заголовок по центру -->
       <div class="flex-1 flex flex-col items-center justify-center text-center px-5">
-        <h1 ref="titleRef" class="font-display font-500 text-white leading-tight mb-6 hero-hidden max-w-1100px"
-            style="font-size: clamp(2.2rem, 6vw, 4.4rem)">
-          Пансионат Радде <span class="font-accent italic font-500 text-sand-300 text-[1.3em]">— реликтовый лес, горы и&nbsp;гармония</span>
+        <h1 ref="titleRef" class="font-display font-500 text-white mb-6 hero-hidden max-w-1100px"
+            style="font-size: clamp(2.2rem, 6vw, 4.4rem); line-height: 1.05">
+          Пансионат Радде <span class="font-accent italic font-500 text-sand-300 text-[1.2em]">реликтовый лес, горы и&nbsp;гармония</span>
         </h1>
       </div>
 
@@ -80,7 +80,7 @@ const base = useRuntimeConfig().app.baseURL || '/'
 const titleRef = ref<HTMLElement>()
 const bookingRef = ref<HTMLElement>()
 
-const heroImage = `${base}images/hero/hero-1.jpg`
+const heroImage = `${base}images/hero/hero-1.jpg?v=2`
 
 const today = computed(() => new Date().toISOString().split('T')[0])
 
