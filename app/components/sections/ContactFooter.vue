@@ -87,7 +87,7 @@
         <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-8 mb-8">
           <div class="flex items-center gap-4">
             <img :src="`${base}images/logo-white.png`" alt="Радде" class="h-12 w-auto flex-shrink-0" style="filter: brightness(1.2);" />
-            <p class="text-small text-sand-300 leading-relaxed max-w-85">
+            <p class="footer-desc">
               Отдых в горах Дагестана на высоте 1700 метров<br>в реликтовом лесу Гунибского района
             </p>
           </div>
@@ -109,13 +109,13 @@
         <!-- Bottom row: copyright | meta disclaimer | markins -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div class="flex flex-wrap items-center gap-x-5 gap-y-1">
-            <span class="text-caption text-sand-300">&copy; {{ new Date().getFullYear() }} Пансионат Радде</span>
-            <a href="/privacy" class="text-caption text-sand-300 hover:text-white transition-colors">Политика конфиденциальности</a>
+            <span class="footer-meta">&copy; {{ new Date().getFullYear() }} Пансионат Радде</span>
+            <a href="/privacy" class="footer-meta footer-meta--link">Политика конфиденциальности</a>
           </div>
-          <span class="text-caption text-sand-300">*Meta признана экстремистской организацией и запрещена на территории России</span>
-          <a href="https://markins.ru?utm_source=radde.ru&utm_medium=footer&utm_campaign=credits" target="_blank" class="flex items-center gap-1.5 text-sand-300 hover:text-white transition-colors">
-            <span class="text-caption">Разработано</span>
-            <img :src="`${base}images/markins-text-white.svg`" alt="markins" class="h-3 w-auto" style="filter: brightness(0) invert(0.85);" />
+          <span class="footer-meta">*Meta признана экстремистской организацией и запрещена на территории России</span>
+          <a href="https://markins.ru?utm_source=radde.ru&utm_medium=footer&utm_campaign=credits" target="_blank" class="flex items-center gap-1.5 footer-meta footer-meta--link">
+            <span>Разработано</span>
+            <img :src="`${base}images/markins-text-white.svg`" alt="markins" class="h-2.5 w-auto" style="filter: brightness(0) invert(0.65);" />
           </a>
         </div>
       </div>
@@ -147,5 +147,27 @@ function handlePhone(e: Event) {
 }
 .footer-link:hover {
   color: white;
+}
+
+/* Footer description (под лого) — намеренно мельче 16px по требованию заказчика */
+.footer-desc {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.55);
+  max-width: 22rem;
+}
+
+/* Footer bottom row meta (copyright, политика, Meta-disclaimer, Разработано) — намеренно мельче 16px */
+.footer-meta {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.45);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-meta--link:hover {
+  color: rgba(255, 255, 255, 0.75);
 }
 </style>

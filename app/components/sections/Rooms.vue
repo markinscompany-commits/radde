@@ -69,43 +69,6 @@
               <!-- Name -->
               <h3 class="font-display font-500 text-sand-900 mb-4" style="font-size: clamp(1.4rem, 2.5vw, 1.8rem)">{{ room.name }}</h3>
 
-              <!-- Specs row with icons — distinct background -->
-              <div class="flex flex-wrap items-center gap-3 mb-5 bg-olive-50 border border-olive-100 rounded-2.5 px-4 py-3">
-                <div class="flex items-center gap-2">
-                  <svg class="flex-shrink-0 text-olive-500" width="16" height="16" viewBox="0 0 18 18" fill="none">
-                    <rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.3"/>
-                    <path d="M2 7h14M7 2v14" stroke="currentColor" stroke-width="1.3"/>
-                  </svg>
-                  <span class="font-body text-4 font-600 text-olive-700">{{ room.area }} м²</span>
-                </div>
-                <div class="w-px h-3.5 bg-olive-200"></div>
-                <div class="flex items-center gap-2">
-                  <svg class="flex-shrink-0 text-olive-500" width="16" height="16" viewBox="0 0 18 18" fill="none">
-                    <rect x="1.5" y="8" width="15" height="7" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
-                    <path d="M3 8V6a3 3 0 016 0v2M9 8V6a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.3"/>
-                    <path d="M1.5 11.5h15" stroke="currentColor" stroke-width="1.3"/>
-                  </svg>
-                  <span class="font-body text-4 font-600 text-olive-700">{{ room.bed }}</span>
-                </div>
-                <div class="w-px h-3.5 bg-olive-200"></div>
-                <div class="flex items-center gap-2">
-                  <svg class="flex-shrink-0 text-olive-500" width="16" height="16" viewBox="0 0 18 18" fill="none">
-                    <circle cx="9" cy="5.5" r="3" stroke="currentColor" stroke-width="1.3"/>
-                    <path d="M3 16c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-                  </svg>
-                  <span class="font-body text-4 font-600 text-olive-700">до {{ room.guests }} гостей</span>
-                </div>
-                <div class="w-px h-3.5 bg-olive-200"></div>
-                <div class="flex items-center gap-2">
-                  <svg class="flex-shrink-0 text-olive-500" width="16" height="16" viewBox="0 0 18 18" fill="none">
-                    <path d="M2 13c2-4 4.5-7 7-7s5 2 7 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-                    <path d="M1 15h16" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-                    <circle cx="13" cy="4" r="2" stroke="currentColor" stroke-width="1.3"/>
-                  </svg>
-                  <span class="font-body text-4 font-600 text-olive-700">{{ room.view }}</span>
-                </div>
-              </div>
-
               <!-- Description (max 3 lines, truncated) -->
               <p class="font-body text-4 text-sand-700 leading-relaxed mb-4 room-desc">
                 {{ room.description }}
@@ -117,15 +80,46 @@
                 <span class="text-small text-amber-700 font-500 leading-snug">{{ room.note }}</span>
               </div>
 
-              <!-- Unique amenities -->
+              <!-- Specs as chips (highlighted) + amenities (neutral) — single flow -->
               <div class="flex flex-wrap gap-2 mb-auto pb-5">
-                <span v-for="(tag, ti) in room.tags.slice(0, 4)" :key="ti"
-                      class="font-body text-4 font-500 text-sand-700 bg-sand-100 px-3.5 py-1.5 rounded-full">
+                <!-- Highlighted specs -->
+                <span class="spec-chip">
+                  <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
+                    <rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.3"/>
+                    <path d="M2 7h14M7 2v14" stroke="currentColor" stroke-width="1.3"/>
+                  </svg>
+                  {{ room.area }} м²
+                </span>
+                <span class="spec-chip">
+                  <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
+                    <rect x="1.5" y="8" width="15" height="7" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+                    <path d="M3 8V6a3 3 0 016 0v2M9 8V6a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.3"/>
+                    <path d="M1.5 11.5h15" stroke="currentColor" stroke-width="1.3"/>
+                  </svg>
+                  {{ room.bed }}
+                </span>
+                <span class="spec-chip">
+                  <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
+                    <circle cx="9" cy="5.5" r="3" stroke="currentColor" stroke-width="1.3"/>
+                    <path d="M3 16c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                  </svg>
+                  до {{ room.guests }} гостей
+                </span>
+                <span class="spec-chip">
+                  <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
+                    <path d="M2 13c2-4 4.5-7 7-7s5 2 7 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                    <path d="M1 15h16" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                    <circle cx="13" cy="4" r="2" stroke="currentColor" stroke-width="1.3"/>
+                  </svg>
+                  {{ room.view }}
+                </span>
+                <!-- Neutral amenity tags -->
+                <span v-for="(tag, ti) in room.tags.slice(0, 4)" :key="ti" class="amenity-chip">
                   {{ tag }}
                 </span>
                 <button v-if="room.tags.length > 4"
                         @click="openDetails(room)"
-                        class="font-body text-4 font-500 text-amber-700 bg-amber-400/12 px-3.5 py-1.5 rounded-full border-none cursor-pointer hover:bg-amber-400/20 transition-colors">
+                        class="amenity-chip amenity-chip--more">
                   ещё {{ room.tags.length - 4 }}
                 </button>
               </div>
@@ -196,29 +190,26 @@
             </div>
 
             <div class="p-6 md:p-8">
-              <h3 class="font-display font-500 text-7 text-sand-900 mb-3">{{ detailRoom.name }}</h3>
+              <h3 class="font-display font-500 text-7 text-sand-900 mb-4">{{ detailRoom.name }}</h3>
 
-              <!-- Specs with icons — distinct block -->
-              <div class="flex flex-wrap items-center gap-3 mb-6 bg-olive-50 border border-olive-100 rounded-2.5 px-5 py-3.5">
-                <div class="flex items-center gap-2">
-                  <svg class="text-olive-500" width="16" height="16" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M2 7h14M7 2v14" stroke="currentColor" stroke-width="1.3"/></svg>
-                  <span class="font-body text-4 font-600 text-olive-700">{{ detailRoom.area }} м²</span>
-                </div>
-                <div class="w-px h-3.5 bg-olive-200"></div>
-                <div class="flex items-center gap-2">
-                  <svg class="text-olive-500" width="16" height="16" viewBox="0 0 18 18" fill="none"><rect x="1.5" y="8" width="15" height="7" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M3 8V6a3 3 0 016 0v2M9 8V6a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 11.5h15" stroke="currentColor" stroke-width="1.3"/></svg>
-                  <span class="font-body text-4 font-600 text-olive-700">{{ detailRoom.bed }}</span>
-                </div>
-                <div class="w-px h-3.5 bg-olive-200"></div>
-                <div class="flex items-center gap-2">
-                  <svg class="text-olive-500" width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="5.5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M3 16c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-                  <span class="font-body text-4 font-600 text-olive-700">до {{ detailRoom.guests }} гостей</span>
-                </div>
-                <div class="w-px h-3.5 bg-olive-200"></div>
-                <div class="flex items-center gap-2">
-                  <svg class="text-olive-500" width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M2 13c2-4 4.5-7 7-7s5 2 7 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M1 15h16" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="13" cy="4" r="2" stroke="currentColor" stroke-width="1.3"/></svg>
-                  <span class="font-body text-4 font-600 text-olive-700">{{ detailRoom.view }}</span>
-                </div>
+              <!-- Specs as chips (highlighted) — single flow -->
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="spec-chip">
+                  <svg width="15" height="15" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M2 7h14M7 2v14" stroke="currentColor" stroke-width="1.3"/></svg>
+                  {{ detailRoom.area }} м²
+                </span>
+                <span class="spec-chip">
+                  <svg width="15" height="15" viewBox="0 0 18 18" fill="none"><rect x="1.5" y="8" width="15" height="7" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M3 8V6a3 3 0 016 0v2M9 8V6a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 11.5h15" stroke="currentColor" stroke-width="1.3"/></svg>
+                  {{ detailRoom.bed }}
+                </span>
+                <span class="spec-chip">
+                  <svg width="15" height="15" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="5.5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M3 16c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                  до {{ detailRoom.guests }} гостей
+                </span>
+                <span class="spec-chip">
+                  <svg width="15" height="15" viewBox="0 0 18 18" fill="none"><path d="M2 13c2-4 4.5-7 7-7s5 2 7 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M1 15h16" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="13" cy="4" r="2" stroke="currentColor" stroke-width="1.3"/></svg>
+                  {{ detailRoom.view }}
+                </span>
               </div>
 
               <p class="font-body text-4 text-sand-800 leading-relaxed mb-6">{{ detailRoom.fullDescription }}</p>
@@ -230,8 +221,7 @@
 
               <h4 class="text-label text-sand-700 mb-3">Удобства в номере</h4>
               <div class="flex flex-wrap gap-2 mb-8">
-                <span v-for="tag in detailRoom.tags" :key="tag"
-                      class="font-body text-4 font-500 text-sand-700 bg-sand-200 px-3.5 py-1.5 rounded-full">
+                <span v-for="tag in detailRoom.tags" :key="tag" class="amenity-chip">
                   {{ tag }}
                 </span>
               </div>
@@ -455,6 +445,52 @@ onMounted(() => {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Spec chip — выделенные характеристики (площадь, кровать, гости, вид) */
+.spec-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #4A6330;
+  background: #F4F6EE;
+  border: 1px solid #D1D9B9;
+  padding: 7px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.spec-chip svg {
+  color: #6B8B3A;
+  flex-shrink: 0;
+}
+
+/* Amenity chip — нейтральные теги удобств */
+.amenity-chip {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #6B5B4A;
+  background: #FAF6F0;
+  border: 1px solid #F0E6D6;
+  padding: 7px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.amenity-chip--more {
+  color: #A66B32;
+  background: rgba(212, 148, 74, 0.1);
+  border-color: rgba(212, 148, 74, 0.25);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.amenity-chip--more:hover {
+  background: rgba(212, 148, 74, 0.18);
+  border-color: rgba(212, 148, 74, 0.4);
 }
 
 /* Crossfade transition for photos */

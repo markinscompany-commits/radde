@@ -3,15 +3,15 @@
     <div class="container">
       <!-- Header -->
       <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
-        <div>
+        <div class="lg:flex-shrink-0 lg:max-w-[55%]">
           <span class="text-label text-olive-600 mb-4 block">Как добраться</span>
-          <h2 ref="titleRef" class="text-h2 font-500 text-sand-900">
-            Мы в самом сердце<br>
+          <h2 ref="titleRef" class="text-h2 font-500 text-sand-900 whitespace-nowrap">
+            Мы в&nbsp;самом сердце<br>
             <span class="section-title-accent">Гунибского района</span>
           </h2>
         </div>
         <!-- Coordinates -->
-        <div ref="coordRef" class="flex items-center gap-3 flex-wrap">
+        <div ref="coordRef" class="flex items-center gap-3 flex-wrap lg:justify-end">
           <span class="text-small text-sand-700 font-500">42.3949°N, 46.9366°E</span>
           <button @click="copyCoords" class="loc-small-btn">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>

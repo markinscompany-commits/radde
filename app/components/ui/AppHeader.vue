@@ -58,10 +58,10 @@
           <img :src="`${base}images/icon-max.svg`" width="16" height="16" alt="Max" style="filter: brightness(0) invert(1); opacity: 0.7;" />
         </a>
       </div>
-      <a href="tel:+79001234567" class="font-body text-4.5 font-500 text-white/80 hover:text-white transition-colors">
+      <a href="tel:+79001234567" class="font-body text-4 font-500 text-white/85 hover:text-white transition-colors">
         +7 (900) 123-45-67
       </a>
-      <span class="bg-amber-500/50 text-white/80 font-body font-600 text-4.5 px-5 py-2.5 rounded-2 cursor-default no-underline">
+      <span class="bg-amber-500/50 text-white/85 font-body font-600 text-4 px-5 py-2.5 rounded-2 cursor-default no-underline">
         Забронировать
       </span>
     </div>
@@ -223,7 +223,7 @@ onMounted(() => {
 <style scoped>
 .nav-link {
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.85);
   transition: color 0.2s;
@@ -273,7 +273,7 @@ onMounted(() => {
 .dropdown-link {
   display: block;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.8);
   padding: 8px 16px;
