@@ -130,14 +130,14 @@
                 </button>
               </div>
 
-              <!-- Bottom: Price + buttons -->
-              <div class="flex items-end justify-between pt-4 border-t border-sand-100">
-                <div>
+              <!-- Bottom: Price (left) above Buttons (right) -->
+              <div class="pt-4 border-t border-sand-100">
+                <div class="text-left mb-4">
                   <span class="font-display font-500 text-sand-900" style="font-size: clamp(1.3rem, 2vw, 1.6rem)">от {{ room.price }} ₽</span>
                   <span class="text-small text-sand-400 ml-1">/ ночь</span>
                   <span class="block text-caption text-sand-400 mt-0.5">за 2 взрослых</span>
                 </div>
-                <div class="flex items-center gap-3">
+                <div class="flex items-center justify-end gap-3">
                   <button v-if="room.fullDescription"
                           @click="openDetails(room)"
                           class="text-small font-600 text-amber-600 hover:text-amber-700 transition-colors bg-transparent border-none cursor-pointer p-0">
@@ -372,7 +372,7 @@ function prevPhoto(room: typeof rooms[0]) {
 }
 
 const VIP_COUNT = 9
-const PANORAMA_COUNT = 9
+const PANORAMA_COUNT = 8
 const LUX_COUNT = 17
 const STANDARD_COUNT = 3
 const range = (n: number) => Array.from({ length: n }, (_, i) => i + 1)
