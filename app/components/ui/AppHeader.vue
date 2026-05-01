@@ -122,6 +122,7 @@ const mainNav: NavLink[] = [
   { href: '#rooms', label: 'Номера', section: 'rooms' },
   { href: '#services', label: 'Услуги', section: 'services' },
   { href: '#about', label: 'Локация', section: 'about' },
+  { href: '/blog', label: 'Блог', section: 'blog' },
 ]
 
 const moreNav: NavLink[] = [
@@ -131,7 +132,6 @@ const moreNav: NavLink[] = [
   { href: '#activities', label: 'Чем заняться', section: 'activities' },
   { href: '#about', label: 'О пансионате', section: 'about' },
   { href: '/contacts', label: 'Контакты', section: 'contacts' },
-  { href: '/blog', label: 'Блог', section: 'blog' },
 ]
 
 const mobileOpen = ref(false)

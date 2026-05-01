@@ -13,8 +13,8 @@
         <div v-for="(room, i) in rooms" :key="i"
              class="room-card bg-white rounded-3 overflow-hidden border border-sand-200 shadow-sm">
           <div class="flex flex-col lg:flex-row" :class="i % 2 === 1 ? 'lg:flex-row-reverse' : ''">
-            <!-- Photo carousel (~42%) -->
-            <div class="relative lg:w-[42%] flex-shrink-0">
+            <!-- Photo carousel (60%) -->
+            <div class="relative lg:w-[60%] flex-shrink-0">
               <div class="aspect-4/3 lg:aspect-auto lg:h-full relative overflow-hidden bg-sand-200 cursor-pointer"
                    @click="openLightbox(room, room.activePhoto)">
                 <!-- Preloaded images with crossfade -->
@@ -26,6 +26,18 @@
                   class="absolute inset-0 w-full h-full object-cover room-photo-transition"
                   :class="room.activePhoto === pi ? 'opacity-100 z-2' : 'opacity-0 z-1'"
                 />
+                <!-- Top-right: zoom hint -->
+                <div class="absolute top-4 right-4 z-10" @click.stop>
+                  <button @click="openLightbox(room, room.activePhoto)"
+                          class="room-arrow"
+                          title="Открыть на весь экран">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                      <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/>
+                      <path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                      <path d="M7 4.5v5M4.5 7h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+                </div>
                 <!-- Bottom bar: arrows left, dots right -->
                 <div class="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-between px-4 py-3"
                      @click.stop>
@@ -52,8 +64,8 @@
               </div>
             </div>
 
-            <!-- Info (~58%) -->
-            <div class="flex-1 p-6 lg:p-8 flex flex-col">
+            <!-- Info (40%) -->
+            <div class="flex-1 p-6 lg:p-7 flex flex-col">
               <!-- Name -->
               <h3 class="font-display font-500 text-sand-900 mb-4" style="font-size: clamp(1.4rem, 2.5vw, 1.8rem)">{{ room.name }}</h3>
 
@@ -359,33 +371,25 @@ function prevPhoto(room: typeof rooms[0]) {
   room.activePhoto = (room.activePhoto - 1 + room.images.length) % room.images.length
 }
 
+const VIP_COUNT = 9
+const PANORAMA_COUNT = 9
+const LUX_COUNT = 17
+const STANDARD_COUNT = 3
+const range = (n: number) => Array.from({ length: n }, (_, i) => i + 1)
+
 const rooms = reactive([
   {
-    name: 'Стандарт',
-    area: 18,
-    bed: 'Двуспальная кровать',
-    guests: 2,
-    view: 'Вид на лес',
-    price: '3 500',
-    description: 'Уютный номер в тёплых природных тонах с видом на реликтовый лес. Всё необходимое для спокойного отдыха вдали от суеты.',
-    fullDescription: 'Уютный номер в тёплых природных тонах с видом на реликтовый лес. Всё необходимое для спокойного отдыха вдали от суеты — удобная кровать с ортопедическим матрасом, шкаф для одежды, рабочее место у окна. Из окна открывается вид на вековые деревья реликтового леса. Идеальный вариант для пар и путешественников, ценящих простоту и природу.',
-    note: 'Санузел в коридоре — один на два номера',
-    tags: ['Рабочее место', 'Шкаф', 'Вид на лес'],
-    images: [`${base}images/rooms/standard/1.jpg`, `${base}images/rooms/standard/2.jpg`, `${base}images/rooms/standard/3.jpg`],
-    activePhoto: 0,
-  },
-  {
-    name: 'Люкс',
-    area: 30,
-    bed: 'Двуспальная кровать',
-    guests: 3,
-    view: 'Вид на горы',
-    price: '5 500',
-    description: 'Просторный номер с собственным санузлом и балконом. Большие окна наполняют пространство естественным светом и открывают вид на горные вершины.',
-    fullDescription: 'Просторный номер с собственным санузлом и балконом. Большие окна наполняют пространство естественным светом и открывают вид на горные вершины. Интерьер в натуральных тонах создаёт атмосферу уюта — мягкая мебель, телевизор, мини-бар с прохладительными напитками. Балкон с видом на горы — идеальное место для утреннего кофе.',
+    name: 'VIP',
+    area: 50,
+    bed: 'King-size',
+    guests: 4,
+    view: 'Панорама на горы и долину',
+    price: '10 000',
+    description: 'Максимальный комфорт. Отдельная гостиная с камином, спальня с панорамными окнами, собственная терраса с видом на горы и долину.',
+    fullDescription: 'Максимальный комфорт для тех, кто ценит пространство и уединение. Отдельная гостиная с камином — идеальное место для вечерних посиделок. Спальня с панорамными окнами и кроватью King-size. Собственная терраса с видом на горы и долину. Санузел с дождевым душем и ванной. Халаты, тапочки, мини-бар, телевизор — всё продумано для безупречного отдыха.',
     note: '',
-    tags: ['Собственный санузел', 'Балкон', 'Телевизор', 'Мини-бар'],
-    images: [`${base}images/rooms/lux/1.jpg`, `${base}images/rooms/lux/2.jpg`, `${base}images/rooms/lux/3.jpg`],
+    tags: ['Гостиная', 'Камин', 'Терраса', 'Ванна', 'Дождевой душ', 'Халаты', 'Мини-бар'],
+    images: range(VIP_COUNT).map(n => `${base}images/rooms/vip/${n}.jpg`),
     activePhoto: 0,
   },
   {
@@ -399,21 +403,35 @@ const rooms = reactive([
     fullDescription: 'Панорамные окна от пола до потолка превращают спальню в смотровую площадку. Просыпаетесь с видом на горные вершины и реликтовый лес — незабываемое начало каждого дня. Номер оснащён кроватью King-size с ортопедическим матрасом, собственным санузлом с дождевым душем, террасой для отдыха на свежем воздухе. Мини-бар, телевизор, кресло у окна — всё для полного комфорта.',
     note: '',
     tags: ['Панорамные окна', 'Терраса', 'Дождевой душ', 'Собственный санузел', 'Мини-бар', 'Кресло у окна'],
-    images: [`${base}images/rooms/panorama/1.jpg`, `${base}images/rooms/panorama/2.jpg`, `${base}images/rooms/panorama/3.jpg`],
+    images: range(PANORAMA_COUNT).map(n => `${base}images/rooms/panorama/${n}.jpg`),
     activePhoto: 0,
   },
   {
-    name: 'VIP',
-    area: 50,
-    bed: 'King-size',
-    guests: 4,
-    view: 'Панорама на горы и долину',
-    price: '10 000',
-    description: 'Максимальный комфорт. Отдельная гостиная с камином, спальня с панорамными окнами, собственная терраса с видом на горы и долину.',
-    fullDescription: 'Максимальный комфорт для тех, кто ценит пространство и уединение. Отдельная гостиная с камином — идеальное место для вечерних посиделок. Спальня с панорамными окнами и кроватью King-size. Собственная терраса с видом на горы и долину. Санузел с дождевым душем и ванной. Халаты, тапочки, мини-бар, телевизор — всё продумано для безупречного отдыха.',
+    name: 'Люкс',
+    area: 30,
+    bed: 'Двуспальная кровать',
+    guests: 3,
+    view: 'Вид на горы',
+    price: '5 500',
+    description: 'Просторный номер с собственным санузлом и балконом. Большие окна наполняют пространство естественным светом и открывают вид на горные вершины.',
+    fullDescription: 'Просторный номер с собственным санузлом и балконом. Большие окна наполняют пространство естественным светом и открывают вид на горные вершины. Интерьер в натуральных тонах создаёт атмосферу уюта — мягкая мебель, телевизор, мини-бар с прохладительными напитками. Балкон с видом на горы — идеальное место для утреннего кофе.',
     note: '',
-    tags: ['Гостиная', 'Камин', 'Терраса', 'Ванна', 'Дождевой душ', 'Халаты', 'Мини-бар'],
-    images: [`${base}images/rooms/vip/1.jpg`, `${base}images/rooms/vip/2.jpg`, `${base}images/rooms/vip/3.jpg`],
+    tags: ['Собственный санузел', 'Балкон', 'Телевизор', 'Мини-бар'],
+    images: range(LUX_COUNT).map(n => `${base}images/rooms/lux/${n}.jpg`),
+    activePhoto: 0,
+  },
+  {
+    name: 'Стандарт',
+    area: 18,
+    bed: 'Двуспальная кровать',
+    guests: 2,
+    view: 'Вид на лес',
+    price: '3 500',
+    description: 'Уютный номер в тёплых природных тонах с видом на реликтовый лес. Всё необходимое для спокойного отдыха вдали от суеты.',
+    fullDescription: 'Уютный номер в тёплых природных тонах с видом на реликтовый лес. Всё необходимое для спокойного отдыха вдали от суеты — удобная кровать с ортопедическим матрасом, шкаф для одежды, рабочее место у окна. Из окна открывается вид на вековые деревья реликтового леса. Идеальный вариант для пар и путешественников, ценящих простоту и природу.',
+    note: 'Санузел в коридоре — один на два номера',
+    tags: ['Рабочее место', 'Шкаф', 'Вид на лес'],
+    images: range(STANDARD_COUNT).map(n => `${base}images/rooms/standard/${n}.jpg`),
     activePhoto: 0,
   },
 ])
