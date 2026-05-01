@@ -72,7 +72,7 @@ const usps = [
 }
 @media (min-width: 768px) {
   .usp-wide {
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 4 / 3;
   }
   .usp-narrow {
     aspect-ratio: auto;

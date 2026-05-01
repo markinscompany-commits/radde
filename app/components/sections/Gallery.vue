@@ -83,7 +83,6 @@ const photos = [
   `${base}images/hero/hero-4.jpg`,
   `${base}images/rooms/vip/1.jpg`,
   `${base}images/usp/nature/1.jpg`,
-  `${base}images/rooms/standard/1.jpg`,
 ]
 
 function openLightbox(index: number) {
