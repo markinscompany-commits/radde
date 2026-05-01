@@ -503,10 +503,15 @@ onMounted(() => {
   background: transparent;
   border: 1.5px solid #E8D5B7;
   border-radius: 999px;
-  padding: 9px 18px;
+  padding: 8px 14px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
+}
+@media (min-width: 640px) {
+  .tab-btn {
+    padding: 9px 18px;
+  }
 }
 .tab-btn:hover:not(.tab-btn--active) {
   border-color: #C17F3E;

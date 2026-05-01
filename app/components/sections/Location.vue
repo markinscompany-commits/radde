@@ -24,17 +24,16 @@
       </div>
 
       <!-- Map with scroll guard -->
-      <div ref="mapWrapRef" class="relative rounded-3 overflow-hidden mb-10 shadow-lg">
+      <div ref="mapWrapRef" class="relative rounded-3 overflow-hidden mb-10 shadow-lg map-frame">
         <iframe
           v-if="mapLoaded"
           src="https://yandex.ru/map-widget/v1/?ll=46.936568%2C42.394855&z=14&pt=46.936568%2C42.394855,pm2rdm"
           width="100%"
-          height="420"
-          style="border:0; display:block; width:100%;"
+          style="border:0; display:block; width:100%; height:100%;"
           loading="lazy"
           title="Пансионат Радде на карте"
         ></iframe>
-        <div v-else class="w-full bg-sand-200 flex items-center justify-center" style="height: 420px;">
+        <div v-else class="w-full bg-sand-200 flex items-center justify-center h-full">
           <span class="font-body text-4 text-sand-700">Загрузка карты...</span>
         </div>
         <div v-if="mapGuardVisible" class="map-guard" @click="dismissGuard" @mouseenter="mapHintVisible = true" @mouseleave="mapHintVisible = false" :class="mapHintVisible ? 'map-guard--hover' : ''">
@@ -324,6 +323,20 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.map-frame {
+  height: 320px;
+}
+@media (min-width: 768px) {
+  .map-frame {
+    height: 380px;
+  }
+}
+@media (min-width: 1024px) {
+  .map-frame {
+    height: 420px;
+  }
+}
+
 .map-hint {
   background: rgba(44, 36, 22, 0.85);
   color: #FAF6F0;
@@ -396,9 +409,14 @@ onMounted(() => {
   background: white;
   border: 1px solid #F0E6D6;
   border-radius: 14px;
-  padding: 20px;
+  padding: 16px;
   cursor: pointer;
   transition: all 0.25s ease;
+}
+@media (min-width: 640px) {
+  .route-card {
+    padding: 20px;
+  }
 }
 .route-card:hover {
   border-color: #E8D5B7;
@@ -409,7 +427,12 @@ onMounted(() => {
   background: white;
   border: 1px solid #F0E6D6;
   border-radius: 14px;
-  padding: 20px;
+  padding: 16px;
+}
+@media (min-width: 640px) {
+  .tip-card {
+    padding: 20px;
+  }
 }
 
 /* Route detail modal content styling */

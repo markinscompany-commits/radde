@@ -131,7 +131,7 @@
                   <span class="text-small text-sand-600 ml-1">/ ночь</span>
                   <span class="block text-small text-sand-600 mt-0.5">за 2 взрослых</span>
                 </div>
-                <div class="flex items-center justify-end gap-3">
+                <div class="flex flex-wrap items-center justify-end gap-x-4 gap-y-3">
                   <button v-if="room.fullDescription"
                           @click="openDetails(room)"
                           class="text-small font-600 text-amber-600 hover:text-amber-700 transition-colors bg-transparent border-none cursor-pointer p-0">
@@ -238,7 +238,7 @@
                 </span>
               </div>
 
-              <div class="flex items-center justify-between pt-5 border-t border-sand-200">
+              <div class="flex flex-wrap items-center justify-between gap-4 pt-5 border-t border-sand-200">
                 <div>
                   <span class="font-display font-500 text-6 text-sand-900">от {{ detailRoom.price }} ₽</span>
                   <span class="text-small text-sand-600 ml-1">/ ночь</span>

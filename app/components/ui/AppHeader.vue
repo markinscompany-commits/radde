@@ -1,14 +1,14 @@
 ﻿<template>
   <div
     class="fixed top-0 left-0 right-0 z-50"
-    :class="scrolled ? 'bg-sand-900/95 backdrop-blur-md shadow-lg shadow-sand-900/10' : 'bg-transparent'"
+    :class="(scrolled || mobileOpen) ? 'bg-sand-900/95 backdrop-blur-md shadow-lg shadow-sand-900/10' : 'bg-transparent'"
     :style="{
       opacity: visible ? 1 : 0,
       transform: visible ? 'translateY(0)' : 'translateY(-10px)',
       transition: 'opacity 0.5s ease, transform 0.5s ease, background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease, padding 0.3s ease',
     }"
   >
-  <header class="relative flex items-center justify-between px-5 md:px-8 max-w-1400px mx-auto w-full" :class="scrolled ? 'py-2.5' : 'py-8'" style="transition: padding 0.3s ease">
+  <header class="relative flex items-center justify-between px-5 md:px-8 max-w-1400px mx-auto w-full" :class="(scrolled || mobileOpen) ? 'py-2.5' : 'py-5 md:py-8'" style="transition: padding 0.3s ease">
     <!-- Left: Nav -->
     <nav class="hidden lg:flex items-center gap-5">
       <a v-for="link in mainNav" :key="link.href"
@@ -41,11 +41,11 @@
 
     <!-- Center: Logo -->
     <a href="/" class="absolute left-1/2 -translate-x-1/2 flex-shrink-0">
-      <img :src="`${base}images/logo-white.png`" alt="Радде — Пансионат" :class="scrolled ? 'h-10' : 'h-12 md:h-14'" class="w-auto" style="transition: height 0.3s ease" />
+      <img :src="`${base}images/logo-white.png`" alt="Радде — Пансионат" :class="(scrolled || mobileOpen) ? 'h-9 md:h-10' : 'h-10 md:h-14'" class="w-auto" style="transition: height 0.3s ease" />
     </a>
 
-    <!-- Right side: phone + messengers + CTA -->
-    <div class="hidden md:flex items-center gap-4">
+    <!-- Right side: phone + messengers + CTA — only on desktop -->
+    <div class="hidden lg:flex items-center gap-4">
       <!-- Мессенджеры -->
       <div class="flex items-center gap-1.5">
         <a href="#" target="_blank" title="WhatsApp" class="messenger-icon">
@@ -80,7 +80,7 @@
 
   <!-- Mobile menu -->
   <Transition name="slide">
-    <div v-if="mobileOpen" class="fixed top-16 left-0 right-0 bottom-0 z-60 lg:hidden bg-sand-900/95 backdrop-blur-md border-t border-white/10 px-5 pb-6 overflow-y-auto" data-lenis-prevent>
+    <div v-if="mobileOpen" class="fixed top-14 md:top-15 left-0 right-0 bottom-0 z-60 lg:hidden bg-sand-900/95 backdrop-blur-md border-t border-white/10 px-5 pt-5 pb-6 overflow-y-auto" data-lenis-prevent>
       <nav class="flex flex-col gap-1 mb-5">
         <a v-for="link in [...mainNav, ...moreNav]" :key="link.href"
            :href="link.href"

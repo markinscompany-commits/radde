@@ -1,5 +1,5 @@
 ﻿<template>
-  <section id="contacts" class="relative py-24 md:py-32 overflow-hidden">
+  <section id="contacts" class="relative py-20 md:py-26 overflow-hidden">
     <!-- Background image -->
     <div class="absolute inset-0">
       <img

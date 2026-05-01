@@ -1,5 +1,5 @@
 ﻿<template>
-  <section id="gallery" class="py-24 md:py-32 bg-sand-100">
+  <section id="gallery" class="py-20 md:py-26 bg-sand-100">
     <div class="container">
       <div class="text-center mb-16">
         <span class="text-label text-olive-600 mb-4 block">Галерея</span>

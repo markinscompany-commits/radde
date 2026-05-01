@@ -21,7 +21,7 @@
 
             <a href="tel:+78001234567" class="block mb-4">
               <span class="text-small text-white/65 block mb-1">Телефон</span>
-              <span class="font-display font-500 text-white leading-none" style="font-size: clamp(1.8rem, 4vw, 3rem)">
+              <span class="font-display font-500 text-white leading-none whitespace-nowrap" style="font-size: clamp(1.5rem, 4.5vw, 3rem)">
                 +7 (800) 123-45-67
               </span>
             </a>
@@ -96,14 +96,14 @@
     <footer class="bg-sand-900 border-t border-white/5">
       <div class="container py-10">
         <!-- Top row: logo + description -->
-        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-8 mb-8">
+        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 mb-8">
           <div class="flex items-center gap-4">
             <img :src="`${base}images/logo-white.png`" alt="Радде" class="h-12 w-auto flex-shrink-0" style="filter: brightness(1.2);" />
             <p class="footer-desc">
               Отдых в горах Дагестана на высоте 1700 метров<br>в реликтовом лесу Гунибского района
             </p>
           </div>
-          <nav class="flex flex-wrap items-start justify-end gap-x-6 gap-y-2 md:max-w-100">
+          <nav class="flex flex-wrap items-start lg:justify-end gap-x-6 gap-y-2 lg:max-w-100">
             <a href="/" class="footer-link">Главная</a>
             <a href="#rooms" class="footer-link">Номера</a>
             <a href="#services" class="footer-link">Услуги</a>
@@ -119,7 +119,7 @@
         <div class="h-px bg-white/6 mb-6"></div>
 
         <!-- Bottom row: copyright | meta disclaimer | markins -->
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
           <div class="flex flex-wrap items-center gap-x-5 gap-y-1">
             <span class="footer-meta">&copy; {{ new Date().getFullYear() }} Пансионат Радде</span>
             <a href="/privacy" class="footer-meta footer-meta--link">Политика конфиденциальности</a>

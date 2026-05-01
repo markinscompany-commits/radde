@@ -27,7 +27,7 @@
           </a>
 
           <!-- Цифры -->
-          <div ref="statsRef" class="flex gap-10">
+          <div ref="statsRef" class="flex gap-6 sm:gap-10">
             <div>
               <span class="font-display font-500 text-sand-900 block leading-none" style="font-size: clamp(2rem, 4vw, 2.8rem)">12</span>
               <span class="text-small text-sand-700 mt-1 block">уютных номеров</span>

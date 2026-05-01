@@ -25,22 +25,22 @@
       <!-- Форма бронирования -->
       <div class="px-5 md:px-8 pb-8 overflow-hidden">
         <div ref="bookingRef" class="max-w-1000px mx-auto bg-white/10 backdrop-blur-md border border-white/15 rounded-3 p-5 md:p-6" style="transform: translateY(140%)">
-          <div class="grid grid-cols-2 lg:grid-cols-12 gap-3 md:gap-4 items-end">
+          <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-12 gap-3 md:gap-4 items-end">
 
             <!-- Заезд -->
-            <div class="lg:col-span-3">
+            <div class="md:col-span-2 lg:col-span-3">
               <label class="label-dark">Заезд</label>
               <UiDatePicker v-model="form.checkIn" :min-date="today" placeholder="Выберите дату" />
             </div>
 
             <!-- Выезд -->
-            <div class="lg:col-span-3">
+            <div class="md:col-span-2 lg:col-span-3">
               <label class="label-dark">Выезд</label>
               <UiDatePicker v-model="form.checkOut" :min-date="checkOutMin" placeholder="Выберите дату" />
             </div>
 
             <!-- Взрослые -->
-            <div class="lg:col-span-2">
+            <div class="md:col-span-1 lg:col-span-2">
               <label class="label-dark">Взрослые</label>
               <div class="counter-wrap">
                 <button @click="form.adults = Math.max(1, form.adults - 1)" class="counter-btn" :disabled="form.adults <= 1">&minus;</button>
@@ -50,7 +50,7 @@
             </div>
 
             <!-- Дети -->
-            <div class="lg:col-span-2">
+            <div class="md:col-span-1 lg:col-span-2">
               <label class="label-dark">Дети</label>
               <div class="counter-wrap">
                 <button @click="form.children = Math.max(0, form.children - 1)" class="counter-btn" :disabled="form.children <= 0">&minus;</button>
@@ -60,7 +60,7 @@
             </div>
 
             <!-- Кнопка -->
-            <div class="col-span-2 lg:col-span-2">
+            <div class="col-span-2 md:col-span-2 lg:col-span-2">
               <button
                 @click="handleBooking"
                 class="w-full bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white font-body font-600 text-4 rounded-2 py-3.5 transition-all duration-300 shadow-lg shadow-amber-500/20 cursor-pointer border-none">
