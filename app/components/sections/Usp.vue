@@ -12,7 +12,7 @@
         <div v-for="(item, i) in usps" :key="i"
              class="group relative rounded-3 overflow-hidden cursor-default aspect-4/3 md:aspect-auto"
              :class="[
-               (i === 0 || i === 3) ? 'md:col-span-7 md:aspect-3/2' : 'md:col-span-5',
+               (i === 0 || i === 3) ? 'md:col-span-7 md:aspect-5/4' : 'md:col-span-5',
              ]">
           <!-- Background photo -->
           <img :src="item.image" :alt="item.title"
