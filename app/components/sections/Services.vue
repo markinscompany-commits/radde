@@ -32,8 +32,8 @@
         </div>
       </div>
 
-      <!-- Cards grid -->
-      <div ref="gridRef" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Cards grid (desktop) / horizontal scroll (mobile) -->
+      <div ref="gridRef" class="services-list">
         <Transition name="grid-fade" mode="out-in">
           <div :key="activeTab + '-' + expanded" class="contents">
           <div
@@ -79,9 +79,15 @@
         </Transition>
       </div>
 
-      <!-- Показать ещё -->
+      <!-- Mobile scroll hint -->
+      <div class="services-scroll-hint md:hidden">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        Скролльте, чтобы увидеть все услуги
+      </div>
+
+      <!-- Показать ещё (только на десктопе) -->
       <Transition name="show-more">
-        <div v-if="activeServices.length > 6 && !expanded" class="text-center mt-8">
+        <div v-if="activeServices.length > 6 && !expanded" class="hidden md:block text-center mt-8">
           <button @click="expanded = true" class="btn-secondary">
             Показать ещё {{ activeServices.length - 6 }}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-1"><path d="M6 9l6 6l6 -6" /></svg>
@@ -173,6 +179,7 @@ const tabsRef = ref<HTMLElement>()
 const gridRef = ref<HTMLElement>()
 const activeTab = ref('included')
 const expanded = ref(false)
+const isMobile = ref(false)
 const detailService = ref<Service | null>(null)
 
 // Reset expanded when tab changes
@@ -450,7 +457,8 @@ const activeServices = computed(() => {
 })
 
 const visibleServices = computed(() => {
-  if (expanded.value) return activeServices.value
+  // На мобильной показываем все услуги — они в горизонтальном скролле
+  if (isMobile.value || expanded.value) return activeServices.value
   return activeServices.value.slice(0, 6)
 })
 
@@ -475,6 +483,13 @@ function closeDetail() {
 
 onMounted(() => {
   if (!import.meta.client) return
+
+  // Track mobile viewport for scroll-vs-grid behaviour
+  const mq = window.matchMedia('(max-width: 767px)')
+  isMobile.value = mq.matches
+  const onMqChange = (e: MediaQueryListEvent) => { isMobile.value = e.matches }
+  mq.addEventListener('change', onMqChange)
+  onUnmounted(() => mq.removeEventListener('change', onMqChange))
 
   // Open service modal from URL hash
   const hash = window.location.hash
@@ -589,6 +604,59 @@ onMounted(() => {
   color: #FBF0EB;
 }
 
+/* Layout: horizontal scroll on mobile, grid on tablet+ */
+.services-list {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  overflow-y: visible;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  /* Edge-to-edge с peek справа: вытаскиваем за container padding */
+  margin-left: -20px;
+  margin-right: -20px;
+  padding: 4px 20px 20px;
+}
+.services-list::-webkit-scrollbar {
+  display: none;
+}
+@media (min-width: 768px) {
+  .services-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+  }
+}
+@media (min-width: 1024px) {
+  .services-list {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+/* Mobile scroll hint */
+.services-scroll-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  margin: 14px auto 0;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 16px;
+  color: #6B5B4A;
+  background: #FAF6F0;
+  border: 1px solid #F0E6D6;
+  border-radius: 999px;
+  padding: 8px 16px;
+}
+.services-scroll-hint svg {
+  color: #C17F3E;
+  flex-shrink: 0;
+}
+
 /* Service card */
 .service-card {
   background: white;
@@ -599,6 +667,14 @@ onMounted(() => {
   flex-direction: column;
   transition: all 0.3s ease;
   box-shadow: 0 1px 3px rgba(44, 36, 22, 0.04);
+}
+@media (max-width: 767px) {
+  .service-card {
+    flex: 0 0 78%;
+    max-width: 320px;
+    scroll-snap-align: start;
+    padding: 20px;
+  }
 }
 .service-card:hover {
   box-shadow: 0 8px 30px rgba(44, 36, 22, 0.08);

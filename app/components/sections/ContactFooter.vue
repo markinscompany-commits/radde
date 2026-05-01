@@ -100,7 +100,8 @@
           <div class="flex items-center gap-4">
             <img :src="`${base}images/logo-white.png`" alt="Радде" class="h-12 w-auto flex-shrink-0" style="filter: brightness(1.2);" />
             <p class="footer-desc">
-              Отдых в горах Дагестана на высоте 1700 метров<br>в реликтовом лесу Гунибского района
+              <span class="md:hidden">Отдых в горах Дагестана,<br>на высоте 1700 метров</span>
+              <span class="hidden md:inline">Отдых в горах Дагестана на высоте 1700 метров<br>в реликтовом лесу Гунибского района</span>
             </p>
           </div>
           <nav class="flex flex-wrap items-start lg:justify-end gap-x-6 gap-y-2 lg:max-w-100">

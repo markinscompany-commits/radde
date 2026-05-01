@@ -1,52 +1,55 @@
 ﻿<template>
   <section id="about" ref="sectionRef" class="bg-sand-50 py-20 md:py-26">
     <div class="container">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-        <!-- Текст -->
-        <div ref="textRef">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-start">
+        <!-- Левая колонка (lg) / часть 1 (mobile): лейбл + заголовок + 1-й абзац -->
+        <div ref="textRef" class="order-1">
           <span class="text-label text-olive-600 mb-4 block">О пансионате</span>
           <h2 class="text-h2 font-500 text-sand-900 mb-6">
             Реликтовый лес<br>
             <span class="section-title-accent">на высоте 1700 метров</span>
           </h2>
-          <p class="text-body-lg text-sand-700 mb-6">
+          <p class="text-body-lg text-sand-700 mb-6 lg:mb-6">
             Пансионат Радде расположен в природном парке «Верхний Гуниб» —
             одном из самых живописных уголков Дагестана.
           </p>
-          <p class="text-body text-sand-700 mb-6">
-            Здесь растёт реликтовая берёза Радде — эндемик Кавказа, занесённый в Красную книгу.
-          </p>
-          <p class="text-body text-sand-700 mb-8">
-            Тёплое горское гостеприимство, чистейший горный воздух, панорамные виды,
-            домашняя кухня и полное единение с природой — лучший выбор для семейного
-            отдыха и перезагрузки.
-          </p>
-          <a href="/blog/about" class="inline-flex items-center gap-2 font-body text-4 font-600 text-amber-600 hover:text-amber-700 transition-colors mb-10">
-            Узнать больше о Радде
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
+          <!-- Остальной текст: на lg здесь же; на мобильной — после галереи (см. ниже) -->
+          <div class="hidden lg:block">
+            <p class="text-body text-sand-700 mb-6">
+              Здесь растёт реликтовая берёза Радде — эндемик Кавказа, занесённый в Красную книгу.
+            </p>
+            <p class="text-body text-sand-700 mb-8">
+              Тёплое горское гостеприимство, чистейший горный воздух, панорамные виды,
+              домашняя кухня и полное единение с природой — лучший выбор для семейного
+              отдыха и перезагрузки.
+            </p>
+            <a href="/blog/about" class="inline-flex items-center gap-2 font-body text-4 font-600 text-amber-600 hover:text-amber-700 transition-colors mb-10">
+              Узнать больше о Радде
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
 
-          <!-- Цифры -->
-          <div ref="statsRef" class="flex gap-6 sm:gap-10">
-            <div>
-              <span class="font-display font-500 text-sand-900 block leading-none" style="font-size: clamp(2rem, 4vw, 2.8rem)">12</span>
-              <span class="text-small text-sand-700 mt-1 block">уютных номеров</span>
-            </div>
-            <div class="w-px bg-sand-200"></div>
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="font-display font-500 text-sand-900 leading-none" style="font-size: clamp(2rem, 4vw, 2.8rem)">4.8</span>
-                <div class="flex gap-0.5 mt-1">
-                  <span v-for="n in 5" :key="n" class="text-4.5" :class="n <= 5 ? 'text-amber-500' : 'text-sand-200'">&#9733;</span>
-                </div>
+            <!-- Цифры (lg) -->
+            <div ref="statsRef" class="flex gap-6 sm:gap-10">
+              <div>
+                <span class="font-display font-500 text-sand-900 block leading-none" style="font-size: clamp(2rem, 4vw, 2.8rem)">12</span>
+                <span class="text-small text-sand-700 mt-1 block">уютных номеров</span>
               </div>
-              <span class="text-small text-sand-700 mt-1 block">рейтинг на Яндекс Картах</span>
+              <div class="w-px bg-sand-200"></div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-display font-500 text-sand-900 leading-none" style="font-size: clamp(2rem, 4vw, 2.8rem)">4.8</span>
+                  <div class="flex gap-0.5 mt-1">
+                    <span v-for="n in 5" :key="'lg'+n" class="text-4.5" :class="n <= 5 ? 'text-amber-500' : 'text-sand-200'">&#9733;</span>
+                  </div>
+                </div>
+                <span class="text-small text-sand-700 mt-1 block">рейтинг на Яндекс Картах</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Галерея -->
-        <div ref="imageRef" class="relative">
+        <!-- Галерея — на lg справа, на mobile между абзацами -->
+        <div ref="imageRef" class="relative order-2">
           <div class="aspect-5/6 rounded-3 overflow-hidden shadow-xl relative">
             <transition-group name="gallery">
               <img
@@ -85,6 +88,40 @@
           </div>
           <div class="absolute -bottom-4 -left-4 w-24 h-24 bg-olive-100 rounded-3 -z-1"></div>
           <div class="absolute -top-4 -right-4 w-16 h-16 bg-amber-400/20 rounded-full -z-1"></div>
+        </div>
+
+        <!-- Mobile-only: остальные абзацы + ссылка + цифры (после галереи) -->
+        <div class="order-3 lg:hidden">
+          <p class="text-body text-sand-700 mb-6">
+            Здесь растёт реликтовая берёза Радде — эндемик Кавказа, занесённый в Красную книгу.
+          </p>
+          <p class="text-body text-sand-700 mb-8">
+            Тёплое горское гостеприимство, чистейший горный воздух, панорамные виды,
+            домашняя кухня и полное единение с природой — лучший выбор для семейного
+            отдыха и перезагрузки.
+          </p>
+          <a href="/blog/about" class="inline-flex items-center gap-2 font-body text-4 font-600 text-amber-600 hover:text-amber-700 transition-colors mb-10">
+            Узнать больше о Радде
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+
+          <!-- Цифры (mobile) -->
+          <div class="flex gap-6 sm:gap-10">
+            <div>
+              <span class="font-display font-500 text-sand-900 block leading-none" style="font-size: clamp(2rem, 4vw, 2.8rem)">12</span>
+              <span class="text-small text-sand-700 mt-1 block">уютных номеров</span>
+            </div>
+            <div class="w-px bg-sand-200"></div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-display font-500 text-sand-900 leading-none" style="font-size: clamp(2rem, 4vw, 2.8rem)">4.8</span>
+                <div class="flex gap-0.5 mt-1">
+                  <span v-for="n in 5" :key="'m'+n" class="text-4.5" :class="n <= 5 ? 'text-amber-500' : 'text-sand-200'">&#9733;</span>
+                </div>
+              </div>
+              <span class="text-small text-sand-700 mt-1 block">рейтинг на Яндекс Картах</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

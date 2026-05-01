@@ -14,9 +14,17 @@
              @click="openLightbox(i)">
           <img :src="src"
                :alt="`Пансионат Радде — фото ${i + 1}`"
-               class="w-full h-auto block transition-transform duration-500 group-hover:scale-105"
+               class="block transition-transform duration-500 group-hover:scale-105"
                loading="lazy"
                decoding="async" />
+        </div>
+      </div>
+
+      <!-- Mobile scroll hint -->
+      <div class="md:hidden flex justify-center mt-5">
+        <div class="gallery-scroll-hint">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          Скролльте, чтобы увидеть все фото
         </div>
       </div>
     </div>
@@ -137,16 +145,64 @@ if (import.meta.client) {
   margin-bottom: 12px;
 }
 
-@media (max-width: 768px) {
+.gallery-item img {
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 1023px) {
   .gallery-grid {
     columns: 2;
   }
 }
 
-@media (max-width: 480px) {
+/* Mobile: горизонтальный скролл с peek справа */
+@media (max-width: 767px) {
   .gallery-grid {
-    columns: 1;
+    columns: unset;
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding: 4px 20px 12px;
   }
+  .gallery-grid::-webkit-scrollbar {
+    display: none;
+  }
+  .gallery-item {
+    flex: 0 0 78%;
+    max-width: 320px;
+    margin-bottom: 0;
+    aspect-ratio: 4 / 3;
+    scroll-snap-align: start;
+  }
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.gallery-scroll-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 16px;
+  color: #6B5B4A;
+  background: #FAF6F0;
+  border: 1px solid #F0E6D6;
+  border-radius: 999px;
+  padding: 8px 16px;
+}
+.gallery-scroll-hint svg {
+  color: #C17F3E;
+  flex-shrink: 0;
 }
 
 .lightbox-enter-active { transition: opacity 0.3s ease; }

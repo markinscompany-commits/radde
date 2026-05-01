@@ -9,8 +9,8 @@
     />
     <div class="absolute inset-0 bg-sand-900/70"></div>
 
-    <!-- Заголовок по центру блока (горизонтально и вертикально) -->
-    <div class="absolute inset-0 z-10 flex items-center justify-center text-center px-5">
+    <!-- Заголовок: выше на мобильной (чтобы не уходил за форму бронирования), по центру на md+ -->
+    <div class="absolute inset-0 z-10 flex items-start md:items-center justify-center text-center px-5 pt-[20vh] md:pt-0">
       <h1 ref="titleRef" class="font-display font-500 text-white hero-hidden max-w-1100px"
           style="font-size: clamp(2.2rem, 6vw, 4.4rem); line-height: 1.05">
         Пансионат Радде<br><span class="font-accent italic font-500 text-sand-300 text-[1.2em]">реликтовый лес, горы и&nbsp;гармония</span>
