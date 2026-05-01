@@ -10,13 +10,8 @@
             <span class="section-title-accent">Гунибского района</span>
           </h2>
         </div>
-        <!-- Coordinates -->
+        <!-- Actions -->
         <div ref="coordRef" class="flex items-center gap-3 flex-wrap lg:justify-end">
-          <span class="text-small text-sand-700 font-500">42.3949°N, 46.9366°E</span>
-          <button @click="copyCoords" class="loc-small-btn">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-            {{ coordsCopied ? 'Скопировано' : 'Скопировать' }}
-          </button>
           <a href="https://yandex.ru/maps/-/CPfFnT2P" target="_blank" rel="noopener" class="loc-small-btn">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18.5l-3-1.5-6 3v-13l6-3 6 3 6-3v7.5"/><path d="M9 4v13"/><path d="M15 7v5.5"/><circle cx="19" cy="18" r="3"/></svg>
             Открыть в навигаторе
