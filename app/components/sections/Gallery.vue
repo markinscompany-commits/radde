@@ -1,12 +1,7 @@
 ﻿<template>
-  <section id="gallery" class="py-20 md:py-26 bg-sand-100">
+  <section id="gallery" class="section-padding bg-sand-100">
     <div class="container">
-      <div class="text-center mb-16">
-        <span class="text-label text-olive-600 mb-4 block">Галерея</span>
-        <h2 ref="titleRef" class="text-h2 font-500 text-sand-900">
-          Фотографии <span class="section-title-accent">пансионата</span>
-        </h2>
-      </div>
+      <UiSectionHeader label="Галерея" title="Фотографии" accent="пансионата" class="mb-16" />
 
       <div ref="gridRef" class="gallery-grid">
         <div v-for="(src, i) in photos" :key="i"
@@ -22,10 +17,7 @@
 
       <!-- Mobile scroll hint — show only when grid actually overflows -->
       <div v-show="showScrollHint" class="md:hidden flex justify-center mt-5">
-        <div class="gallery-scroll-hint">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          Скролльте, чтобы увидеть все фото
-        </div>
+        <UiScrollHint>Скролльте, чтобы увидеть все фото</UiScrollHint>
       </div>
     </div>
 
@@ -76,7 +68,6 @@
 <script setup lang="ts">
 const base = useRuntimeConfig().app.baseURL || '/'
 
-const titleRef = ref<HTMLElement>()
 const gridRef = ref<HTMLElement>()
 
 const lightboxOpen = ref(false)
@@ -218,23 +209,6 @@ onMounted(() => {
     height: 100%;
     object-fit: cover;
   }
-}
-
-.gallery-scroll-hint {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'Source Sans 3', sans-serif;
-  font-size: 16px;
-  color: #6B5B4A;
-  background: #FAF6F0;
-  border: 1px solid #F0E6D6;
-  border-radius: 999px;
-  padding: 8px 16px;
-}
-.gallery-scroll-hint svg {
-  color: #C17F3E;
-  flex-shrink: 0;
 }
 
 .lightbox-enter-active { transition: opacity 0.3s ease; }

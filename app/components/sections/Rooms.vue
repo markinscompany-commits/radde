@@ -1,148 +1,18 @@
 ﻿<template>
-  <section id="rooms" class="py-20 md:py-26 bg-sand-100">
+  <section id="rooms" class="section-padding bg-sand-100">
     <div class="container">
-      <div class="text-center mb-16">
-        <span class="text-label text-olive-600 mb-4 block">Размещение</span>
-        <h2 ref="titleRef" class="text-h2 font-500 text-sand-900">
-          Выберите <span class="section-title-accent">номер</span>
-        </h2>
-      </div>
+      <UiSectionHeader label="Размещение" title="Выберите" accent="номер" class="mb-16" />
 
       <!-- Room cards — one per row, alternating -->
       <div ref="roomsGrid" class="space-y-6">
-        <div v-for="(room, i) in rooms" :key="i"
-             class="room-card bg-white rounded-3 overflow-hidden border border-sand-200 shadow-sm">
-          <div class="flex flex-col lg:flex-row" :class="i % 2 === 1 ? 'lg:flex-row-reverse' : ''">
-            <!-- Photo carousel (60%) -->
-            <div class="relative lg:w-[60%] flex-shrink-0">
-              <div class="aspect-4/3 lg:aspect-auto lg:h-full relative overflow-hidden bg-sand-200 cursor-pointer"
-                   @click="openLightbox(room, room.activePhoto)">
-                <!-- Preloaded images with crossfade -->
-                <img
-                  v-for="(src, pi) in room.images"
-                  :key="src"
-                  :src="src"
-                  :alt="`${room.name} — фото ${pi + 1}`"
-                  class="absolute inset-0 w-full h-full object-cover room-photo-transition"
-                  :class="room.activePhoto === pi ? 'opacity-100 z-2' : 'opacity-0 z-1'"
-                />
-                <!-- Top-right: zoom hint -->
-                <div class="absolute top-4 right-4 z-10" @click.stop>
-                  <button @click="openLightbox(room, room.activePhoto)"
-                          class="room-arrow"
-                          title="Открыть на весь экран">
-                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                      <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/>
-                      <path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                      <path d="M7 4.5v5M4.5 7h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-                    </svg>
-                  </button>
-                </div>
-                <!-- Bottom bar: arrows left, dots right -->
-                <div class="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-between px-4 py-3"
-                     @click.stop>
-                  <!-- Arrows (bottom-left) -->
-                  <div v-if="room.images.length > 1" class="flex items-center gap-1.5">
-                    <button @click="prevPhoto(room)"
-                            class="room-arrow">
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 1.5L3 6l5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </button>
-                    <button @click="nextPhoto(room)"
-                            class="room-arrow">
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4 1.5L9 6l-5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </button>
-                  </div>
-                  <!-- Dots (bottom-right) -->
-                  <div v-if="room.images.length > 1" class="flex items-center gap-1.5 ml-auto">
-                    <button v-for="(_, pi) in room.images" :key="pi"
-                            @click="room.activePhoto = pi"
-                            class="room-dot"
-                            :class="room.activePhoto === pi ? 'bg-white w-5' : 'bg-white/50 w-2'">
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Info (40%) -->
-            <div class="flex-1 p-6 lg:p-7 flex flex-col">
-              <!-- Name -->
-              <h3 class="font-display font-500 text-sand-900 mb-4" style="font-size: clamp(1.4rem, 2.5vw, 1.8rem)">{{ room.name }}</h3>
-
-              <!-- Description (max 3 lines, truncated) -->
-              <p class="font-body text-4 text-sand-700 leading-relaxed mb-4 room-desc">
-                {{ room.description }}
-              </p>
-
-              <!-- Note (special, attention-grabbing) -->
-              <div v-if="room.note" class="flex items-start gap-2.5 bg-amber-400/8 border border-amber-400/20 rounded-2 px-4 py-3 mb-4">
-                <svg class="flex-shrink-0 mt-0.5 text-amber-500" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v3.5M8 10.5h.007" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-                <span class="text-small text-amber-700 font-500 leading-snug">{{ room.note }}</span>
-              </div>
-
-              <!-- Specs as chips (highlighted) + amenities (neutral) — single flow -->
-              <div class="flex flex-wrap gap-2 mb-auto pb-5">
-                <!-- Highlighted specs -->
-                <span class="spec-chip">
-                  <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
-                    <rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.3"/>
-                    <path d="M2 7h14M7 2v14" stroke="currentColor" stroke-width="1.3"/>
-                  </svg>
-                  {{ room.area }} м²
-                </span>
-                <span class="spec-chip">
-                  <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
-                    <rect x="1.5" y="8" width="15" height="7" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
-                    <path d="M3 8V6a3 3 0 016 0v2M9 8V6a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.3"/>
-                    <path d="M1.5 11.5h15" stroke="currentColor" stroke-width="1.3"/>
-                  </svg>
-                  {{ room.bed }}
-                </span>
-                <span class="spec-chip">
-                  <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
-                    <circle cx="9" cy="5.5" r="3" stroke="currentColor" stroke-width="1.3"/>
-                    <path d="M3 16c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-                  </svg>
-                  до {{ room.guests }} гостей
-                </span>
-                <span class="spec-chip">
-                  <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
-                    <path d="M2 13c2-4 4.5-7 7-7s5 2 7 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-                    <path d="M1 15h16" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-                    <circle cx="13" cy="4" r="2" stroke="currentColor" stroke-width="1.3"/>
-                  </svg>
-                  {{ room.view }}
-                </span>
-                <!-- Neutral amenity tags -->
-                <span v-for="(tag, ti) in room.tags.slice(0, 4)" :key="ti" class="amenity-chip">
-                  {{ tag }}
-                </span>
-                <button v-if="room.tags.length > 4"
-                        @click="openDetails(room)"
-                        class="amenity-chip amenity-chip--more">
-                  ещё {{ room.tags.length - 4 }}
-                </button>
-              </div>
-
-              <!-- Bottom: Price (left) above Buttons (right) -->
-              <div class="pt-4 border-t border-sand-100">
-                <div class="text-left mb-4">
-                  <span class="font-display font-500 text-sand-900" style="font-size: clamp(1.3rem, 2vw, 1.6rem)">от {{ room.price }} ₽</span>
-                  <span class="text-small text-sand-600 ml-1">/ ночь</span>
-                  <span class="block text-small text-sand-600 mt-0.5">за 2 взрослых</span>
-                </div>
-                <div class="flex flex-wrap items-center justify-end gap-x-4 gap-y-3">
-                  <button v-if="room.fullDescription"
-                          @click="openDetails(room)"
-                          class="text-small font-600 text-amber-600 hover:text-amber-700 transition-colors bg-transparent border-none cursor-pointer p-0">
-                    Подробнее
-                  </button>
-                  <button class="btn-primary opacity-50 cursor-default" disabled>Забронировать</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <UiRoomCard
+          v-for="(room, i) in rooms"
+          :key="i"
+          :room="room"
+          :reverse="i % 2 === 1"
+          @details="openDetails"
+          @lightbox="openLightbox"
+        />
       </div>
 
     </div>
@@ -170,7 +40,7 @@
               <!-- Top-right: zoom hint -->
               <div class="absolute top-4 right-4 z-10" @click.stop>
                 <button @click="openLightbox(detailRoom, detailPhotoIndex)"
-                        class="room-arrow"
+                        class="media-arrow"
                         title="Открыть на весь экран">
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                     <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/>
@@ -183,18 +53,18 @@
                    @click.stop>
                 <div v-if="detailRoom.images.length > 1" class="flex items-center gap-1.5">
                   <button @click="detailPhotoIndex = (detailPhotoIndex - 1 + detailRoom.images.length) % detailRoom.images.length"
-                          class="room-arrow">
+                          class="media-arrow">
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 1.5L3 6l5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   </button>
                   <button @click="detailPhotoIndex = (detailPhotoIndex + 1) % detailRoom.images.length"
-                          class="room-arrow">
+                          class="media-arrow">
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4 1.5L9 6l-5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   </button>
                 </div>
                 <div v-if="detailRoom.images.length > 1" class="flex items-center gap-1.5 ml-auto">
                   <button v-for="(_, pi) in detailRoom.images" :key="pi"
                           @click="detailPhotoIndex = pi"
-                          class="room-dot"
+                          class="media-dot"
                           :class="detailPhotoIndex === pi ? 'bg-white w-5' : 'bg-white/50 w-2'">
                   </button>
                 </div>
@@ -288,7 +158,7 @@
           <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
             <button v-for="(_, pi) in lightbox.images" :key="pi"
                     @click="lightbox.index = pi; lightbox.zoom = 1"
-                    class="room-dot"
+                    class="media-dot"
                     :class="lightbox.index === pi ? 'bg-white w-5' : 'bg-white/40 w-2'">
             </button>
           </div>
@@ -301,7 +171,6 @@
 <script setup lang="ts">
 const base = useRuntimeConfig().app.baseURL || '/'
 
-const titleRef = ref<HTMLElement>()
 const roomsGrid = ref<HTMLElement>()
 const detailRoom = ref<typeof rooms[0] | null>(null)
 const detailPhotoIndex = ref(0)
@@ -363,14 +232,6 @@ if (import.meta.client) {
     if (e.key === 'ArrowLeft') { lightbox.index = (lightbox.index - 1 + lightbox.images.length) % lightbox.images.length; lightbox.zoom = 1 }
     if (e.key === 'ArrowRight') { lightbox.index = (lightbox.index + 1) % lightbox.images.length; lightbox.zoom = 1 }
   })
-}
-
-function nextPhoto(room: typeof rooms[0]) {
-  room.activePhoto = (room.activePhoto + 1) % room.images.length
-}
-
-function prevPhoto(room: typeof rooms[0]) {
-  room.activePhoto = (room.activePhoto - 1 + room.images.length) % room.images.length
 }
 
 const VIP_COUNT = 9
@@ -459,83 +320,9 @@ onMounted(() => {
   overflow: hidden;
 }
 
-/* Spec chip — выделенные характеристики (площадь, кровать, гости, вид) */
-.spec-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: 'Source Sans 3', sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  color: #4A6330;
-  background: #F4F6EE;
-  border: 1px solid #D1D9B9;
-  padding: 7px 14px;
-  border-radius: 999px;
-  white-space: nowrap;
-}
-.spec-chip svg {
-  color: #6B8B3A;
-  flex-shrink: 0;
-}
-
-/* Amenity chip — нейтральные теги удобств */
-.amenity-chip {
-  display: inline-flex;
-  align-items: center;
-  font-family: 'Source Sans 3', sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-  color: #6B5B4A;
-  background: #FAF6F0;
-  border: 1px solid #F0E6D6;
-  padding: 7px 14px;
-  border-radius: 999px;
-  white-space: nowrap;
-}
-.amenity-chip--more {
-  color: #A66B32;
-  background: rgba(212, 148, 74, 0.1);
-  border-color: rgba(212, 148, 74, 0.25);
-  cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
-}
-.amenity-chip--more:hover {
-  background: rgba(212, 148, 74, 0.18);
-  border-color: rgba(212, 148, 74, 0.4);
-}
-
 /* Crossfade transition for photos */
 .room-photo-transition {
   transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Arrow buttons */
-.room-arrow {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.room-arrow:hover {
-  background: rgba(0, 0, 0, 0.6);
-}
-
-/* Dot indicators */
-.room-dot {
-  height: 8px;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0;
 }
 
 /* Lightbox */

@@ -192,6 +192,194 @@ textarea.input-dark {
 }
 
 /* =============================================
+   ЧИПЫ: характеристики и удобства
+   Используются в карточках номеров (UiRoomCard) и в любых местах,
+   где нужно показать набор тегов/спецификаций.
+   ============================================= */
+
+/* Spec chip — выделенные характеристики (площадь, кровать, гости, вид) */
+.spec-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #4A6330;
+  background: #F4F6EE;
+  border: 1px solid #D1D9B9;
+  padding: 7px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.spec-chip svg {
+  color: #6B8B3A;
+  flex-shrink: 0;
+}
+
+/* Amenity chip — нейтральные теги удобств */
+.amenity-chip {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #6B5B4A;
+  background: #FAF6F0;
+  border: 1px solid #F0E6D6;
+  padding: 7px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.amenity-chip--more {
+  color: #A66B32;
+  background: rgba(212, 148, 74, 0.1);
+  border-color: rgba(212, 148, 74, 0.25);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.amenity-chip--more:hover {
+  background: rgba(212, 148, 74, 0.18);
+  border-color: rgba(212, 148, 74, 0.4);
+}
+
+/* =============================================
+   SCROLL HINT — подсказка горизонтального скролла на mobile
+   Показывается ТОЛЬКО когда контент реально шире контейнера
+   (обернуть в v-show + checkOverflow через ResizeObserver).
+   ============================================= */
+
+.scroll-hint-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 16px;
+  color: #6B5B4A;
+  background: #FAF6F0;
+  border: 1px solid #F0E6D6;
+  border-radius: 999px;
+  padding: 8px 16px;
+  white-space: nowrap;
+}
+.scroll-hint-pill svg {
+  color: #C17F3E;
+  flex-shrink: 0;
+}
+
+/* =============================================
+   MOBILE ACTION BUTTONS (шапка) и SOCIAL ICONS (бургер, футер)
+   На тёмной подложке шапки/футера. 40×40 — баланс под бургер-меню.
+   ============================================= */
+
+.mobile-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  flex-shrink: 0;
+  padding: 0;
+}
+.mobile-action-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+/* На lg+ скрываем — UnoCSS lg:hidden иначе перебивается scoped стилями */
+@media (min-width: 1024px) {
+  .mobile-action-btn {
+    display: none;
+  }
+}
+
+/* Social icon — кружок-обводка под иконку соцсети.
+   Используется в бургер-меню (44×44) и в футере контактов (48×48).
+   Variant'ы — через утилиты UnoCSS прямо на месте, размер задаём здесь
+   модификатором --sm / --md. */
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.social-icon:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+.social-icon--sm {
+  width: 44px;
+  height: 44px;
+}
+.social-icon--md {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+}
+.social-icon--md:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* =============================================
+   MEDIA CONTROLS — стрелки и точки галерей/каруселей
+   Тёмные (overlay на фото) и светлые (внутри секции).
+   ============================================= */
+
+/* Тёмная стрелка-кружок поверх изображения (Hero gallery, Rooms, lightbox) */
+.media-arrow {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  padding: 0;
+}
+.media-arrow:hover {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* Светлая стрелка для каруселей внутри секций (Reviews, Blog) */
+.media-arrow--light {
+  background: rgba(44, 36, 22, 0.06);
+  color: #6B5B4A;
+}
+.media-arrow--light:hover {
+  background: rgba(44, 36, 22, 0.12);
+  color: #2C2416;
+}
+
+/* Точки-индикаторы (8px высотой, ширина задаётся при активном состоянии) */
+.media-dot {
+  height: 8px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+/* =============================================
    ЕДИНАЯ СИСТЕМА АНИМАЦИЙ ПЕРЕХОДОВ
    ============================================= */
 

@@ -1,14 +1,13 @@
 ﻿<template>
-  <section id="about" ref="sectionRef" class="bg-sand-50 py-20 md:py-26">
+  <section id="about" ref="sectionRef" class="bg-sand-50 section-padding">
     <div class="container">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-start">
         <!-- Левая колонка (lg) / часть 1 (mobile): лейбл + заголовок + 1-й абзац -->
         <div ref="textRef" class="order-1">
-          <span class="text-label text-olive-600 mb-4 block">О пансионате</span>
-          <h2 class="text-h2 font-500 text-sand-900 mb-6">
+          <UiSectionHeader label="О пансионате" align="left" class="mb-6">
             Реликтовый лес<br>
             <span class="section-title-accent">на высоте 1700 метров</span>
-          </h2>
+          </UiSectionHeader>
           <p class="text-body-lg text-sand-700 mb-6 lg:mb-6">
             Пансионат Радде расположен в природном парке «Верхний Гуниб» —
             одном из самых живописных уголков Дагестана.
@@ -23,10 +22,7 @@
               домашняя кухня и полное единение с природой — лучший выбор для семейного
               отдыха и перезагрузки.
             </p>
-            <a href="/blog/about" class="inline-flex items-center gap-2 font-body text-4 font-600 text-amber-600 hover:text-amber-700 transition-colors mb-10">
-              Узнать больше о Радде
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
+            <UiArrowLink href="/blog/about" class="mb-10">Узнать больше о Радде</UiArrowLink>
 
             <!-- Цифры (lg) -->
             <div ref="statsRef" class="flex gap-6 sm:gap-10">
@@ -67,10 +63,10 @@
             <div class="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-between px-4 py-3">
               <!-- Arrows (bottom-left) -->
               <div class="flex items-center gap-1.5">
-                <button @click="prevSlide" class="gallery-arrow">
+                <button @click="prevSlide" class="media-arrow">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 1.5L3 6l5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
-                <button @click="nextSlide" class="gallery-arrow">
+                <button @click="nextSlide" class="media-arrow">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4 1.5L9 6l-5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
               </div>
@@ -80,7 +76,7 @@
                   v-for="(_, idx) in galleryImages"
                   :key="idx"
                   @click="goToSlide(idx)"
-                  class="gallery-dot"
+                  class="media-dot"
                   :class="currentSlide === idx ? 'bg-white w-5' : 'bg-white/50 w-2'"
                 ></button>
               </div>
@@ -100,10 +96,7 @@
             домашняя кухня и полное единение с природой — лучший выбор для семейного
             отдыха и перезагрузки.
           </p>
-          <a href="/blog/about" class="inline-flex items-center gap-2 font-body text-4 font-600 text-amber-600 hover:text-amber-700 transition-colors mb-10">
-            Узнать больше о Радде
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
+          <UiArrowLink href="/blog/about" class="mb-10">Узнать больше о Радде</UiArrowLink>
 
           <!-- Цифры (mobile) -->
           <div class="flex gap-6 sm:gap-10">
@@ -204,32 +197,4 @@ onUnmounted(() => {
 }
 .gallery-enter-from { opacity: 0; }
 .gallery-leave-to { opacity: 0; }
-
-/* Arrow buttons — same as Rooms */
-.gallery-arrow {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.gallery-arrow:hover {
-  background: rgba(0, 0, 0, 0.6);
-}
-
-/* Dot indicators — same as Rooms */
-.gallery-dot {
-  height: 8px;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0;
-}
 </style>

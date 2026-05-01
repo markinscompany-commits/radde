@@ -1,14 +1,9 @@
 ﻿<template>
-  <section id="reviews" ref="sectionRef" class="py-20 md:py-26 bg-sand-50 relative overflow-hidden">
+  <section id="reviews" ref="sectionRef" class="section-padding bg-sand-50 relative overflow-hidden">
     <div class="container">
       <!-- Header row: title left, rating widgets right -->
       <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-14">
-        <div>
-          <span class="text-label text-olive-600 mb-4 block">Отзывы гостей</span>
-          <h2 ref="titleRef" class="text-h2 font-500 text-sand-900">
-            Что говорят <span class="section-title-accent">наши гости</span>
-          </h2>
-        </div>
+        <UiSectionHeader label="Отзывы гостей" title="Что говорят" accent="наши гости" align="left" />
 
         <!-- Rating mini-widgets -->
         <div ref="widgetsRef" class="flex flex-col sm:flex-row gap-3">
@@ -60,60 +55,25 @@
     <div class="relative w-full" ref="carouselWrapRef">
       <div class="overflow-hidden">
         <div ref="trackRef" class="flex gap-5" :class="trackTransition ? 'track-animate' : ''" :style="{ paddingLeft: containerPadding + 'px', transform: `translateX(-${trackOffset}px)` }">
-            <div
-              v-for="(review, i) in loopedReviews"
-              :key="'r' + i"
-              class="review-card flex-shrink-0"
-              :style="{ width: cardWidth + 'px' }"
-            >
-              <!-- Source badge + stars -->
-              <div class="flex items-center justify-between mb-4">
-                <div class="review-source" :class="'review-source--' + review.source">
-                  <img v-if="review.source === 'yandex'" :src="`${base}images/icon-yandex-maps.svg`" width="14" height="14" alt="" />
-                  <img v-else-if="review.source === '2gis'" :src="`${base}images/icon-2gis.svg`" width="14" height="14" alt="" />
-                  <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18l-6.921 -14.612a2.3 2.3 0 0 0 -4.158 0l-6.921 14.612" /><path d="M7.5 11l2 2.5l2.5 -2.5l2 3l2.5 -2" /></svg>
-                  <span>{{ sourceLabel(review.source) }}</span>
-                </div>
-                <div class="flex gap-0.5">
-                  <span v-for="n in 5" :key="n" class="text-3.5" :class="n <= review.rating ? 'text-amber-500' : 'text-sand-200'">&#9733;</span>
-                </div>
-              </div>
-
-              <!-- Text (truncated) -->
-              <p class="font-body text-4 text-sand-800 leading-relaxed mb-4 review-text">
-                &laquo;{{ review.text }}&raquo;
-              </p>
-
-              <!-- Read more — left aligned -->
-              <button v-if="review.fullText" @click="openReview(review)"
-                      class="text-small font-600 text-amber-600 hover:text-amber-700 transition-colors bg-transparent border-none cursor-pointer p-0 mb-4 self-start">
-                Подробнее
-              </button>
-
-              <!-- Author: avatar + name left, date right — all on one line -->
-              <div class="mt-auto flex items-center justify-between pt-4 border-t border-sand-100">
-                <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
-                       :class="review.source === 'yandex' ? 'bg-red-50 text-red-500' : review.source === '2gis' ? 'bg-green-50 text-green-600' : 'bg-sand-200 text-sand-700'">
-                    <span class="font-display font-500 text-4">{{ review.author[0] }}</span>
-                  </div>
-                  <span class="text-small font-600 text-sand-800">{{ review.author }}</span>
-                </div>
-                <span class="text-small text-sand-700">{{ review.date }}</span>
-              </div>
-            </div>
-          </div>
+          <UiReviewCard
+            v-for="(review, i) in loopedReviews"
+            :key="'r' + i"
+            :review="review"
+            :width="cardWidth"
+            @open="openReview"
+          />
         </div>
       </div>
+    </div>
 
     <!-- Bottom bar -->
     <div class="container">
       <div class="flex items-center justify-between mt-6 px-1">
         <div class="flex items-center gap-1.5">
-          <button @click="prev" class="carousel-arrow">
+          <button @click="prev" class="media-arrow media-arrow--light">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 1.5L3 6l5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
-          <button @click="next" class="carousel-arrow">
+          <button @click="next" class="media-arrow media-arrow--light">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4 1.5L9 6l-5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
         </div>
@@ -122,7 +82,7 @@
             v-for="i in totalDots"
             :key="i"
             @click="goTo(i - 1)"
-            class="carousel-dot"
+            class="media-dot"
             :class="activeDot === i - 1 ? 'bg-sand-800 w-5' : 'bg-sand-300 w-2'"
           ></button>
         </div>
@@ -190,7 +150,6 @@ interface Review {
   fullText?: string
 }
 
-const titleRef = ref<HTMLElement>()
 const widgetsRef = ref<HTMLElement>()
 const carouselWrapRef = ref<HTMLElement>()
 const trackRef = ref<HTMLElement>()
@@ -465,23 +424,7 @@ onUnmounted(() => {
   color: #6B5B4A;
 }
 
-.review-card {
-  background: white;
-  border: 1px solid #F0E6D6;
-  border-radius: 16px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 2px 8px rgba(44, 36, 22, 0.03);
-}
-
-.review-text {
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
+/* review-source bleed — модалка использует те же классы, что и UiReviewCard */
 .review-source {
   display: inline-flex;
   align-items: center;
@@ -493,44 +436,13 @@ onUnmounted(() => {
   border-radius: 999px;
   letter-spacing: 0.01em;
 }
-/* review-source — намеренное исключение из min 16px:
-   мини-бейдж источника отзыва, иначе ломает layout карточки */
 .review-source--yandex { background: #FFF0EE; color: #CC3326; }
 .review-source--2gis { background: #EEFBEE; color: #2D8A30; }
 .review-source--site { background: #F4F6EE; color: #5B7A3A; }
 
-/* Arrows — same style as room/intro galleries */
-.carousel-arrow {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(44, 36, 22, 0.06);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #6B5B4A;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.carousel-arrow:hover {
-  background: rgba(44, 36, 22, 0.12);
-  color: #2C2416;
-}
-
 /* Track animation */
 .track-animate {
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Dots — same as rooms/intro */
-.carousel-dot {
-  height: 8px;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0;
 }
 
 /* Modal transition */

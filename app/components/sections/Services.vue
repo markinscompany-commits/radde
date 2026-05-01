@@ -1,16 +1,10 @@
 ﻿<template>
-  <section id="services" class="py-20 md:py-26 bg-sand-50 relative overflow-hidden">
+  <section id="services" class="section-padding bg-sand-50 relative overflow-hidden">
     <!-- Subtle texture -->
     <div class="absolute inset-0 opacity-3 pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%236B5B4A&quot; fill-opacity=&quot;0.4&quot;%3E%3Ccircle cx=&quot;1&quot; cy=&quot;1&quot; r=&quot;1&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
 
     <div class="container relative z-1">
-      <!-- Header -->
-      <div class="text-center mb-14">
-        <span class="text-label text-olive-600 mb-4 block">Услуги</span>
-        <h2 ref="titleRef" class="text-h2 font-500 text-sand-900">
-          Всё для вашего <span class="section-title-accent">комфорта</span>
-        </h2>
-      </div>
+      <UiSectionHeader label="Услуги" title="Всё для вашего" accent="комфорта" class="mb-14" />
 
       <!-- Tabs -->
       <div ref="tabsRef" class="mb-10">
@@ -36,53 +30,20 @@
       <div ref="gridRef" class="services-list">
         <Transition name="grid-fade" mode="out-in">
           <div :key="activeTab + '-' + expanded" class="contents">
-          <div
-            v-for="(service, si) in visibleServices"
-            :key="service.id"
-            class="service-card"
-            :style="{ animationDelay: si * 0.06 + 's' }"
-          >
-            <!-- Top: icon + badge -->
-            <div class="flex items-start justify-between mb-4">
-              <div class="service-icon-wrap" v-html="service.icon"></div>
-              <span v-if="service.included" class="badge badge--included">Включено</span>
-              <span v-else-if="service.price" class="badge badge--price">{{ service.price }}</span>
-            </div>
-
-            <!-- Content -->
-            <h3 class="font-display font-500 text-sand-900 mb-2" style="font-size: clamp(1.15rem, 2vw, 1.35rem)">{{ service.title }}</h3>
-            <p class="font-body text-4 text-sand-700 leading-relaxed mb-4 service-desc">{{ service.description }}</p>
-
-            <!-- Meta row -->
-            <div v-if="service.duration || service.format" class="flex flex-wrap items-center gap-3 mb-5 text-sand-600">
-              <span v-if="service.duration" class="flex items-center gap-1.5 font-body text-4 font-500">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 7v5l3 3" /></svg>
-                {{ service.duration }}
-              </span>
-              <span v-if="service.format" class="flex items-center gap-1.5 font-body text-4 font-500">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="5.5" r="3" /><path d="M3 16c0-3.3 2.7-6 6-6s6 2.7 6 6" /></svg>
-                {{ service.format }}
-              </span>
-            </div>
-
-            <!-- CTA -->
-            <div class="mt-auto pt-4 border-t border-sand-100 flex items-center justify-between">
-              <button @click="openDetail(service)" class="font-body text-4 font-600 text-amber-600 hover:text-amber-700 transition-colors bg-transparent border-none cursor-pointer p-0">
-                Подробнее
-              </button>
-              <button v-if="!service.included" class="font-body text-4 font-600 text-sand-700 bg-sand-100 hover:bg-sand-200 px-3.5 py-1.5 rounded-full border-none cursor-pointer transition-colors" disabled>
-                Добавить к брони
-              </button>
-            </div>
-          </div>
+            <UiServiceCard
+              v-for="(service, si) in visibleServices"
+              :key="service.id"
+              :service="service"
+              :style="{ animationDelay: si * 0.06 + 's' }"
+              @open="openDetail"
+            />
           </div>
         </Transition>
       </div>
 
       <!-- Mobile scroll hint — show only when list actually overflows -->
-      <div v-show="showScrollHint" class="services-scroll-hint md:hidden">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-        Скролльте, чтобы увидеть все услуги
+      <div v-show="showScrollHint" class="md:hidden flex justify-center mt-3.5">
+        <UiScrollHint>Скролльте, чтобы увидеть все услуги</UiScrollHint>
       </div>
 
       <!-- Показать ещё (только на десктопе) -->
@@ -174,7 +135,6 @@ interface Service {
   format: string
 }
 
-const titleRef = ref<HTMLElement>()
 const tabsRef = ref<HTMLElement>()
 const gridRef = ref<HTMLElement>()
 const activeTab = ref('included')
@@ -656,71 +616,8 @@ onMounted(() => {
   }
 }
 
-/* Mobile scroll hint */
-.services-scroll-hint {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: fit-content;
-  margin: 14px auto 0;
-  font-family: 'Source Sans 3', sans-serif;
-  font-size: 16px;
-  color: #6B5B4A;
-  background: #FAF6F0;
-  border: 1px solid #F0E6D6;
-  border-radius: 999px;
-  padding: 8px 16px;
-}
-.services-scroll-hint svg {
-  color: #C17F3E;
-  flex-shrink: 0;
-}
-
-/* Service card */
-.service-card {
-  background: white;
-  border-radius: 14px;
-  border: 1px solid #F0E6D6;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.3s ease;
-  box-shadow: 0 1px 3px rgba(44, 36, 22, 0.04);
-}
-@media (max-width: 767px) {
-  .service-card {
-    flex: 0 0 78%;
-    max-width: 320px;
-    scroll-snap-align: start;
-    padding: 20px;
-  }
-}
-.service-card:hover {
-  box-shadow: 0 8px 30px rgba(44, 36, 22, 0.08);
-  border-color: #E8D5B7;
-  transform: translateY(-2px);
-}
-
-.service-desc {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* Icon wrappers */
-.service-icon-wrap {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #F4F6EE, #E8ECDC);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #5B7A3A;
-  flex-shrink: 0;
-}
-
+/* Modal icon — модалка ниже использует тот же стиль, что и иконки в UiServiceCard.
+   Карточный .service-icon-wrap живёт в UiServiceCard, здесь только модальный wrap. */
 .modal-icon-wrap {
   width: 52px;
   height: 52px;
@@ -733,31 +630,11 @@ onMounted(() => {
   flex-shrink: 0;
 }
 
-/* Badges */
-.badge {
-  font-family: 'Source Sans 3', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  padding: 5px 12px;
-  border-radius: 999px;
-  letter-spacing: 0.02em;
-}
-/* badge — намеренное исключение из правила min 16px:
-   мини-бейдж в углу карточки, иначе ломает layout */
-.badge--included {
-  background: #E8F0E0;
-  color: #4A6330;
-}
-.badge--price {
-  background: #FAF0E4;
-  color: #A66B32;
-}
-
 /* Grid fade transition (tab switching) */
 .grid-fade-enter-active {
   transition: opacity 0.5s ease 0.15s;
 }
-.grid-fade-enter-active .service-card {
+.grid-fade-enter-active :deep(.service-card) {
   animation: cardReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .grid-fade-leave-active {
