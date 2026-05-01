@@ -54,27 +54,39 @@
 
           <!-- Right: contact form -->
           <div ref="formRef">
-            <form @submit.prevent class="bg-sand-900/60 border border-white/10 rounded-3 p-6 md:p-8">
-              <h3 class="font-display font-500 text-6 text-white mb-6">Оставить заявку</h3>
-              <div class="space-y-4 mb-6">
-                <div>
-                  <label class="label-dark">Имя</label>
-                  <input type="text" placeholder="Как к вам обращаться" class="input-dark" />
+            <div class="bg-sand-900/60 border border-white/10 rounded-3 p-6 md:p-8">
+              <form v-if="!contactSuccess" @submit.prevent="submitContact">
+                <h3 class="font-display font-500 text-6 text-white mb-6">Оставить заявку</h3>
+                <div class="space-y-4 mb-6">
+                  <div>
+                    <label class="label-dark">Имя</label>
+                    <input v-model="contactForm.name" type="text" placeholder="Как к вам обращаться" class="input-dark" required />
+                  </div>
+                  <div>
+                    <label class="label-dark">Телефон</label>
+                    <input :value="contactForm.phone" @input="handlePhone" @keydown="phoneMaskKeydown" type="tel" placeholder="+7 (900) 000-00-00" class="input-dark" required />
+                  </div>
+                  <div>
+                    <label class="label-dark">Комментарий <span style="opacity:0.5">(необязательно)</span></label>
+                    <textarea v-model="contactForm.comment" placeholder="Пожелания, вопросы..." rows="3" class="input-dark" style="height:auto;min-height:80px;padding:10px 14px;resize:vertical;line-height:1.5"></textarea>
+                  </div>
                 </div>
-                <div>
-                  <label class="label-dark">Телефон</label>
-                  <input type="tel" placeholder="+7 (900) 000-00-00" class="input-dark" @input="handlePhone" @keydown="phoneMaskKeydown" />
+                <button type="submit" class="btn-primary w-full text-center py-4" :disabled="contactSubmitting">
+                  {{ contactSubmitting ? 'Отправляем...' : 'Отправить заявку' }}
+                </button>
+                <p class="text-small text-white/65 mt-4 text-center">
+                  Нажимая кнопку, вы соглашаетесь с <a href="/privacy" class="text-white/85 underline underline-offset-2 hover:text-white transition-colors">политикой конфиденциальности</a>
+                </p>
+              </form>
+              <div v-else class="flex flex-col items-center text-center py-4">
+                <div class="w-14 h-14 rounded-full bg-olive-500/20 text-olive-300 flex items-center justify-center mb-5">
+                  <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><path d="M10 16.5L14.5 21L22 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </div>
-                <div>
-                  <label class="label-dark">Комментарий <span style="opacity:0.5">(необязательно)</span></label>
-                  <textarea placeholder="Пожелания, вопросы..." rows="3" class="input-dark" style="height:auto;min-height:80px;padding:10px 14px;resize:vertical;line-height:1.5"></textarea>
-                </div>
+                <h3 class="font-display font-500 text-6 text-white mb-3">Заявка отправлена</h3>
+                <p class="font-body text-4 text-white/75 mb-6 max-w-80">Спасибо, {{ contactForm.name }}! Мы свяжемся с вами в ближайшее время.</p>
+                <button @click="resetContact" class="btn-primary px-10 py-3.5">Отправить ещё одну</button>
               </div>
-              <button type="submit" class="btn-primary w-full text-center py-4">Отправить заявку</button>
-              <p class="text-small text-white/65 mt-4 text-center">
-                Нажимая кнопку, вы соглашаетесь с <a href="/privacy" class="text-white/85 underline underline-offset-2 hover:text-white transition-colors">политикой конфиденциальности</a>
-              </p>
-            </form>
+            </div>
           </div>
         </div>
       </div>
@@ -130,8 +142,28 @@ const { onInput: phoneMaskOnInput, onKeydown: phoneMaskKeydown } = usePhoneMask(
 const infoRef = ref<HTMLElement>()
 const formRef = ref<HTMLElement>()
 
+const contactForm = reactive({ name: '', phone: '', comment: '' })
+const contactSubmitting = ref(false)
+const contactSuccess = ref(false)
+
 function handlePhone(e: Event) {
-  phoneMaskOnInput(e)
+  contactForm.phone = phoneMaskOnInput(e)
+}
+
+async function submitContact() {
+  if (!contactForm.name || !contactForm.phone) return
+  contactSubmitting.value = true
+  // TODO: отправка на сервер → SQLite → Telegram
+  await new Promise(r => setTimeout(r, 1200))
+  contactSubmitting.value = false
+  contactSuccess.value = true
+}
+
+function resetContact() {
+  contactSuccess.value = false
+  contactForm.name = ''
+  contactForm.phone = ''
+  contactForm.comment = ''
 }
 
 </script>

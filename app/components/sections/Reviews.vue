@@ -208,7 +208,7 @@ const gap = 20
 const yandexRating = reactive({
   score: 4.8,
   count: 47,
-  reviewUrl: 'https://yandex.ru/maps/-/CDwXRG',
+  reviewUrl: 'https://yandex.com/maps/-/CPSTAYNj',
 })
 
 const gisRating = reactive({

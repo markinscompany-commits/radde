@@ -167,6 +167,18 @@
                 class="absolute inset-0 w-full h-full object-cover room-photo-transition"
                 :class="detailPhotoIndex === pi ? 'opacity-100 z-2' : 'opacity-0 z-1'"
               />
+              <!-- Top-right: zoom hint -->
+              <div class="absolute top-4 right-4 z-10" @click.stop>
+                <button @click="openLightbox(detailRoom, detailPhotoIndex)"
+                        class="room-arrow"
+                        title="Открыть на весь экран">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                    <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M7 4.5v5M4.5 7h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                  </svg>
+                </button>
+              </div>
               <div class="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-between px-4 py-3"
                    @click.stop>
                 <div v-if="detailRoom.images.length > 1" class="flex items-center gap-1.5">
