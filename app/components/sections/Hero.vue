@@ -9,18 +9,18 @@
     />
     <div class="absolute inset-0 bg-sand-900/70"></div>
 
+    <!-- Заголовок по центру блока (горизонтально и вертикально) -->
+    <div class="absolute inset-0 z-10 flex items-center justify-center text-center px-5">
+      <h1 ref="titleRef" class="font-display font-500 text-white hero-hidden max-w-1100px"
+          style="font-size: clamp(2.2rem, 6vw, 4.4rem); line-height: 1.05">
+        Пансионат Радде<br><span class="font-accent italic font-500 text-sand-300 text-[1.2em]">реликтовый лес, горы и&nbsp;гармония</span>
+      </h1>
+    </div>
+
     <!-- Content -->
     <div class="relative z-10 min-h-screen flex flex-col">
-      <!-- Отступ под фиксированную шапку -->
-      <div class="h-16 md:h-18"></div>
-
-      <!-- Заголовок по центру -->
-      <div class="flex-1 flex flex-col items-center justify-center text-center px-5">
-        <h1 ref="titleRef" class="font-display font-500 text-white mb-6 hero-hidden max-w-1100px"
-            style="font-size: clamp(2.2rem, 6vw, 4.4rem); line-height: 1.05">
-          Пансионат Радде<br><span class="font-accent italic font-500 text-sand-300 text-[1.2em]">реликтовый лес, горы и&nbsp;гармония</span>
-        </h1>
-      </div>
+      <!-- Spacer to push booking form to bottom -->
+      <div class="flex-1"></div>
 
       <!-- Форма бронирования -->
       <div class="px-5 md:px-8 pb-8 overflow-hidden">
