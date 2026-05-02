@@ -106,7 +106,8 @@
               <div v-else>
                 <span class="font-body text-4 font-600 text-olive-700">Включено в стоимость проживания</span>
               </div>
-              <button class="btn-primary opacity-50 cursor-default" disabled>Добавить к брони</button>
+              <a v-if="bookableExtraIds.has(detailService.id)" :href="`${base}booking?extra=${detailService.id}`" class="btn-primary">Добавить к брони</a>
+              <a v-else :href="`${base}booking`" class="btn-secondary">К бронированию</a>
             </div>
           </div>
         </div>
@@ -134,6 +135,9 @@ interface Service {
   duration: string
   format: string
 }
+
+const base = useRuntimeConfig().app.baseURL || '/'
+const bookableExtraIds = new Set(useBookingExtras().map(e => e.id))
 
 const tabsRef = ref<HTMLElement>()
 const gridRef = ref<HTMLElement>()

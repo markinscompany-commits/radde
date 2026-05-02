@@ -61,9 +61,9 @@
       <a :href="`tel:${contacts.phone.tel}`" class="font-body text-4 font-500 text-white/85 hover:text-white transition-colors">
         {{ contacts.phone.display }}
       </a>
-      <button type="button" @click="$emit('book')" class="btn-primary px-5 py-2.5">
+      <a :href="`${base}booking`" class="btn-primary px-5 py-2.5">
         Забронировать
-      </button>
+      </a>
     </div>
 
     <!-- Mobile: phone icon (left) — balances the burger -->
@@ -104,9 +104,9 @@
       <span class="block text-small text-white/55 mb-5">{{ contacts.schedule }}</span>
 
       <!-- CTA -->
-      <button type="button" @click="$emit('book'); closeMobile()" class="btn-primary w-full py-3.5 mb-6">
+      <a :href="`${base}booking`" @click="closeMobile()" class="btn-primary w-full py-3.5 mb-6 text-center">
         Забронировать
-      </button>
+      </a>
 
       <!-- Social icons -->
       <div class="pt-5 border-t border-white/10">

@@ -120,7 +120,16 @@ watch(() => form.checkIn, (val) => {
 })
 
 function handleBooking() {
-  // TODO: интеграция с Bnovo — пока неактивна
+  // Сохраняем выбранные на главной даты/гостей в стор и переходим на /booking.
+  // На странице бронирования эти значения подхватятся (state восстанавливается из localStorage).
+  const { setQuery } = useBookingStore()
+  setQuery({
+    arrival: form.checkIn,
+    departure: form.checkOut,
+    adults: form.adults,
+    children: form.children,
+  })
+  window.location.href = `${base}booking`
 }
 
 // Wait for preloader to finish before starting hero animations

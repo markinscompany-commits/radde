@@ -115,7 +115,7 @@
                     class="text-small font-600 text-amber-600 hover:text-amber-700 transition-colors bg-transparent border-none cursor-pointer p-0">
               Подробнее
             </button>
-            <button class="btn-primary opacity-50 cursor-default" disabled>Забронировать</button>
+            <a :href="bookHref" class="btn-primary">Забронировать</a>
           </div>
         </div>
       </div>
@@ -125,6 +125,7 @@
 
 <script setup lang="ts">
 export interface Room {
+  id?: string
   name: string
   area: number
   bed: string
@@ -148,6 +149,9 @@ defineEmits<{
   details: [room: Room]
   lightbox: [room: Room, startIndex: number]
 }>()
+
+const base = useRuntimeConfig().app.baseURL || '/'
+const bookHref = computed(() => props.room.id ? `${base}booking?room=${props.room.id}` : `${base}booking`)
 
 function nextPhoto() {
   props.room.activePhoto = (props.room.activePhoto + 1) % props.room.images.length

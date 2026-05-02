@@ -114,7 +114,7 @@
                   <span class="text-small text-sand-600 ml-1">/ ночь</span>
                   <span class="block text-small text-sand-600 mt-0.5">за 2 взрослых</span>
                 </div>
-                <button class="btn-primary opacity-50 cursor-default" disabled>Забронировать</button>
+                <a :href="`${base}booking?room=${detailRoom.id}`" class="btn-primary">Забронировать</a>
               </div>
             </div>
           </div>
@@ -183,16 +183,12 @@ const lightbox = reactive({
   zoom: 1,
 })
 
-function getRoomSlug(room: typeof rooms[0]) {
-  return room.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-zа-яё0-9-]/gi, '')
-}
-
 function openDetails(room: typeof rooms[0]) {
   detailRoom.value = room
   detailPhotoIndex.value = 0
   document.body.style.overflow = 'hidden'
   useLenis().instance()?.stop()
-  history.replaceState(null, '', `#room-${getRoomSlug(room)}`)
+  history.replaceState(null, '', `#room-${room.id}`)
 }
 
 function closeDetails() {
@@ -234,70 +230,9 @@ if (import.meta.client) {
   })
 }
 
-const VIP_COUNT = 9
-const PANORAMA_COUNT = 8
-const LUX_COUNT = 17
-const STANDARD_COUNT = 3
-const range = (n: number) => Array.from({ length: n }, (_, i) => i + 1)
-
-const rooms = reactive([
-  {
-    name: 'VIP',
-    area: 50,
-    bed: 'King-size',
-    guests: 4,
-    view: 'Панорама на горы и долину',
-    price: '10 000',
-    description: 'Максимальный комфорт. Отдельная гостиная с камином, спальня с панорамными окнами, собственная терраса с видом на горы и долину.',
-    fullDescription: 'Максимальный комфорт для тех, кто ценит пространство и уединение. Отдельная гостиная с камином — идеальное место для вечерних посиделок. Спальня с панорамными окнами и кроватью King-size. Собственная терраса с видом на горы и долину. Санузел с дождевым душем и ванной. Халаты, тапочки, мини-бар, телевизор — всё продумано для безупречного отдыха.',
-    note: '',
-    tags: ['Гостиная', 'Камин', 'Терраса', 'Ванна', 'Дождевой душ', 'Халаты', 'Мини-бар'],
-    images: range(VIP_COUNT).map(n => `${base}images/rooms/vip/${n}.jpg`),
-    activePhoto: 0,
-  },
-  {
-    name: 'Люкс с панорамной спальней',
-    area: 35,
-    bed: 'King-size',
-    guests: 3,
-    view: 'Панорама на горы',
-    price: '7 000',
-    description: 'Панорамные окна от пола до потолка. Просыпаетесь с видом на горные вершины и реликтовый лес — незабываемое начало каждого дня.',
-    fullDescription: 'Панорамные окна от пола до потолка превращают спальню в смотровую площадку. Просыпаетесь с видом на горные вершины и реликтовый лес — незабываемое начало каждого дня. Номер оснащён кроватью King-size с ортопедическим матрасом, собственным санузлом с дождевым душем, террасой для отдыха на свежем воздухе. Мини-бар, телевизор, кресло у окна — всё для полного комфорта.',
-    note: '',
-    tags: ['Панорамные окна', 'Терраса', 'Дождевой душ', 'Собственный санузел', 'Мини-бар', 'Кресло у окна'],
-    images: range(PANORAMA_COUNT).map(n => `${base}images/rooms/panorama/${n}.jpg`),
-    activePhoto: 0,
-  },
-  {
-    name: 'Люкс',
-    area: 30,
-    bed: 'Двуспальная кровать',
-    guests: 3,
-    view: 'Вид на горы',
-    price: '5 500',
-    description: 'Просторный номер с собственным санузлом и балконом. Большие окна наполняют пространство естественным светом и открывают вид на горные вершины.',
-    fullDescription: 'Просторный номер с собственным санузлом и балконом. Большие окна наполняют пространство естественным светом и открывают вид на горные вершины. Интерьер в натуральных тонах создаёт атмосферу уюта — мягкая мебель, телевизор, мини-бар с прохладительными напитками. Балкон с видом на горы — идеальное место для утреннего кофе.',
-    note: '',
-    tags: ['Собственный санузел', 'Балкон', 'Телевизор', 'Мини-бар'],
-    images: range(LUX_COUNT).map(n => `${base}images/rooms/lux/${n}.jpg`),
-    activePhoto: 0,
-  },
-  {
-    name: 'Стандарт',
-    area: 18,
-    bed: 'Двуспальная кровать',
-    guests: 2,
-    view: 'Вид на лес',
-    price: '3 500',
-    description: 'Уютный номер в тёплых природных тонах с видом на реликтовый лес. Всё необходимое для спокойного отдыха вдали от суеты.',
-    fullDescription: 'Уютный номер в тёплых природных тонах с видом на реликтовый лес. Всё необходимое для спокойного отдыха вдали от суеты — удобная кровать с ортопедическим матрасом, шкаф для одежды, рабочее место у окна. Из окна открывается вид на вековые деревья реликтового леса. Идеальный вариант для пар и путешественников, ценящих простоту и природу.',
-    note: 'Санузел в коридоре — один на два номера',
-    tags: ['Рабочее место', 'Шкаф', 'Вид на лес'],
-    images: range(STANDARD_COUNT).map(n => `${base}images/rooms/standard/${n}.jpg`),
-    activePhoto: 0,
-  },
-])
+// Берём номера из общего источника (composables/useRooms.ts), добавляем
+// локальное UI-поле activePhoto для индекса слайда галереи.
+const rooms = reactive(useRooms().map(r => ({ ...r, activePhoto: 0 })))
 
 onMounted(() => {
   if (!import.meta.client) return
@@ -305,8 +240,8 @@ onMounted(() => {
   // Open room modal from URL hash
   const hash = window.location.hash
   if (hash.startsWith('#room-')) {
-    const slug = hash.replace('#room-', '')
-    const found = rooms.find(r => getRoomSlug(r) === slug)
+    const id = hash.replace('#room-', '')
+    const found = rooms.find(r => r.id === id)
     if (found) setTimeout(() => openDetails(found), 500)
   }
 })
