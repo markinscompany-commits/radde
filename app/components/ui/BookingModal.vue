@@ -46,6 +46,8 @@
                 {{ submitting ? 'Отправляем...' : 'Отправить заявку' }}
               </button>
 
+              <p v-if="errorMessage" class="text-small text-amber-700 text-center leading-snug">{{ errorMessage }}</p>
+
               <p class="text-small text-sand-700 text-center leading-snug">
                 Нажимая кнопку, вы соглашаетесь с
                 <a :href="`${base}privacy`" class="text-sand-800 underline underline-offset-2 hover:text-amber-600 transition-colors">политикой конфиденциальности</a>
@@ -87,6 +89,7 @@ const isOpen = computed({
 
 const submitting = ref(false)
 const isSuccess = ref(false)
+const errorMessage = ref('')
 
 const form = reactive({
   name: '',
@@ -96,6 +99,7 @@ const form = reactive({
 watch(isOpen, (open) => {
   if (open) {
     isSuccess.value = false
+    errorMessage.value = ''
     document.body.style.overflow = 'hidden'
     useLenis().instance()?.stop()
   } else {
@@ -113,7 +117,15 @@ function handlePhone(e: Event) {
 }
 
 async function submit() {
-  if (!form.name || !form.phone) return
+  errorMessage.value = ''
+  if (!form.name.trim()) {
+    errorMessage.value = 'Укажите имя — иначе не сможем к вам обратиться'
+    return
+  }
+  if (form.phone.replace(/\D/g, '').length < 11) {
+    errorMessage.value = 'Укажите корректный телефон в формате +7 (XXX) XXX-XX-XX'
+    return
+  }
   submitting.value = true
   // TODO: отправка на сервер → SQLite → Telegram
   await new Promise(resolve => setTimeout(resolve, 1200))

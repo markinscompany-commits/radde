@@ -60,6 +60,7 @@
                 <button type="submit" class="btn-primary w-full text-center py-4" :disabled="contactSubmitting">
                   {{ contactSubmitting ? 'Отправляем...' : 'Отправить заявку' }}
                 </button>
+                <p v-if="contactError" class="text-small text-amber-300 mt-3 text-center leading-snug">{{ contactError }}</p>
                 <p class="text-small text-white/65 mt-4 text-center">
                   Нажимая кнопку, вы соглашаетесь с <a :href="`${base}privacy`" class="text-white/85 underline underline-offset-2 hover:text-white transition-colors">политикой конфиденциальности</a>
                 </p>
@@ -93,13 +94,22 @@ const formRef = ref<HTMLElement>()
 const contactForm = reactive({ name: '', phone: '', comment: '' })
 const contactSubmitting = ref(false)
 const contactSuccess = ref(false)
+const contactError = ref('')
 
 function handlePhone(e: Event) {
   contactForm.phone = phoneMaskOnInput(e)
 }
 
 async function submitContact() {
-  if (!contactForm.name || !contactForm.phone) return
+  contactError.value = ''
+  if (!contactForm.name.trim()) {
+    contactError.value = 'Укажите имя — иначе не сможем к вам обратиться'
+    return
+  }
+  if (contactForm.phone.replace(/\D/g, '').length < 11) {
+    contactError.value = 'Укажите корректный телефон в формате +7 (XXX) XXX-XX-XX'
+    return
+  }
   contactSubmitting.value = true
   // TODO: отправка на сервер → SQLite → Telegram
   await new Promise(r => setTimeout(r, 1200))
@@ -109,6 +119,7 @@ async function submitContact() {
 
 function resetContact() {
   contactSuccess.value = false
+  contactError.value = ''
   contactForm.name = ''
   contactForm.phone = ''
   contactForm.comment = ''

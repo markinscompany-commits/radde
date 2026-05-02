@@ -22,6 +22,9 @@ export default defineNuxtConfig({
         { property: 'og:type', content: 'website' },
       ],
       link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/radde/favicon.svg' },
+        { rel: 'icon', type: 'image/png', sizes: '512x512', href: '/radde/favicon.png' },
+        { rel: 'apple-touch-icon', href: '/radde/favicon.png' },
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Manrope:wght@300;400;500;600;700;800&family=Source+Sans+3:wght@300;400;500;600;700&display=swap' },

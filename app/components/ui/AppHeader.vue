@@ -145,16 +145,16 @@ const mainNav: NavLink[] = [
   { href: '#rooms', label: 'Номера', section: 'rooms' },
   { href: '#services', label: 'Услуги', section: 'services' },
   { href: '#about', label: 'Локация', section: 'about' },
-  { href: `${base}contacts`, label: 'Контакты', section: 'contacts' },
+  { href: `${base}blog`, label: 'Блог', section: 'blog' },
 ]
 
 const moreNav: NavLink[] = [
   { href: '#location', label: 'Как добраться', section: 'location' },
   { href: '#gallery', label: 'Галерея', section: 'gallery' },
-  { href: '#food', label: 'Питание', section: 'food' },
+  { href: `${base}blog/dagestanskaya-kuhnya`, label: 'Питание', section: 'food' },
   { href: `${base}blog/about`, label: 'О пансионате', section: 'about' },
   { href: '#faq', label: 'Вопросы и ответы', section: 'faq' },
-  { href: `${base}blog`, label: 'Блог', section: 'blog' },
+  { href: `${base}contacts`, label: 'Контакты', section: 'contacts' },
 ]
 
 const mobileOpen = ref(false)

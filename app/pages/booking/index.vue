@@ -24,27 +24,7 @@
       </div>
     </section>
 
-    <!-- Success screen -->
-    <section v-if="isSuccess" class="bg-sand-50 section-padding">
-      <div class="container">
-        <div class="max-w-150 mx-auto text-center">
-          <div class="w-16 h-16 mx-auto rounded-full bg-olive-100 text-olive-600 flex items-center justify-center mb-6">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M10 16.5L14.5 21L22 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <h2 class="text-h2 text-sand-900 mb-4">Заявка <span class="section-title-accent">отправлена</span></h2>
-          <p class="text-body-lg text-sand-700 mb-8">
-            Спасибо, {{ state.guest.firstName }}! Мы свяжемся с&nbsp;вами по&nbsp;номеру {{ state.guest.phone }} в&nbsp;течение 15&nbsp;минут, чтобы подтвердить бронь.
-          </p>
-          <div class="flex flex-wrap items-center justify-center gap-3">
-            <a :href="base" class="btn-secondary">На главную</a>
-            <button type="button" class="btn-primary" @click="bookAnother">Новая бронь</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- Form -->
-    <template v-else>
       <!-- Dates + guests panel (dark) -->
       <section class="relative bg-sand-900 py-10 md:py-14">
         <div class="container">
@@ -281,7 +261,7 @@
                 <button
                   type="button"
                   class="btn-primary w-full py-4 text-4"
-                  :disabled="!canSubmit || submitting"
+                  :disabled="submitting"
                   @click="submit"
                 >
                   {{ submitting ? 'Отправляем…' : 'Отправить заявку' }}
@@ -302,7 +282,6 @@
           </div>
         </div>
       </section>
-    </template>
 
     <UiSiteFooter />
   </div>
@@ -470,7 +449,6 @@ const hasAnySelection = computed(() =>
 // ----- Submit -----
 
 const submitting = ref(false)
-const isSuccess = ref(false)
 const errorMessage = ref('')
 
 const canSubmit = computed(() => {
@@ -506,20 +484,27 @@ async function submit() {
   const payload = toBnovoPayload(state.value, selectedRoom.value, extras)
   // eslint-disable-next-line no-console
   console.log('[booking] outgoing payload', payload)
-  await new Promise(resolve => setTimeout(resolve, 1200))
-  submitting.value = false
-  isSuccess.value = true
-  // Сохраняем имя для «Спасибо», но extras+room сбрасываем,
-  // чтобы пользователь, начав заново, не отправил то же дважды.
-  // Контактные поля оставляем — вдруг понадобится повторно.
-}
 
-function bookAnother() {
-  isSuccess.value = false
+  // Сохраняем имя+телефон для страницы успеха (она прочитает из localStorage)
+  if (import.meta.client) {
+    try {
+      localStorage.setItem('radde_booking_last', JSON.stringify({
+        firstName: state.value.guest.firstName,
+        phone: state.value.guest.phone,
+      }))
+    } catch { /* ignore */ }
+  }
+
+  await new Promise(resolve => setTimeout(resolve, 800))
+
+  // Сбрасываем выбор номера и услуг — повторная бронь начнётся с нуля.
+  // Контактные поля оставляем (на случай если человек отправит ещё одну заявку).
   state.value.roomId = null
   state.value.extras = []
   state.value.comment = ''
-  scrollToTop()
+
+  // Hard navigation, чтобы /booking/success прочитала свежий localStorage
+  window.location.href = `${base}booking/success`
 }
 
 function resetAll() {
