@@ -48,7 +48,7 @@
 
               <p class="text-small text-sand-700 text-center leading-snug">
                 Нажимая кнопку, вы соглашаетесь с
-                <a href="/privacy" class="text-sand-800 underline underline-offset-2 hover:text-amber-600 transition-colors">политикой конфиденциальности</a>
+                <a :href="`${base}privacy`" class="text-sand-800 underline underline-offset-2 hover:text-amber-600 transition-colors">политикой конфиденциальности</a>
               </p>
             </form>
           </div>
@@ -69,6 +69,7 @@
 </template>
 
 <script setup lang="ts">
+const base = useRuntimeConfig().app.baseURL || '/'
 const { onInput: phoneMaskInput, onKeydown: phoneMaskKeydown } = usePhoneMask()
 
 const props = defineProps<{

@@ -7,7 +7,7 @@
           Полезное <span class="section-title-accent">о Радде</span>
         </template>
         <template #actions>
-          <UiArrowLink href="/blog" class="hidden md:inline-flex">Все статьи</UiArrowLink>
+          <UiArrowLink :href="`${base}blog`" class="hidden md:inline-flex">Все статьи</UiArrowLink>
         </template>
       </UiSectionHeader>
     </div>
@@ -50,7 +50,7 @@
 
       <!-- Mobile: все статьи -->
       <div class="mt-8 text-center md:hidden">
-        <a href="/blog" class="btn-secondary inline-flex items-center gap-2">
+        <a :href="`${base}blog`" class="btn-secondary inline-flex items-center gap-2">
           Все статьи
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
@@ -79,7 +79,7 @@ const posts = [
     category: 'Путешествие',
     readTime: '5 мин чтения',
     image: `${base}images/hero/hero-3.jpg`,
-    href: '/blog/kak-dobratsya',
+    href: `${base}blog/kak-dobratsya`,
   },
   {
     title: 'Достопримечательности Гунибского района',
@@ -87,7 +87,7 @@ const posts = [
     category: 'Что посмотреть',
     readTime: '7 мин чтения',
     image: `${base}images/usp/landmarks/1.jpg`,
-    href: '/blog/dostoprimechatelnosti',
+    href: `${base}blog/dostoprimechatelnosti`,
   },
   {
     title: 'Семейный отдых в горах Дагестана',
@@ -95,7 +95,7 @@ const posts = [
     category: 'Семейный отдых',
     readTime: '6 мин чтения',
     image: `${base}images/usp/nature/1.jpg`,
-    href: '/blog/semeynyy-otdyh',
+    href: `${base}blog/semeynyy-otdyh`,
   },
   {
     title: 'Дагестанская кухня: что попробовать в Гунибе',
@@ -103,7 +103,7 @@ const posts = [
     category: 'Гастрономия',
     readTime: '4 мин чтения',
     image: `${base}images/usp/food/1.jpg`,
-    href: '/blog/dagestanskaya-kuhnya',
+    href: `${base}blog/dagestanskaya-kuhnya`,
   },
   {
     title: 'Зимний Дагестан: стоит ли ехать?',
@@ -111,7 +111,7 @@ const posts = [
     category: 'Сезоны',
     readTime: '5 мин чтения',
     image: `${base}images/hero/hero-1.jpg`,
-    href: '/blog/zimniy-dagestan',
+    href: `${base}blog/zimniy-dagestan`,
   },
   {
     title: 'Конные прогулки по реликтовому лесу',
@@ -119,7 +119,7 @@ const posts = [
     category: 'Активности',
     readTime: '4 мин чтения',
     image: `${base}images/hero/hero-4.jpg`,
-    href: '/blog/konnye-progulki',
+    href: `${base}blog/konnye-progulki`,
   },
 ]
 
