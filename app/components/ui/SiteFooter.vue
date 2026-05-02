@@ -17,7 +17,7 @@
           <a :href="`${base}#about`" class="footer-link">Локация</a>
           <a :href="`${base}#location`" class="footer-link">Как добраться</a>
           <a :href="`${base}#gallery`" class="footer-link">Галерея</a>
-          <a :href="`${base}#blog`" class="footer-link">Блог</a>
+          <a :href="`${base}blog`" class="footer-link">Блог</a>
           <a :href="`${base}contacts`" class="footer-link">Контакты</a>
         </nav>
       </div>

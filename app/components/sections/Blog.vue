@@ -17,7 +17,7 @@
       <div class="overflow-hidden">
         <div ref="trackRef" class="flex gap-6 blog-track-animate will-change-transform" :style="{ paddingLeft: containerPad + 'px', transform: `translateX(-${trackOffset}px)` }">
           <UiBlogCard
-            v-for="(post, i) in posts"
+            v-for="(post, i) in cards"
             :key="'p' + i"
             :post="post"
             :width="cardWidth"
@@ -72,56 +72,15 @@ const containerPad = ref(20)
 const trackOffset = ref(0)
 const gap = 24
 
-const posts = [
-  {
-    title: 'Как добраться до пансионата Радде',
-    excerpt: 'Подробная инструкция: маршруты из Махачкалы, трансфер, что учесть в дороге по горному серпантину.',
-    category: 'Путешествие',
-    readTime: '5 мин чтения',
-    image: `${base}images/hero/hero-3.jpg`,
-    href: `${base}blog/kak-dobratsya`,
-  },
-  {
-    title: 'Достопримечательности Гунибского района',
-    excerpt: 'Гунибская крепость, водопады, каньоны и другие места, которые стоит посетить рядом с Радде.',
-    category: 'Что посмотреть',
-    readTime: '7 мин чтения',
-    image: `${base}images/usp/landmarks/1.jpg`,
-    href: `${base}blog/dostoprimechatelnosti`,
-  },
-  {
-    title: 'Семейный отдых в горах Дагестана',
-    excerpt: 'Чем заняться с детьми, безопасность, питание и всё, что нужно знать для комфортного отдыха всей семьёй.',
-    category: 'Семейный отдых',
-    readTime: '6 мин чтения',
-    image: `${base}images/usp/nature/1.jpg`,
-    href: `${base}blog/semeynyy-otdyh`,
-  },
-  {
-    title: 'Дагестанская кухня: что попробовать в Гунибе',
-    excerpt: 'Хинкал, чуду, курзе, урбеч — гид по блюдам, которые нужно попробовать во время отдыха в горах.',
-    category: 'Гастрономия',
-    readTime: '4 мин чтения',
-    image: `${base}images/usp/food/1.jpg`,
-    href: `${base}blog/dagestanskaya-kuhnya`,
-  },
-  {
-    title: 'Зимний Дагестан: стоит ли ехать?',
-    excerpt: 'Снежные горы, тёплые номера, баня и тишина. Почему зима — лучшее время для перезагрузки в Радде.',
-    category: 'Сезоны',
-    readTime: '5 мин чтения',
-    image: `${base}images/hero/hero-1.jpg`,
-    href: `${base}blog/zimniy-dagestan`,
-  },
-  {
-    title: 'Конные прогулки по реликтовому лесу',
-    excerpt: 'Как проходит прогулка верхом, что нужно знать новичкам и почему это главное впечатление от Гуниба.',
-    category: 'Активности',
-    readTime: '4 мин чтения',
-    image: `${base}images/hero/hero-4.jpg`,
-    href: `${base}blog/konnye-progulki`,
-  },
-]
+const { posts } = useBlogPosts()
+const cards = computed(() => posts.map((p) => ({
+  title: p.title,
+  excerpt: p.excerpt,
+  category: p.category,
+  readTime: p.readTime,
+  image: p.image,
+  href: `${base}blog/${p.slug}`,
+})))
 
 const visibleCount = computed(() => {
   if (!import.meta.client) return 3
@@ -130,7 +89,7 @@ const visibleCount = computed(() => {
   return 3
 })
 
-const maxIndex = computed(() => Math.max(0, posts.length - visibleCount.value))
+const maxIndex = computed(() => Math.max(0, cards.value.length - visibleCount.value))
 const totalDots = computed(() => maxIndex.value + 1)
 
 function updateSizes() {

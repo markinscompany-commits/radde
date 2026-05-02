@@ -22,7 +22,7 @@
               домашняя кухня и полное единение с природой — лучший выбор для семейного
               отдыха и перезагрузки.
             </p>
-            <UiArrowLink href="/blog/about" class="mb-10">Узнать больше о Радде</UiArrowLink>
+            <UiArrowLink :href="`${base}blog/about`" class="mb-10">Узнать больше о Радде</UiArrowLink>
 
             <!-- Цифры (lg) -->
             <div ref="statsRef" class="flex gap-6 sm:gap-10">

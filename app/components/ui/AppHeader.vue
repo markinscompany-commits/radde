@@ -152,9 +152,9 @@ const moreNav: NavLink[] = [
   { href: '#location', label: 'Как добраться', section: 'location' },
   { href: '#gallery', label: 'Галерея', section: 'gallery' },
   { href: '#food', label: 'Питание', section: 'food' },
-  { href: '#about', label: 'О пансионате', section: 'about' },
+  { href: `${base}blog/about`, label: 'О пансионате', section: 'about' },
   { href: '#faq', label: 'Вопросы и ответы', section: 'faq' },
-  { href: '#blog', label: 'Блог', section: 'blog' },
+  { href: `${base}blog`, label: 'Блог', section: 'blog' },
 ]
 
 const mobileOpen = ref(false)
