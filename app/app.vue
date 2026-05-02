@@ -4,6 +4,7 @@
     <NuxtRouteAnnouncer />
     <NuxtPage />
     <UiCookieBanner />
+    <UiToastContainer />
   </div>
 </template>
 

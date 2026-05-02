@@ -266,7 +266,6 @@
                 >
                   {{ submitting ? 'Отправляем…' : 'Отправить заявку' }}
                 </button>
-                <p v-if="errorMessage" class="text-small text-amber-700 mt-3 leading-snug">{{ errorMessage }}</p>
 
                 <button
                   v-if="hasAnySelection"
@@ -449,31 +448,23 @@ const hasAnySelection = computed(() =>
 // ----- Submit -----
 
 const submitting = ref(false)
-const errorMessage = ref('')
-
-const canSubmit = computed(() => {
-  return !!state.value.roomId
-    && !!state.value.guest.firstName.trim()
-    && state.value.guest.phone.replace(/\D/g, '').length >= 11
-    && nights.value > 0
-})
+const toast = useToast()
 
 async function submit() {
-  errorMessage.value = ''
   if (!state.value.roomId) {
-    errorMessage.value = 'Выберите номер на шаге 1.'
+    toast.error('Выберите номер на шаге 1')
     return
   }
   if (!state.value.guest.firstName.trim()) {
-    errorMessage.value = 'Укажите имя на шаге 3.'
+    toast.error('Укажите имя на шаге 3')
     return
   }
   if (state.value.guest.phone.replace(/\D/g, '').length < 11) {
-    errorMessage.value = 'Укажите корректный телефон на шаге 3.'
+    toast.error('Укажите корректный телефон на шаге 3')
     return
   }
   if (nights.value <= 0) {
-    errorMessage.value = 'Дата выезда должна быть позже даты заезда.'
+    toast.error('Дата выезда должна быть позже даты заезда')
     return
   }
 
@@ -509,7 +500,6 @@ async function submit() {
 
 function resetAll() {
   reset()
-  errorMessage.value = ''
   scrollToTop()
 }
 
