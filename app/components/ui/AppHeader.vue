@@ -1,14 +1,14 @@
 ﻿<template>
   <div
     class="fixed top-0 left-0 right-0 z-50"
-    :class="(scrolled || mobileOpen) ? 'bg-sand-900/95 backdrop-blur-md shadow-lg shadow-sand-900/10' : 'bg-transparent'"
+    :class="(scrolled || mobileOpen || solid) ? 'bg-sand-900/95 backdrop-blur-md shadow-lg shadow-sand-900/10' : 'bg-transparent'"
     :style="{
       opacity: visible ? 1 : 0,
       transform: visible ? 'translateY(0)' : 'translateY(-10px)',
       transition: 'opacity 0.5s ease, transform 0.5s ease, background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease, padding 0.3s ease',
     }"
   >
-  <header class="relative flex items-center justify-between px-5 md:px-8 max-w-1400px mx-auto w-full" :class="(scrolled || mobileOpen) ? 'py-2.5' : 'py-5 md:py-8'" style="transition: padding 0.3s ease">
+  <header class="relative flex items-center justify-between px-5 md:px-8 max-w-1400px mx-auto w-full" :class="(scrolled || mobileOpen || solid) ? 'py-2.5' : 'py-5 md:py-8'" style="transition: padding 0.3s ease">
     <!-- Left: Nav -->
     <nav class="hidden lg:flex items-center gap-5">
       <a v-for="link in mainNav" :key="link.href"
@@ -41,7 +41,7 @@
 
     <!-- Center: Logo -->
     <a :href="base" class="absolute left-1/2 -translate-x-1/2 flex-shrink-0">
-      <img :src="`${base}images/logo-white.png`" alt="Радде — Пансионат" :class="(scrolled || mobileOpen) ? 'h-9 md:h-10' : 'h-10 md:h-14'" class="w-auto" style="transition: height 0.3s ease" />
+      <img :src="`${base}images/logo-white.png`" alt="Радде — Пансионат" :class="(scrolled || mobileOpen || solid) ? 'h-9 md:h-10' : 'h-10 md:h-14'" class="w-auto" style="transition: height 0.3s ease" />
     </a>
 
     <!-- Right side: phone + messengers + CTA — only on desktop -->
@@ -121,6 +121,14 @@
 <script setup lang="ts">
 const base = useRuntimeConfig().app.baseURL || '/'
 const contacts = useContacts()
+
+withDefaults(defineProps<{
+  // Постоянно отображать тёмную подложку шапки (для страниц со светлым контентом
+  // в верхней части — /privacy и подобных, чтобы белый логотип/текст не сливался).
+  solid?: boolean
+}>(), {
+  solid: false,
+})
 
 defineEmits<{
   book: []

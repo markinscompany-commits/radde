@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UiAppHeader @book="showBooking = true" />
+    <UiAppHeader solid @book="showBooking = true" />
 
     <!-- Хлебная крошка + заголовок -->
     <section class="bg-sand-50 pt-32 md:pt-40 pb-12 md:pb-16">
