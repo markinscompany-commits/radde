@@ -12,6 +12,16 @@
       <div class="absolute inset-0 bg-sand-900/82"></div>
 
       <div class="container relative z-10">
+        <div class="flex justify-center mb-6">
+          <UiBreadcrumbs
+            variant="dark"
+            :items="[
+              { label: 'Главная', href: base },
+              { label: 'Бронирование', href: `${base}booking` },
+              { label: 'Заявка отправлена' },
+            ]"
+          />
+        </div>
         <div class="max-w-160 mx-auto text-center">
           <span class="text-label text-amber-400 mb-4 block">Бронирование</span>
           <h1 class="text-h1 text-white mb-4">

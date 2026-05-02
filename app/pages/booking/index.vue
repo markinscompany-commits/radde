@@ -12,6 +12,14 @@
       <div class="absolute inset-0 bg-sand-900/82"></div>
 
       <div class="container relative z-10">
+        <UiBreadcrumbs
+          variant="dark"
+          :items="[
+            { label: 'Главная', href: base },
+            { label: 'Бронирование' },
+          ]"
+          class="mb-6"
+        />
         <div class="max-w-180">
           <span class="text-label text-amber-400 mb-4 block">Бронирование</span>
           <h1 class="text-h1 text-white mb-5">

@@ -5,10 +5,14 @@
     <!-- Хлебная крошка + заголовок -->
     <section class="bg-sand-50 pt-32 md:pt-40 pb-12 md:pb-16">
       <div class="container">
-        <a :href="base" class="inline-flex items-center gap-2 text-small text-sand-700 hover:text-amber-600 transition-colors mb-6">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 12L3 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          На главную
-        </a>
+        <UiBreadcrumbs
+          variant="light"
+          :items="[
+            { label: 'Главная', href: base },
+            { label: 'Политика конфиденциальности' },
+          ]"
+          class="mb-6"
+        />
         <span class="text-label text-olive-600 mb-4 block">Документы</span>
         <h1 class="text-h1 text-sand-900 mb-5 max-w-180">
           Политика <span class="section-title-accent">конфиденциальности</span>

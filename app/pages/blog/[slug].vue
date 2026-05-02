@@ -9,12 +9,16 @@
         <div class="absolute inset-0 bg-sand-900/72"></div>
 
         <div class="container relative z-10">
+          <UiBreadcrumbs
+            variant="dark"
+            :items="[
+              { label: 'Главная', href: base },
+              { label: 'Блог', href: `${base}blog` },
+              { label: post.title },
+            ]"
+            class="mb-5"
+          />
           <div class="flex items-center gap-3 text-small text-white/65 mb-5 flex-wrap">
-            <a :href="`${base}blog`" class="inline-flex items-center gap-2 hover:text-white transition-colors">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 12L3 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              К&nbsp;статьям
-            </a>
-            <span class="opacity-40">·</span>
             <span class="post-meta-chip">{{ post.category }}</span>
             <span class="opacity-40">·</span>
             <span>{{ post.readTime }}</span>

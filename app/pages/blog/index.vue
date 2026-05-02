@@ -12,6 +12,14 @@
       <div class="absolute inset-0 bg-sand-900/80"></div>
 
       <div class="container relative z-10">
+        <UiBreadcrumbs
+          variant="dark"
+          :items="[
+            { label: 'Главная', href: base },
+            { label: 'Блог' },
+          ]"
+          class="mb-6"
+        />
         <span class="text-label text-amber-400 mb-4 block">Блог</span>
         <h1 class="text-h1 text-white mb-5 max-w-200">
           Полезное <span class="section-title-accent">о Радде</span>
