@@ -14,30 +14,9 @@
       <div class="container relative z-10">
         <div class="max-w-180">
           <span class="text-label text-amber-400 mb-4 block">Контакты</span>
-          <h1 class="text-h1 text-white mb-5">
+          <h1 class="text-h1 text-white">
             Свяжитесь <span class="section-title-accent text-sand-300">с пансионатом</span>
           </h1>
-          <p class="text-body-lg text-white/75 max-w-130 mb-7">
-            Поможем выбрать номер, расскажем о трансфере и ответим на любые вопросы. Звоните, пишите в мессенджеры или заполните форму — на связи каждый день.
-          </p>
-
-          <!-- Адрес + ссылка на Яндекс.Карты -->
-          <a :href="contacts.address.mapUrl" target="_blank" rel="noopener" class="hero-address-row group">
-            <div class="hero-address-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 22s-7-7-7-12a7 7 0 0 1 14 0c0 5-7 12-7 12z"/>
-                <circle cx="12" cy="10" r="2.5"/>
-              </svg>
-            </div>
-            <div class="flex-1 min-w-0">
-              <span class="text-label text-amber-300 block mb-1">Адрес</span>
-              <span class="font-display font-500 text-white block leading-snug" style="font-size: clamp(1rem, 1.6vw, 1.2rem)">{{ contacts.address.full }}</span>
-            </div>
-            <span class="hero-address-cta">
-              Открыть в Яндекс Картах
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </a>
         </div>
       </div>
     </section>
@@ -113,7 +92,6 @@
           <!-- Превью карты -->
           <a :href="contacts.address.mapUrl" target="_blank" rel="noopener" class="map-preview-card group">
             <img :src="`${base}images/usp/landmarks/1.jpg`" alt="Расположение пансионата Радде" class="map-preview-img" />
-            <div class="map-preview-overlay"></div>
             <div class="map-preview-content">
               <div class="map-preview-icon">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -131,14 +109,12 @@
       </div>
     </section>
 
-    <UiEthnicDivider variant="medium" />
+    <UiEthnicDivider variant="light" />
 
     <!-- Полный блок «Как добраться» (тот же, что и на главной) -->
     <SectionsLocation />
 
-    <UiEthnicDivider variant="light" />
-
-    <!-- Форма + футер -->
+    <!-- Форма + футер (без разделителя — bg-sand-900 секция сама задаёт границу, как на главной) -->
     <SectionsContactFooter />
 
     <UiBookingModal v-model="showBooking" />
@@ -209,57 +185,6 @@ useHead({
   color: #C17F3E;
 }
 
-/* Адрес в hero */
-.hero-address-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(8px);
-  border-radius: 14px;
-  padding: 14px 18px;
-  text-decoration: none;
-  transition: background 0.2s, border-color 0.2s;
-  flex-wrap: wrap;
-}
-.hero-address-row:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-.hero-address-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: rgba(193, 127, 62, 0.18);
-  color: #E8B57A;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.hero-address-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: 'Source Sans 3', sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  color: #E8B57A;
-  white-space: nowrap;
-  margin-left: auto;
-}
-.hero-address-row:hover .hero-address-cta {
-  color: #FFD9A8;
-}
-@media (max-width: 640px) {
-  .hero-address-cta {
-    margin-left: 0;
-    width: 100%;
-    margin-top: 4px;
-  }
-}
-
 /* Превью карты */
 .map-preview-card {
   position: relative;
@@ -285,11 +210,6 @@ useHead({
 }
 .map-preview-card:hover .map-preview-img {
   transform: scale(1.04);
-}
-.map-preview-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(44, 36, 22, 0.2) 0%, rgba(44, 36, 22, 0.85) 100%);
 }
 .map-preview-content {
   position: absolute;
