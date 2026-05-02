@@ -2,7 +2,7 @@
   <div>
     <UiAppHeader @book="showBooking = true" />
 
-    <!-- Hero strip -->
+    <!-- Hero strip с адресом -->
     <section class="relative overflow-hidden bg-sand-900 pt-32 md:pt-40 pb-12 md:pb-16">
       <img
         :src="`${base}images/hero/hero-3.jpg`"
@@ -17,66 +17,37 @@
           <h1 class="text-h1 text-white mb-5">
             Свяжитесь <span class="section-title-accent text-sand-300">с пансионатом</span>
           </h1>
-          <p class="text-body-lg text-white/75 max-w-130">
+          <p class="text-body-lg text-white/75 max-w-130 mb-7">
             Поможем выбрать номер, расскажем о трансфере и ответим на любые вопросы. Звоните, пишите в мессенджеры или заполните форму — на связи каждый день.
           </p>
-        </div>
-      </div>
-    </section>
 
-    <!-- Контактные карточки -->
-    <section class="section-padding bg-sand-50">
-      <div class="container">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
-          <!-- Телефон -->
-          <a :href="`tel:${contacts.phone.tel}`" class="contact-card">
-            <div class="contact-card-icon bg-amber-500/10 text-amber-600">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5-2.5l5 2v4a2 2 0 0 1-2 2a16 16 0 0 1-15-15a2 2 0 0 1 2-2"/>
-              </svg>
-            </div>
-            <div class="flex-1">
-              <span class="text-label text-sand-500 block mb-2">Телефон</span>
-              <span class="font-display font-500 text-sand-900 block leading-tight" style="font-size: clamp(1.4rem, 2.6vw, 2rem)">{{ contacts.phone.display }}</span>
-              <span class="text-small text-sand-700 block mt-2">{{ contacts.schedule }}</span>
-            </div>
-          </a>
-
-          <!-- Email -->
-          <a :href="`mailto:${contacts.email}`" class="contact-card">
-            <div class="contact-card-icon bg-olive-100 text-olive-700">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="5" width="18" height="14" rx="2"/>
-                <path d="M3 7l9 6l9-6"/>
-              </svg>
-            </div>
-            <div class="flex-1">
-              <span class="text-label text-sand-500 block mb-2">Email</span>
-              <span class="font-display font-500 text-sand-900 block leading-tight" style="font-size: clamp(1.2rem, 2.2vw, 1.6rem)">{{ contacts.email }}</span>
-              <span class="text-small text-sand-700 block mt-2">Ответим в течение дня</span>
-            </div>
-          </a>
-
-          <!-- Адрес -->
-          <a :href="contacts.address.mapUrl" target="_blank" rel="noopener" class="contact-card">
-            <div class="contact-card-icon bg-amber-500/10 text-amber-600">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Адрес + ссылка на Яндекс.Карты -->
+          <a :href="contacts.address.mapUrl" target="_blank" rel="noopener" class="hero-address-row group">
+            <div class="hero-address-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 22s-7-7-7-12a7 7 0 0 1 14 0c0 5-7 12-7 12z"/>
                 <circle cx="12" cy="10" r="2.5"/>
               </svg>
             </div>
-            <div class="flex-1">
-              <span class="text-label text-sand-500 block mb-2">Адрес</span>
-              <span class="font-display font-500 text-sand-900 block leading-tight" style="font-size: clamp(1.1rem, 2vw, 1.4rem)">{{ contacts.address.full }}</span>
-              <span class="text-small text-amber-600 inline-flex items-center gap-1 mt-2">
-                Открыть в Яндекс Картах
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </span>
+            <div class="flex-1 min-w-0">
+              <span class="text-label text-amber-300 block mb-1">Адрес</span>
+              <span class="font-display font-500 text-white block leading-snug" style="font-size: clamp(1rem, 1.6vw, 1.2rem)">{{ contacts.address.full }}</span>
             </div>
+            <span class="hero-address-cta">
+              Открыть в Яндекс Картах
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
           </a>
+        </div>
+      </div>
+    </section>
 
-          <!-- Мессенджеры -->
-          <div class="contact-card !block">
+    <!-- Контактные карточки: мессенджеры на всю ширину, ниже телефон+email+карта -->
+    <section class="section-padding bg-sand-50">
+      <div class="container">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Мессенджеры — на всю ширину строки -->
+          <div class="contact-card !block md:col-span-3">
             <div class="flex items-start gap-4 mb-5">
               <div class="contact-card-icon bg-olive-100 text-olive-700">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -85,8 +56,8 @@
               </div>
               <div class="flex-1">
                 <span class="text-label text-sand-500 block mb-2">Мессенджеры</span>
-                <span class="font-display font-500 text-sand-900 block leading-tight" style="font-size: clamp(1.1rem, 2vw, 1.4rem)">Напишите нам в удобный</span>
-                <span class="text-small text-sand-700 block mt-1">Отвечаем быстрее, чем по почте</span>
+                <span class="font-display font-500 text-sand-900 block leading-tight" style="font-size: clamp(1.2rem, 2.2vw, 1.6rem)">Напишите нам в удобном</span>
+                <span class="text-small text-sand-700 block mt-1">Отвечаем быстрее, чем по почте — обычно в течение 15 минут</span>
               </div>
             </div>
             <div class="flex flex-wrap gap-2">
@@ -109,26 +80,61 @@
             </div>
             <span class="text-small text-sand-700 block mt-3">*Meta признана экстремистской организацией и запрещена на территории России</span>
           </div>
-        </div>
 
-        <!-- Карта -->
-        <div class="rounded-3 overflow-hidden border border-sand-200 bg-white">
-          <a :href="contacts.address.mapUrl" target="_blank" rel="noopener" class="block relative aspect-21-9 group">
-            <img :src="`${base}images/usp/landmarks/1.jpg`" alt="Расположение пансионата Радде" class="absolute inset-0 w-full h-full object-cover" />
-            <div class="absolute inset-0 bg-sand-900/45 group-hover:bg-sand-900/35 transition-colors"></div>
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="bg-white/95 backdrop-blur-sm rounded-2 px-6 py-4 flex items-center gap-3 shadow-lg">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C17F3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Телефон -->
+          <a :href="`tel:${contacts.phone.tel}`" class="contact-card">
+            <div class="contact-card-icon bg-amber-500/10 text-amber-600">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5-2.5l5 2v4a2 2 0 0 1-2 2a16 16 0 0 1-15-15a2 2 0 0 1 2-2"/>
+              </svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <span class="text-label text-sand-500 block mb-2">Телефон</span>
+              <span class="font-display font-500 text-sand-900 block leading-tight" style="font-size: clamp(1.2rem, 2vw, 1.55rem)">{{ contacts.phone.display }}</span>
+              <span class="text-small text-sand-700 block mt-2">{{ contacts.schedule }}</span>
+            </div>
+          </a>
+
+          <!-- Email -->
+          <a :href="`mailto:${contacts.email}`" class="contact-card">
+            <div class="contact-card-icon bg-olive-100 text-olive-700">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="5" width="18" height="14" rx="2"/>
+                <path d="M3 7l9 6l9-6"/>
+              </svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <span class="text-label text-sand-500 block mb-2">Email</span>
+              <span class="font-display font-500 text-sand-900 block leading-tight break-words" style="font-size: clamp(1.05rem, 1.6vw, 1.3rem)">{{ contacts.email }}</span>
+              <span class="text-small text-sand-700 block mt-2">Ответим в течение дня</span>
+            </div>
+          </a>
+
+          <!-- Превью карты -->
+          <a :href="contacts.address.mapUrl" target="_blank" rel="noopener" class="map-preview-card group">
+            <img :src="`${base}images/usp/landmarks/1.jpg`" alt="Расположение пансионата Радде" class="map-preview-img" />
+            <div class="map-preview-overlay"></div>
+            <div class="map-preview-content">
+              <div class="map-preview-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M12 22s-7-7-7-12a7 7 0 0 1 14 0c0 5-7 12-7 12z"/>
                   <circle cx="12" cy="10" r="2.5"/>
                 </svg>
-                <span class="font-display font-500 text-4 text-sand-900">Открыть в Яндекс Картах</span>
+              </div>
+              <div>
+                <span class="font-display font-500 text-white block leading-tight" style="font-size: clamp(1rem, 1.5vw, 1.15rem)">Открыть в Яндекс Картах</span>
+                <span class="text-small text-white/75 block mt-1">Гунибский район Дагестана</span>
               </div>
             </div>
           </a>
         </div>
       </div>
     </section>
+
+    <UiEthnicDivider variant="medium" />
+
+    <!-- Полный блок «Как добраться» (тот же, что и на главной) -->
+    <SectionsLocation />
 
     <UiEthnicDivider variant="light" />
 
@@ -203,12 +209,115 @@ useHead({
   color: #C17F3E;
 }
 
-.aspect-21-9 {
-  aspect-ratio: 21 / 9;
+/* Адрес в hero */
+.hero-address-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+  padding: 14px 18px;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+  flex-wrap: wrap;
 }
+.hero-address-row:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.hero-address-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(193, 127, 62, 0.18);
+  color: #E8B57A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.hero-address-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #E8B57A;
+  white-space: nowrap;
+  margin-left: auto;
+}
+.hero-address-row:hover .hero-address-cta {
+  color: #FFD9A8;
+}
+@media (max-width: 640px) {
+  .hero-address-cta {
+    margin-left: 0;
+    width: 100%;
+    margin-top: 4px;
+  }
+}
+
+/* Превью карты */
+.map-preview-card {
+  position: relative;
+  display: block;
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  min-height: 200px;
+  border: 1px solid #F0E6D6;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.map-preview-card:hover {
+  border-color: #E8D5B7;
+  box-shadow: 0 8px 24px rgba(44, 36, 22, 0.1);
+}
+.map-preview-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.map-preview-card:hover .map-preview-img {
+  transform: scale(1.04);
+}
+.map-preview-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(44, 36, 22, 0.2) 0%, rgba(44, 36, 22, 0.85) 100%);
+}
+.map-preview-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.map-preview-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  color: #E8B57A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 @media (max-width: 768px) {
-  .aspect-21-9 {
-    aspect-ratio: 4 / 3;
+  .map-preview-card {
+    min-height: 180px;
   }
 }
 </style>
