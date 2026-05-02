@@ -21,12 +21,12 @@
       </div>
     </section>
 
-    <!-- Контактные карточки: мессенджеры на всю ширину, ниже телефон+email+карта -->
+    <!-- Контактные карточки: мессенджеры на всю ширину, ниже телефон+email -->
     <section class="section-padding bg-sand-50">
       <div class="container">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <!-- Мессенджеры — на всю ширину строки -->
-          <div class="contact-card !block md:col-span-3">
+          <div class="contact-card !block md:col-span-2">
             <div class="flex items-start gap-4 mb-5">
               <div class="contact-card-icon bg-olive-100 text-olive-700">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -86,23 +86,6 @@
               <span class="text-label text-sand-500 block mb-2">Email</span>
               <span class="font-display font-500 text-sand-900 block leading-tight break-words" style="font-size: clamp(1.05rem, 1.6vw, 1.3rem)">{{ contacts.email }}</span>
               <span class="text-small text-sand-700 block mt-2">Ответим в течение дня</span>
-            </div>
-          </a>
-
-          <!-- Превью карты -->
-          <a :href="contacts.address.mapUrl" target="_blank" rel="noopener" class="map-preview-card group">
-            <img :src="`${base}images/usp/landmarks/1.jpg`" alt="Расположение пансионата Радде" class="map-preview-img" />
-            <div class="map-preview-content">
-              <div class="map-preview-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 22s-7-7-7-12a7 7 0 0 1 14 0c0 5-7 12-7 12z"/>
-                  <circle cx="12" cy="10" r="2.5"/>
-                </svg>
-              </div>
-              <div>
-                <span class="font-display font-500 text-white block leading-tight" style="font-size: clamp(1rem, 1.5vw, 1.15rem)">Открыть в Яндекс Картах</span>
-                <span class="text-small text-white/75 block mt-1">Гунибский район Дагестана</span>
-              </div>
             </div>
           </a>
         </div>
@@ -185,59 +168,4 @@ useHead({
   color: #C17F3E;
 }
 
-/* Превью карты */
-.map-preview-card {
-  position: relative;
-  display: block;
-  border-radius: 16px;
-  overflow: hidden;
-  text-decoration: none;
-  min-height: 200px;
-  border: 1px solid #F0E6D6;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-.map-preview-card:hover {
-  border-color: #E8D5B7;
-  box-shadow: 0 8px 24px rgba(44, 36, 22, 0.1);
-}
-.map-preview-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
-.map-preview-card:hover .map-preview-img {
-  transform: scale(1.04);
-}
-.map-preview-content {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 22px 24px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.map-preview-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(8px);
-  color: #E8B57A;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-@media (max-width: 768px) {
-  .map-preview-card {
-    min-height: 180px;
-  }
-}
 </style>
