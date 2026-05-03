@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="date-picker-wrap" ref="wrapRef">
-    <div class="date-input" @click="open = !open">
+    <div class="date-input" :class="`date-input--${variant}`" @click="open = !open">
       <span class="date-value" :class="{ 'date-placeholder': !modelValue }">
         {{ displayValue }}
       </span>
@@ -53,11 +53,14 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   modelValue: string
   minDate?: string
   placeholder?: string
-}>()
+  variant?: 'dark' | 'light'
+}>(), {
+  variant: 'dark',
+})
 
 const emit = defineEmits<{
   'update:modelValue': [value: string]
@@ -178,27 +181,42 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 8px;
   height: 46px;
   padding: 0 14px;
   cursor: pointer;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, background-color 0.2s;
 }
-.date-input:hover {
+
+/* === Dark variant (для тёмного фона — Hero, и т.д.) === */
+.date-input--dark {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+.date-input--dark:hover {
   border-color: rgba(193, 127, 62, 0.35);
 }
+.date-input--dark .date-value { color: white; }
+.date-input--dark .date-placeholder { color: rgba(255, 255, 255, 0.55); }
+.date-input--dark .date-icon { color: rgba(255, 255, 255, 0.55); }
+
+/* === Light variant (для светлого фона — /booking, /contacts) === */
+.date-input--light {
+  background: white;
+  border: 1.5px solid #E0D5C8;
+}
+.date-input--light:hover {
+  border-color: #C17F3E;
+}
+.date-input--light .date-value { color: #2C2416; }
+.date-input--light .date-placeholder { color: #9A8B73; }
+.date-input--light .date-icon { color: #9A8B73; }
+
 .date-value {
   font-family: 'Source Sans 3', sans-serif;
   font-size: 16px;
-  color: white;
-}
-.date-placeholder {
-  color: rgba(255, 255, 255, 0.55);
 }
 .date-icon {
-  color: rgba(255, 255, 255, 0.55);
   flex-shrink: 0;
 }
 

@@ -3,7 +3,7 @@
     <UiAppHeader solid @book="scrollToTop" />
 
     <!-- Hero strip -->
-    <section class="relative overflow-hidden bg-sand-900 pt-32 md:pt-40 pb-10 md:pb-14">
+    <section class="relative overflow-hidden bg-sand-900 pt-32 md:pt-36 pb-8 md:pb-10">
       <img :src="`${base}images/hero/hero-1.jpg`" alt="" class="absolute inset-0 w-full h-full object-cover" />
       <div class="absolute inset-0 bg-sand-900/82"></div>
 
@@ -14,126 +14,90 @@
             { label: 'Главная', href: base },
             { label: 'Бронирование' },
           ]"
-          class="mb-6"
+          class="mb-5"
         />
-        <div class="max-w-180">
-          <span class="text-label text-amber-400 mb-4 block">Бронирование</span>
-          <h1 class="text-h1 text-white mb-5">
-            Соберите свой <span class="section-title-accent text-sand-300">отдых</span>
-          </h1>
-          <p class="text-body-lg text-white/75 max-w-130">
-            Пять простых шагов: выберите даты, номер и услуги — мы свяжемся в&nbsp;течение 15&nbsp;минут, чтобы подтвердить бронь.
+        <div class="flex items-baseline justify-between gap-6 flex-wrap">
+          <div>
+            <span class="text-label text-amber-400 mb-3 block">Бронирование</span>
+            <h1 class="text-h1 text-white">
+              Ваш <span class="section-title-accent text-sand-300">отдых</span>
+            </h1>
+          </div>
+          <p class="font-body text-4 text-white/70 max-w-110">
+            Соберите бронь — менеджер свяжется с&nbsp;вами в&nbsp;течение 15&nbsp;минут, чтобы подтвердить детали.
           </p>
         </div>
       </div>
     </section>
 
-    <!-- Quiz form -->
-    <section class="bg-sand-50 section-padding">
+    <!-- Checkout layout -->
+    <section class="bg-sand-50 py-10 md:py-14">
       <div class="container">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
 
-        <!-- Progress -->
-        <div class="quiz-progress mb-8 md:mb-10">
-          <div class="quiz-progress__steps">
-            <button
-              v-for="s in steps"
-              :key="s.id"
-              type="button"
-              class="quiz-progress__step"
-              :class="{
-                'quiz-progress__step--active': step === s.id,
-                'quiz-progress__step--done': stepIsDone(s.id),
-                'quiz-progress__step--clickable': stepIsDone(s.id) || s.id < step,
-              }"
-              :disabled="!(stepIsDone(s.id) || s.id < step)"
-              @click="goToStep(s.id)"
-            >
-              <span class="quiz-progress__num">
-                <svg v-if="stepIsDone(s.id)" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12L10 17L19 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <span v-else>{{ s.id }}</span>
-              </span>
-              <span class="quiz-progress__label">{{ s.label }}</span>
-            </button>
-          </div>
-          <div class="quiz-progress__bar">
-            <div class="quiz-progress__fill" :style="{ width: `${((step - 1) / (steps.length - 1)) * 100}%` }"></div>
-          </div>
-        </div>
+          <!-- LEFT: form sections -->
+          <div class="lg:col-span-8 space-y-5 md:space-y-6">
 
-        <!-- Step content -->
-        <div class="max-w-1100px mx-auto">
-          <Transition name="step" mode="out-in">
-            <!-- ============ STEP 1 — DATES + GUESTS ============ -->
-            <div v-if="step === 1" key="1" class="quiz-step">
-              <div class="quiz-step__head">
-                <span class="quiz-step__label">Шаг 1 из 5</span>
-                <h2 class="quiz-step__title">Когда вы хотели бы&nbsp;приехать?</h2>
-                <p class="quiz-step__sub">Выберите даты заезда и&nbsp;количество гостей — это поможет нам показать вам только доступные номера.</p>
+            <!-- ============ 1. DATES + GUESTS ============ -->
+            <div class="checkout-card">
+              <div class="checkout-head">
+                <span class="checkout-num">1</span>
+                <h2 class="checkout-title">Даты и&nbsp;гости</h2>
               </div>
-
-              <div class="quiz-card">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
-                  <div>
-                    <label class="label-light">Дата заезда</label>
-                    <UiDatePicker v-model="state.arrival" :min-date="todayIso" placeholder="Выберите дату" />
-                  </div>
-                  <div>
-                    <label class="label-light">Дата выезда</label>
-                    <UiDatePicker v-model="state.departure" :min-date="checkOutMin" placeholder="Выберите дату" />
-                  </div>
-                  <div>
-                    <label class="label-light">Взрослые</label>
-                    <div class="counter-light">
-                      <button type="button" @click="state.adults = Math.max(1, state.adults - 1)" class="counter-light__btn" :disabled="state.adults <= 1">&minus;</button>
-                      <span class="counter-light__val">{{ state.adults }}</span>
-                      <button type="button" @click="state.adults = Math.min(10, state.adults + 1)" class="counter-light__btn">+</button>
-                    </div>
-                  </div>
-                  <div>
-                    <label class="label-light">Дети <span class="text-sand-500 text-3.5 font-400">(до 12 лет)</span></label>
-                    <div class="counter-light">
-                      <button type="button" @click="state.children = Math.max(0, state.children - 1)" class="counter-light__btn" :disabled="state.children <= 0">&minus;</button>
-                      <span class="counter-light__val">{{ state.children }}</span>
-                      <button type="button" @click="state.children = Math.min(6, state.children + 1)" class="counter-light__btn">+</button>
-                    </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                <div>
+                  <label class="label-light">Заезд</label>
+                  <UiDatePicker v-model="state.arrival" variant="light" :min-date="todayIso" placeholder="Выберите дату" />
+                </div>
+                <div>
+                  <label class="label-light">Выезд</label>
+                  <UiDatePicker v-model="state.departure" variant="light" :min-date="checkOutMin" placeholder="Выберите дату" />
+                </div>
+                <div>
+                  <label class="label-light">Взрослые</label>
+                  <div class="counter-light">
+                    <button type="button" @click="state.adults = Math.max(1, state.adults - 1)" class="counter-light__btn" :disabled="state.adults <= 1">&minus;</button>
+                    <span class="counter-light__val">{{ state.adults }}</span>
+                    <button type="button" @click="state.adults = Math.min(10, state.adults + 1)" class="counter-light__btn">+</button>
                   </div>
                 </div>
-
-                <div v-if="nights > 0" class="quiz-card__hint">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/><path d="M12 7v5l3 3"/></svg>
-                  <span>{{ formattedRange }} — <b>{{ nights }} {{ nightsWord }}</b>, {{ guestSummary }}</span>
+                <div>
+                  <label class="label-light">Дети <span class="text-3.5 text-sand-500 font-400">до 12 лет</span></label>
+                  <div class="counter-light">
+                    <button type="button" @click="state.children = Math.max(0, state.children - 1)" class="counter-light__btn" :disabled="state.children <= 0">&minus;</button>
+                    <span class="counter-light__val">{{ state.children }}</span>
+                    <button type="button" @click="state.children = Math.min(6, state.children + 1)" class="counter-light__btn">+</button>
+                  </div>
                 </div>
               </div>
-
-              <div class="quiz-nav">
-                <span></span>
-                <button type="button" class="btn-primary" :disabled="!canProceedStep1" @click="goToStep(2)">
-                  К&nbsp;выбору номера
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" class="ml-1.5 inline-block"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
+              <div v-if="nights > 0" class="checkout-hint">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/><path d="M12 7v5l3 3"/></svg>
+                <span>{{ formattedRange }} · <b>{{ nights }} {{ nightsWord }}</b> · {{ guestSummary }}</span>
               </div>
             </div>
 
-            <!-- ============ STEP 2 — ROOM ============ -->
-            <div v-else-if="step === 2" key="2" class="quiz-step">
-              <div class="quiz-step__head">
-                <span class="quiz-step__label">Шаг 2 из 5</span>
-                <h2 class="quiz-step__title">Выберите <span class="section-title-accent text-amber-600">номер</span></h2>
-                <p class="quiz-step__sub">
-                  Доступность на&nbsp;<b>{{ formattedRange }}</b>, {{ guestSummary }} ({{ nights }} {{ nightsWord }}).
-                </p>
+            <!-- ============ 2. ROOM ============ -->
+            <div class="checkout-card">
+              <div class="checkout-head">
+                <span class="checkout-num">2</span>
+                <h2 class="checkout-title">Выберите <span class="section-title-accent text-amber-600">номер</span></h2>
               </div>
 
-              <div v-if="availLoading" class="quiz-loader">
+              <div v-if="!canShowRooms" class="checkout-empty">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+                <span>Сначала выберите даты заезда и&nbsp;выезда</span>
+              </div>
+
+              <div v-else-if="availLoading" class="checkout-loading">
                 <div class="quiz-spinner"></div>
                 <span>Проверяем доступность номеров…</span>
               </div>
 
-              <div v-else-if="availableRooms.length === 0" class="quiz-empty">
-                Не&nbsp;удалось загрузить номера. Попробуйте обновить страницу.
+              <div v-else-if="availableRooms.length === 0" class="checkout-empty">
+                Не удалось загрузить номера. Попробуйте обновить страницу.
               </div>
 
-              <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+              <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                 <div
                   v-for="r in availableRooms"
                   :key="r.id"
@@ -155,62 +119,54 @@
                   </div>
                   <div class="room-pick__body">
                     <div class="flex items-baseline justify-between gap-3 mb-2">
-                      <h3 class="font-display font-500 text-sand-900 text-5">{{ r.name }}</h3>
+                      <h3 class="font-display font-500 text-sand-900 text-4.5">{{ r.name }}</h3>
                       <div class="text-right whitespace-nowrap">
                         <span class="font-display font-500 text-sand-900 text-4.5">{{ r.pricePerNight.toLocaleString('ru-RU') }} ₽</span>
-                        <span class="block text-3.5 text-sand-600">/ ночь</span>
+                        <span class="block text-3 text-sand-600">/ ночь</span>
                       </div>
                     </div>
                     <div class="flex flex-wrap gap-1.5 mb-3">
-                      <span class="spec-chip text-3.5! py-1! px-2.5!">{{ r.area }} м²</span>
-                      <span class="spec-chip text-3.5! py-1! px-2.5!">{{ r.bed }}</span>
-                      <span class="spec-chip text-3.5! py-1! px-2.5!">до {{ r.guests }} гостей</span>
+                      <span class="spec-chip text-3.25! py-0.75! px-2!">{{ r.area }} м²</span>
+                      <span class="spec-chip text-3.25! py-0.75! px-2!">{{ r.bed }}</span>
+                      <span class="spec-chip text-3.25! py-0.75! px-2!">до {{ r.guests }} гостей</span>
                     </div>
-                    <p v-if="!r.fitsGuests" class="text-3.5 text-amber-700 mb-3 flex items-start gap-1.5">
-                      <svg class="flex-shrink-0 mt-0.5" width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v3.5M8 10.5h.007" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-                      <span class="leading-snug">Рассчитан до&nbsp;{{ r.guests }} гостей — менеджер предложит доплату за&nbsp;дополнительное место.</span>
+                    <p v-if="!r.fitsGuests" class="text-3.25 text-amber-700 mb-3 flex items-start gap-1.5">
+                      <svg class="flex-shrink-0 mt-0.5" width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v3.5M8 10.5h.007" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                      <span class="leading-snug">Только до&nbsp;{{ r.guests }} гостей. Менеджер предложит доплату за&nbsp;дополнительное место.</span>
                     </p>
-                    <p v-else-if="r.note" class="text-3.5 text-amber-700 mb-3 flex items-start gap-1.5">
-                      <svg class="flex-shrink-0 mt-0.5" width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v3.5M8 10.5h.007" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    <p v-else-if="r.note" class="text-3.25 text-amber-700 mb-3 flex items-start gap-1.5">
+                      <svg class="flex-shrink-0 mt-0.5" width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v3.5M8 10.5h.007" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
                       <span class="leading-snug">{{ r.note }}</span>
                     </p>
-                    <div class="flex items-center gap-3 mt-auto pt-2">
-                      <button type="button" class="room-pick__more" @click="openRoomModal(r)">
+                    <div class="flex items-center justify-between gap-2 mt-auto pt-2">
+                      <button type="button" class="room-pick__more" @click="detailRoom = r">
                         Подробнее
                       </button>
                       <button
                         type="button"
-                        class="btn-primary !py-2.5 !px-5 !text-3.5 ml-auto"
+                        class="room-pick__select"
+                        :class="state.roomId === r.id ? 'room-pick__select--active' : ''"
                         @click="selectRoom(r.id)"
                       >
+                        <svg v-if="state.roomId === r.id" width="14" height="14" viewBox="0 0 24 24" fill="none" class="mr-1.5 inline-block"><path d="M5 12L10 17L19 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         {{ state.roomId === r.id ? 'Выбран' : 'Выбрать' }}
                       </button>
                     </div>
                   </div>
                 </div>
               </div>
-
-              <div class="quiz-nav">
-                <button type="button" class="btn-secondary" @click="goToStep(1)">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" class="mr-1.5 inline-block"><path d="M10 3l-5 5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  Назад
-                </button>
-                <button type="button" class="btn-primary" :disabled="!state.roomId" @click="goToStep(3)">
-                  К&nbsp;услугам
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" class="ml-1.5 inline-block"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
-              </div>
             </div>
 
-            <!-- ============ STEP 3 — EXTRAS ============ -->
-            <div v-else-if="step === 3" key="3" class="quiz-step">
-              <div class="quiz-step__head">
-                <span class="quiz-step__label">Шаг 3 из 5</span>
-                <h2 class="quiz-step__title">Дополнительные <span class="section-title-accent text-amber-600">услуги</span></h2>
-                <p class="quiz-step__sub">Завтрак, Wi-Fi, парковка и&nbsp;горный воздух уже включены — добавьте только то, что захотите попробовать сверху. Шаг можно пропустить.</p>
+            <!-- ============ 3. EXTRAS ============ -->
+            <div class="checkout-card">
+              <div class="checkout-head">
+                <span class="checkout-num">3</span>
+                <h2 class="checkout-title">Дополнительные <span class="section-title-accent text-amber-600">услуги</span></h2>
+                <span class="checkout-optional">необязательно</span>
               </div>
+              <p class="text-3.75 text-sand-700 mb-4 leading-snug">Завтрак, Wi-Fi, парковка и&nbsp;горный воздух уже включены — добавьте только то, что захотите попробовать сверху.</p>
 
-              <div class="flex flex-wrap gap-2 mb-6">
+              <div class="flex flex-wrap gap-2 mb-4">
                 <button
                   v-for="cat in extraCategories"
                   :key="cat.id"
@@ -224,7 +180,7 @@
                 </button>
               </div>
 
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div
                   v-for="extra in visibleExtras"
                   :key="extra.id"
@@ -233,16 +189,14 @@
                 >
                   <div class="extra-card__icon" v-html="extra.icon"></div>
                   <div class="extra-card__body">
-                    <div class="flex items-start justify-between gap-3 mb-1">
-                      <h4 class="font-display font-500 text-sand-900 text-4.5">{{ extra.title }}</h4>
-                    </div>
-                    <p class="text-small text-sand-700 leading-snug mb-3">{{ extra.description }}</p>
-                    <div class="flex items-end justify-between gap-3 flex-wrap">
+                    <h4 class="font-display font-500 text-sand-900 text-4 mb-1">{{ extra.title }}</h4>
+                    <p class="text-3.5 text-sand-700 leading-snug mb-3 line-clamp-2">{{ extra.description }}</p>
+                    <div class="flex items-end justify-between gap-2 flex-wrap">
                       <div>
-                        <span class="font-display font-500 text-sand-900 text-4.5">{{ extra.price }}</span>
-                        <span class="text-small text-sand-600 ml-1">{{ extra.unitLabel }}</span>
+                        <span class="font-display font-500 text-sand-900 text-4">{{ extra.price }}</span>
+                        <span class="text-3.25 text-sand-600 ml-1">{{ extra.unitLabel }}</span>
                       </div>
-                      <div class="flex items-center gap-2.5">
+                      <div class="flex items-center gap-2">
                         <button
                           v-if="extra.fullDescription"
                           type="button"
@@ -254,7 +208,8 @@
                           <span class="counter-light__val">{{ getExtraCount(extra.id) }}</span>
                           <button type="button" @click="setExtraCount(extra.id, getExtraCount(extra.id) + 1)" class="counter-light__btn">+</button>
                         </div>
-                        <button v-else type="button" class="btn-secondary !py-2 !px-4 !text-3.5" @click="setExtraCount(extra.id, 1)">
+                        <button v-else type="button" class="extra-card__add" @click="setExtraCount(extra.id, 1)">
+                          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" class="inline-block"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                           Добавить
                         </button>
                       </div>
@@ -262,177 +217,136 @@
                   </div>
                 </div>
               </div>
-
-              <div class="quiz-nav">
-                <button type="button" class="btn-secondary" @click="goToStep(2)">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" class="mr-1.5 inline-block"><path d="M10 3l-5 5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  Назад
-                </button>
-                <button type="button" class="btn-primary" @click="goToStep(4)">
-                  {{ state.extras.length > 0 ? 'К контактам' : 'Пропустить шаг' }}
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" class="ml-1.5 inline-block"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
-              </div>
             </div>
 
-            <!-- ============ STEP 4 — CONTACTS ============ -->
-            <div v-else-if="step === 4" key="4" class="quiz-step">
-              <div class="quiz-step__head">
-                <span class="quiz-step__label">Шаг 4 из 5</span>
-                <h2 class="quiz-step__title">Куда вам <span class="section-title-accent text-amber-600">позвонить</span></h2>
-                <p class="quiz-step__sub">Менеджер свяжется с&nbsp;вами в&nbsp;течение 15&nbsp;минут, чтобы подтвердить бронь и&nbsp;ответить на&nbsp;вопросы.</p>
+            <!-- ============ 4. CONTACTS ============ -->
+            <div class="checkout-card">
+              <div class="checkout-head">
+                <span class="checkout-num">4</span>
+                <h2 class="checkout-title">Контакты</h2>
               </div>
-
-              <div class="quiz-card">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label class="label-light">Имя <span class="text-amber-600">*</span></label>
-                    <input v-model="state.guest.firstName" type="text" placeholder="Имя" class="input-light" />
-                  </div>
-                  <div>
-                    <label class="label-light">Фамилия</label>
-                    <input v-model="state.guest.lastName" type="text" placeholder="Фамилия" class="input-light" />
-                  </div>
-                  <div>
-                    <label class="label-light">Телефон <span class="text-amber-600">*</span></label>
-                    <input :value="state.guest.phone" @input="handlePhone" @keydown="phoneMaskKeydown" type="tel" placeholder="+7 (900) 000-00-00" class="input-light" />
-                  </div>
-                  <div>
-                    <label class="label-light">Email</label>
-                    <input v-model="state.guest.email" type="email" placeholder="you@example.com" class="input-light" />
-                  </div>
-                  <div class="md:col-span-2">
-                    <label class="label-light">Пожелания и&nbsp;комментарий <span class="text-sand-500">(необязательно)</span></label>
-                    <textarea v-model="state.comment" placeholder="Время заезда, диета, нужен трансфер из аэропорта…" rows="3" class="input-light" style="height:auto;min-height:100px;padding:12px 16px;resize:vertical;line-height:1.5"></textarea>
-                  </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                <div>
+                  <label class="label-light">Имя <span class="text-amber-600">*</span></label>
+                  <input v-model="state.guest.firstName" type="text" placeholder="Имя" class="input-light" />
                 </div>
-              </div>
-
-              <div class="quiz-nav">
-                <button type="button" class="btn-secondary" @click="goToStep(3)">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" class="mr-1.5 inline-block"><path d="M10 3l-5 5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  Назад
-                </button>
-                <button type="button" class="btn-primary" :disabled="!canProceedStep4" @click="goToStep(5)">
-                  К сводке
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" class="ml-1.5 inline-block"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
+                <div>
+                  <label class="label-light">Фамилия</label>
+                  <input v-model="state.guest.lastName" type="text" placeholder="Фамилия" class="input-light" />
+                </div>
+                <div>
+                  <label class="label-light">Телефон <span class="text-amber-600">*</span></label>
+                  <input :value="state.guest.phone" @input="handlePhone" @keydown="phoneMaskKeydown" type="tel" placeholder="+7 (900) 000-00-00" class="input-light" />
+                </div>
+                <div>
+                  <label class="label-light">Email</label>
+                  <input v-model="state.guest.email" type="email" placeholder="you@example.com" class="input-light" />
+                </div>
+                <div class="md:col-span-2">
+                  <label class="label-light">Пожелания и&nbsp;комментарий <span class="text-sand-500">(необязательно)</span></label>
+                  <textarea v-model="state.comment" placeholder="Время заезда, диета, нужен трансфер из аэропорта…" rows="2" class="input-light textarea-light"></textarea>
+                </div>
               </div>
             </div>
+          </div>
 
-            <!-- ============ STEP 5 — SUMMARY ============ -->
-            <div v-else-if="step === 5" key="5" class="quiz-step">
-              <div class="quiz-step__head">
-                <span class="quiz-step__label">Шаг 5 из 5</span>
-                <h2 class="quiz-step__title">Проверьте <span class="section-title-accent text-amber-600">бронь</span></h2>
-                <p class="quiz-step__sub">Если всё верно — отправьте заявку, и&nbsp;мы свяжемся с&nbsp;вами в&nbsp;течение 15&nbsp;минут.</p>
+          <!-- RIGHT: sticky summary -->
+          <aside class="lg:col-span-4 lg:sticky lg:top-24 lg:self-start">
+            <div class="summary-card">
+              <h3 class="summary-card__title">Ваша бронь</h3>
+
+              <!-- Dates -->
+              <div class="summary-block">
+                <div class="summary-row">
+                  <span class="summary-label">Даты</span>
+                  <span class="summary-value">{{ formattedRange }}</span>
+                </div>
+                <div v-if="nights > 0" class="summary-row">
+                  <span class="summary-label">Длительность</span>
+                  <span class="summary-value">{{ nights }} {{ nightsWord }}</span>
+                </div>
+                <div class="summary-row">
+                  <span class="summary-label">Гости</span>
+                  <span class="summary-value">{{ guestSummary }}</span>
+                </div>
               </div>
 
-              <div class="quiz-card summary-card">
-                <!-- Dates / guests -->
-                <div class="summary-section">
-                  <div class="flex items-baseline justify-between gap-3 mb-3">
-                    <h3 class="summary-section__title">Даты и&nbsp;гости</h3>
-                    <button type="button" class="summary-edit" @click="goToStep(1)">Изменить</button>
+              <!-- Room -->
+              <div v-if="selectedAvailable" class="summary-block summary-block--bordered">
+                <div class="summary-line">
+                  <div class="flex-1 min-w-0">
+                    <div class="font-body font-600 text-sand-900 text-4 mb-0.5 truncate">{{ selectedAvailable.name }}</div>
+                    <div class="text-3.25 text-sand-600">{{ selectedAvailable.pricePerNight.toLocaleString('ru-RU') }} ₽ × {{ Math.max(1, nights) }} {{ nightsWord }}</div>
                   </div>
-                  <div class="summary-row"><span class="summary-label">Заезд</span><span class="summary-value">{{ formatDate(state.arrival) }}</span></div>
-                  <div class="summary-row"><span class="summary-label">Выезд</span><span class="summary-value">{{ formatDate(state.departure) }}</span></div>
-                  <div class="summary-row"><span class="summary-label">Длительность</span><span class="summary-value">{{ nights }} {{ nightsWord }}</span></div>
-                  <div class="summary-row"><span class="summary-label">Гости</span><span class="summary-value">{{ guestSummary }}</span></div>
+                  <span class="summary-amount">{{ totals.roomTotal.toLocaleString('ru-RU') }} ₽</span>
                 </div>
-
-                <!-- Room -->
-                <div class="summary-section">
-                  <div class="flex items-baseline justify-between gap-3 mb-3">
-                    <h3 class="summary-section__title">Номер</h3>
-                    <button type="button" class="summary-edit" @click="goToStep(2)">Изменить</button>
-                  </div>
-                  <div v-if="selectedAvailable" class="flex items-start gap-4">
-                    <img :src="selectedAvailable.images[0]" :alt="selectedAvailable.name" class="w-20 h-20 md:w-24 md:h-24 rounded-2 object-cover flex-shrink-0" />
-                    <div class="flex-1 min-w-0">
-                      <div class="font-display font-500 text-sand-900 text-5 mb-1">{{ selectedAvailable.name }}</div>
-                      <div class="text-3.5 text-sand-700 mb-2">{{ selectedAvailable.area }} м² · {{ selectedAvailable.bed }} · до {{ selectedAvailable.guests }} гостей</div>
-                      <div class="text-3.5 text-sand-700">{{ selectedAvailable.pricePerNight.toLocaleString('ru-RU') }} ₽ × {{ nights }} {{ nightsWord }} = <b>{{ totals.roomTotal.toLocaleString('ru-RU') }} ₽</b></div>
-                    </div>
-                  </div>
-                  <div v-else class="text-sand-600 italic">Номер не&nbsp;выбран</div>
-                </div>
-
-                <!-- Extras -->
-                <div v-if="state.extras.length > 0" class="summary-section">
-                  <div class="flex items-baseline justify-between gap-3 mb-3">
-                    <h3 class="summary-section__title">Услуги</h3>
-                    <button type="button" class="summary-edit" @click="goToStep(3)">Изменить</button>
-                  </div>
-                  <div v-for="line in summaryExtras" :key="line.id" class="summary-row summary-row--multiline">
-                    <div class="flex-1 min-w-0">
-                      <div class="font-body text-4 text-sand-900">{{ line.title }}</div>
-                      <div class="text-3.5 text-sand-600">{{ line.formula }}</div>
-                    </div>
-                    <span class="summary-amount">{{ line.amount.toLocaleString('ru-RU') }} ₽</span>
-                  </div>
-                </div>
-
-                <!-- Contacts -->
-                <div class="summary-section">
-                  <div class="flex items-baseline justify-between gap-3 mb-3">
-                    <h3 class="summary-section__title">Контакты</h3>
-                    <button type="button" class="summary-edit" @click="goToStep(4)">Изменить</button>
-                  </div>
-                  <div class="summary-row"><span class="summary-label">Имя</span><span class="summary-value">{{ state.guest.firstName }} {{ state.guest.lastName }}</span></div>
-                  <div class="summary-row"><span class="summary-label">Телефон</span><span class="summary-value">{{ state.guest.phone }}</span></div>
-                  <div v-if="state.guest.email" class="summary-row"><span class="summary-label">Email</span><span class="summary-value">{{ state.guest.email }}</span></div>
-                  <div v-if="state.comment" class="summary-row summary-row--multiline">
-                    <span class="summary-label">Комментарий</span>
-                    <span class="summary-value text-left">{{ state.comment }}</span>
-                  </div>
-                </div>
-
-                <!-- Total -->
-                <div class="summary-total">
-                  <span class="font-body text-4 text-sand-700">Итого</span>
-                  <span class="font-display font-500 text-sand-900 text-7">{{ totals.total.toLocaleString('ru-RU') }} ₽</span>
-                </div>
-                <p class="text-small text-sand-600 leading-snug mb-5">
-                  Окончательная стоимость подтверждается менеджером после проверки доступности номера на&nbsp;выбранные даты.
-                </p>
-
-                <button
-                  type="button"
-                  class="btn-primary w-full py-4 text-4"
-                  :disabled="submitting"
-                  @click="submit"
-                >
-                  {{ submitting ? 'Отправляем…' : 'Отправить заявку' }}
-                </button>
-
-                <p class="text-small text-sand-700 mt-4 leading-relaxed text-center">
-                  Нажимая «Отправить заявку», вы соглашаетесь с
-                  <a :href="`${base}privacy`" class="text-sand-900 underline underline-offset-2 hover:text-amber-600 transition-colors">политикой конфиденциальности</a>.
-                </p>
+              </div>
+              <div v-else class="summary-block summary-block--bordered">
+                <span class="text-3.5 text-sand-600 italic">Номер ещё не выбран</span>
               </div>
 
-              <div class="quiz-nav">
-                <button type="button" class="btn-secondary" @click="goToStep(4)">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" class="mr-1.5 inline-block"><path d="M10 3l-5 5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  Назад
-                </button>
-                <button
-                  v-if="hasAnySelection"
-                  type="button"
-                  class="reset-link"
-                  @click="resetAll"
-                >
-                  Очистить и&nbsp;начать заново
-                </button>
+              <!-- Extras -->
+              <div v-if="summaryExtras.length > 0" class="summary-block summary-block--bordered">
+                <div v-for="line in summaryExtras" :key="line.id" class="summary-line">
+                  <div class="flex-1 min-w-0">
+                    <div class="font-body text-3.75 text-sand-900 truncate">{{ line.title }}</div>
+                    <div class="text-3 text-sand-600">{{ line.formula }}</div>
+                  </div>
+                  <span class="summary-amount">{{ line.amount.toLocaleString('ru-RU') }} ₽</span>
+                </div>
               </div>
+
+              <!-- Total -->
+              <div class="summary-total">
+                <span class="font-body text-4 text-sand-700">Итого</span>
+                <span class="font-display font-500 text-sand-900 text-7">{{ totals.total.toLocaleString('ru-RU') }} ₽</span>
+              </div>
+              <p class="text-3.25 text-sand-600 mb-4 leading-snug">
+                Окончательная стоимость подтверждается менеджером после проверки доступности номера на&nbsp;выбранные даты.
+              </p>
+
+              <button
+                type="button"
+                class="btn-primary w-full py-3.5 text-4"
+                :disabled="submitting"
+                @click="submit"
+              >
+                {{ submitting ? 'Отправляем…' : 'Отправить заявку' }}
+              </button>
+
+              <p class="text-3.25 text-sand-700 mt-3 leading-snug text-center">
+                Нажимая «Отправить», вы соглашаетесь с
+                <a :href="`${base}privacy`" class="text-sand-900 underline underline-offset-2 hover:text-amber-600 transition-colors">политикой конфиденциальности</a>
+              </p>
+
+              <button
+                v-if="hasAnySelection"
+                type="button"
+                class="reset-link"
+                @click="resetAll"
+              >
+                Очистить и&nbsp;начать заново
+              </button>
             </div>
-          </Transition>
+          </aside>
         </div>
       </div>
     </section>
 
-    <!-- Room details modal (для шага 2) -->
+    <!-- Mobile sticky bottom bar -->
+    <div v-if="totals.total > 0" class="mobile-bar lg:hidden">
+      <div class="mobile-bar__inner">
+        <div>
+          <div class="text-3.25 text-sand-600 leading-tight">Итого{{ nights > 0 ? ` за ${nights} ${nightsWord}` : '' }}</div>
+          <div class="font-display font-500 text-sand-900 text-5.5 leading-tight">{{ totals.total.toLocaleString('ru-RU') }} ₽</div>
+        </div>
+        <button type="button" class="btn-primary !py-3 !px-5" :disabled="submitting" @click="submit">
+          {{ submitting ? 'Отправляем…' : 'Отправить' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Room details modal -->
     <UiRoomDetailsModal
       :room="detailRoom"
       action="select"
@@ -441,7 +355,7 @@
       @select="r => { selectRoom(r.id); detailRoom = null }"
     />
 
-    <!-- Extra details modal (для шага 3) -->
+    <!-- Extra details modal -->
     <Teleport to="body">
       <Transition name="modal">
         <div v-if="detailExtra" class="fixed inset-0 z-100 flex items-center justify-center p-4 bg-sand-900/60 backdrop-blur-sm" @click.self="detailExtra = null">
@@ -499,18 +413,6 @@ const { state, nights, setRoom, setExtraCount, getExtraCount, reset } = useBooki
 const { onInput: phoneMaskInput, onKeydown: phoneMaskKeydown } = usePhoneMask()
 const toast = useToast()
 
-// ----- Steps -----
-const steps = [
-  { id: 1, label: 'Даты' },
-  { id: 2, label: 'Номер' },
-  { id: 3, label: 'Услуги' },
-  { id: 4, label: 'Контакты' },
-  { id: 5, label: 'Сводка' },
-] as const
-type StepId = typeof steps[number]['id']
-
-const step = ref<StepId>(1)
-
 const todayIso = computed(() => new Date().toISOString().slice(0, 10))
 const checkOutMin = computed(() => {
   const a = state.value.arrival || todayIso.value
@@ -533,6 +435,8 @@ const childrenRef = computed(() => state.value.children)
 const arrivalRef = computed(() => state.value.arrival)
 const departureRef = computed(() => state.value.departure)
 
+const canShowRooms = computed(() => !!state.value.arrival && !!state.value.departure && nights.value > 0)
+
 const { rooms: availableRooms, loading: availLoading } = useAvailableRooms({
   arrival: arrivalRef,
   departure: departureRef,
@@ -546,49 +450,10 @@ function selectRoom(id: string) {
   setRoom(state.value.roomId === id ? null : id)
 }
 
-// ----- Step navigation -----
-const canProceedStep1 = computed(() => !!state.value.arrival && !!state.value.departure && nights.value > 0)
-const canProceedStep4 = computed(() =>
-  state.value.guest.firstName.trim().length > 0
-  && state.value.guest.phone.replace(/\D/g, '').length >= 11,
-)
-
-function stepIsDone(id: StepId): boolean {
-  if (id === 1) return canProceedStep1.value
-  if (id === 2) return !!state.value.roomId
-  if (id === 3) return step.value > 3 // шаг услуг можно пропустить — отметим как «пройден» если перешли дальше
-  if (id === 4) return canProceedStep4.value
-  return false
-}
-
-function goToStep(target: StepId) {
-  // Валидация только при движении вперёд
-  if (target > step.value) {
-    if (step.value === 1 && !canProceedStep1.value) {
-      toast.error('Выберите даты заезда и выезда')
-      return
-    }
-    if (step.value === 2 && !state.value.roomId && target !== 2) {
-      toast.error('Выберите номер')
-      return
-    }
-    if (step.value === 4 && !canProceedStep4.value) {
-      toast.error('Заполните имя и телефон')
-      return
-    }
-  }
-  step.value = target
-  scrollToTop()
-}
-
-// ----- Pre-select room from URL -----
+// ----- Pre-select from URL -----
 onMounted(() => {
   const roomId = route.query.room
-  if (typeof roomId === 'string') {
-    setRoom(roomId)
-    // если номер был выбран извне и даты валидны — сразу на шаг 2
-    if (canProceedStep1.value) step.value = 2
-  }
+  if (typeof roomId === 'string') setRoom(roomId)
   const extraId = route.query.extra
   if (typeof extraId === 'string' && extras.find(e => e.id === extraId)) {
     if (getExtraCount(extraId) === 0) setExtraCount(extraId, 1)
@@ -626,16 +491,13 @@ function addExtraFromModal() {
 
 // ----- Room modal -----
 const detailRoom = ref<typeof availableRooms.value[0] | null>(null)
-function openRoomModal(r: typeof availableRooms.value[0]) {
-  detailRoom.value = r
-}
 
 // ----- Phone -----
 function handlePhone(e: Event) {
   state.value.guest.phone = phoneMaskInput(e)
 }
 
-// ----- Summary helpers -----
+// ----- Format helpers -----
 const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
 function formatDate(iso: string): string {
   if (!iso) return '—'
@@ -661,7 +523,7 @@ const guestSummary = computed(() => {
   return parts.join(' + ')
 })
 
-// ----- Totals (используем актуальную цену из availability) -----
+// ----- Totals -----
 const totals = computed(() => {
   const room = selectedAvailable.value
   const n = Math.max(1, nights.value)
@@ -685,15 +547,15 @@ const summaryExtras = computed(() => {
       let formula = ''
       switch (meta.unit) {
         case 'guest':
-          formula = `${meta.priceValue.toLocaleString('ru-RU')} ₽ × ${state.value.adults} чел × ${n} ${nightsWord.value}`
+          formula = `${meta.priceValue.toLocaleString('ru-RU')} × ${state.value.adults} × ${n}`
           if (sel.count > 1) formula = `${sel.count} × ` + formula
           break
         case 'night':
-          formula = `${meta.priceValue.toLocaleString('ru-RU')} ₽ × ${n} ${nightsWord.value}`
+          formula = `${meta.priceValue.toLocaleString('ru-RU')} × ${n} ${nightsWord.value}`
           if (sel.count > 1) formula = `${sel.count} × ` + formula
           break
         case 'session':
-          formula = sel.count > 1 ? `${meta.priceValue.toLocaleString('ru-RU')} ₽ × ${sel.count}` : `${meta.priceValue.toLocaleString('ru-RU')} ₽`
+          formula = sel.count > 1 ? `${meta.priceValue.toLocaleString('ru-RU')} × ${sel.count}` : `${meta.priceValue.toLocaleString('ru-RU')} ₽`
           break
       }
       return { id: meta.id, title: meta.title, formula, amount }
@@ -713,22 +575,29 @@ const hasAnySelection = computed(() =>
 const submitting = ref(false)
 
 async function submit() {
+  if (!state.value.arrival || !state.value.departure || nights.value <= 0) {
+    toast.error('Укажите даты заезда и выезда')
+    scrollToTop()
+    return
+  }
   if (!state.value.roomId) {
-    toast.error('Вернитесь на шаг 2 и выберите номер')
+    toast.error('Выберите номер')
+    scrollToSection('room')
     return
   }
-  if (!canProceedStep4.value) {
-    toast.error('Заполните имя и телефон на шаге 4')
+  if (!state.value.guest.firstName.trim()) {
+    toast.error('Укажите имя')
+    scrollToSection('contacts')
     return
   }
-  if (nights.value <= 0) {
-    toast.error('Дата выезда должна быть позже даты заезда')
+  if (state.value.guest.phone.replace(/\D/g, '').length < 11) {
+    toast.error('Укажите корректный телефон')
+    scrollToSection('contacts')
     return
   }
 
   submitting.value = true
 
-  // Готовим payload в формате Bnovo. Когда подключим API — здесь fetch к серверу-проксю.
   const room = selectedAvailable.value
   const payload = {
     arrival: state.value.arrival,
@@ -774,7 +643,6 @@ async function submit() {
 
 function resetAll() {
   reset()
-  step.value = 1
   scrollToTop()
 }
 
@@ -784,168 +652,98 @@ function scrollToTop() {
   if (lenis) lenis.scrollTo(0, { duration: 0.6 })
   else window.scrollTo({ top: 0, behavior: 'smooth' })
 }
+
+function scrollToSection(_id: 'room' | 'contacts') {
+  // scroll к началу формы — секции рядом, в одном экране
+  scrollToTop()
+}
 </script>
 
 <style scoped>
-/* ======== PROGRESS ======== */
-.quiz-progress {
-  max-width: 900px;
-  margin: 0 auto;
+/* ======== CHECKOUT CARD ======== */
+.checkout-card {
+  background: white;
+  border: 1px solid #F0E6D6;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 2px 8px rgba(44, 36, 22, 0.03);
 }
-.quiz-progress__steps {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 4px;
-  margin-bottom: 14px;
-}
-.quiz-progress__step {
+@media (min-width: 768px) { .checkout-card { padding: 24px; } }
+
+.checkout-head {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 4px;
-  background: transparent;
-  border: none;
-  cursor: not-allowed;
-  color: #B5A88E;
-  transition: color 0.2s;
+  gap: 12px;
+  margin-bottom: 16px;
 }
-.quiz-progress__step--clickable { cursor: pointer; }
-.quiz-progress__step--clickable:hover { color: #6B5B4A; }
-.quiz-progress__step--done { color: #6B5B4A; }
-.quiz-progress__step--active { color: #2C2416; }
-.quiz-progress__num {
-  width: 32px;
-  height: 32px;
+@media (min-width: 768px) { .checkout-head { margin-bottom: 18px; } }
+.checkout-num {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
+  background: linear-gradient(135deg, #C17F3E, #A0653A);
+  color: white;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
-  border: 1.5px solid #E8D5B7;
-  font-family: 'Source Sans 3', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: #B5A88E;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 3px 10px rgba(193, 127, 62, 0.25);
 }
-.quiz-progress__step--done .quiz-progress__num {
-  background: #5C6B3A;
-  border-color: #5C6B3A;
-  color: white;
+.checkout-title {
+  flex: 1;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+  font-size: 19px;
+  color: #2C2416;
+  line-height: 1.2;
+  margin: 0;
 }
-.quiz-progress__step--active .quiz-progress__num {
-  background: #C17F3E;
-  border-color: #C17F3E;
-  color: white;
-  box-shadow: 0 4px 14px rgba(193, 127, 62, 0.35);
-}
-.quiz-progress__label {
+@media (min-width: 768px) { .checkout-title { font-size: 22px; } }
+.checkout-optional {
   font-family: 'Source Sans 3', sans-serif;
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  color: #9A8B73;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
-@media (min-width: 640px) {
-  .quiz-progress__num { width: 38px; height: 38px; font-size: 15px; }
-  .quiz-progress__label { font-size: 13px; }
-}
-.quiz-progress__bar {
-  position: relative;
-  height: 3px;
-  background: #F0E6D6;
-  border-radius: 999px;
-  overflow: hidden;
-}
-.quiz-progress__fill {
-  height: 100%;
-  background: linear-gradient(90deg, #5C6B3A, #C17F3E);
-  border-radius: 999px;
-  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* ======== STEP TRANSITIONS ======== */
-.step-enter-active { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-.step-leave-active { transition: all 0.25s ease; }
-.step-enter-from { opacity: 0; transform: translateY(20px); }
-.step-leave-to { opacity: 0; transform: translateY(-10px); }
-
-/* ======== STEP HEAD ======== */
-.quiz-step__head {
-  text-align: center;
-  margin-bottom: 28px;
-}
-@media (min-width: 768px) { .quiz-step__head { margin-bottom: 36px; } }
-.quiz-step__label {
-  display: inline-block;
-  font-family: 'Source Sans 3', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #5C6B3A;
-  margin-bottom: 12px;
-}
-.quiz-step__title {
-  font-family: 'Manrope', sans-serif;
-  font-weight: 500;
-  color: #2C2416;
-  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
-  line-height: 1.2;
-  margin-bottom: 12px;
-}
-.quiz-step__sub {
-  max-width: 560px;
-  margin: 0 auto;
-  font-family: 'Source Sans 3', sans-serif;
-  font-size: 16px;
-  color: #6B5B4A;
-  line-height: 1.6;
-}
-
-/* ======== QUIZ CARD (форма-обёртка) ======== */
-.quiz-card {
-  background: white;
-  border: 1.5px solid #F0E6D6;
-  border-radius: 16px;
-  padding: 22px;
-  box-shadow: 0 8px 32px rgba(44, 36, 22, 0.05);
-}
-@media (min-width: 768px) { .quiz-card { padding: 32px; } }
-.quiz-card__hint {
+.checkout-hint {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 18px;
-  padding-top: 18px;
+  margin-top: 14px;
+  padding-top: 14px;
   border-top: 1px solid #F0E6D6;
   color: #5C6B3A;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 15px;
+  font-size: 14px;
 }
-
-/* ======== QUIZ NAV ======== */
-.quiz-nav {
+.checkout-empty,
+.checkout-loading {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 28px;
-  flex-wrap: wrap;
-}
-.reset-link {
-  background: transparent;
-  border: none;
-  cursor: pointer;
+  justify-content: center;
+  gap: 10px;
+  padding: 36px 16px;
+  text-align: center;
   color: #6B5B4A;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 14px;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: color 0.2s;
+  font-size: 14.5px;
 }
-.reset-link:hover { color: #2C2416; }
+.checkout-empty svg { color: #B5A88E; }
+.quiz-spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid #F0E6D6;
+  border-top-color: #C17F3E;
+  border-radius: 50%;
+  animation: quiz-spin 0.8s linear infinite;
+}
+@keyframes quiz-spin { to { transform: rotate(360deg); } }
 
 /* ======== LIGHT COUNTER ======== */
 .counter-light {
@@ -955,13 +753,14 @@ function scrollToTop() {
   border: 1.5px solid #E0D5C8;
   border-radius: 8px;
   overflow: hidden;
+  height: 46px;
   transition: border-color 0.2s;
 }
 .counter-light:hover { border-color: #C17F3E; }
-.counter-light--sm { border-width: 1px; border-radius: 7px; }
+.counter-light--sm { border-width: 1px; border-radius: 7px; height: 32px; }
 .counter-light__btn {
   width: 44px;
-  height: 46px;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -973,7 +772,7 @@ function scrollToTop() {
   cursor: pointer;
   transition: all 0.2s;
 }
-.counter-light--sm .counter-light__btn { width: 32px; height: 32px; font-size: 14px; }
+.counter-light--sm .counter-light__btn { width: 30px; font-size: 14px; }
 .counter-light__btn:hover:not(:disabled) {
   color: #2C2416;
   background: #FAF6F0;
@@ -986,8 +785,17 @@ function scrollToTop() {
   font-size: 16px;
   font-weight: 600;
   color: #2C2416;
-  min-width: 32px;
-  padding: 0 6px;
+  min-width: 28px;
+  padding: 0 4px;
+}
+
+/* ======== TEXTAREA ======== */
+.textarea-light {
+  height: auto !important;
+  min-height: 84px;
+  padding: 12px 16px !important;
+  resize: vertical;
+  line-height: 1.5;
 }
 
 /* ======== ROOM PICK CARDS ======== */
@@ -996,17 +804,17 @@ function scrollToTop() {
   flex-direction: column;
   background: white;
   border: 1.5px solid #F0E6D6;
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 .room-pick:hover {
   border-color: #D4BC96;
-  box-shadow: 0 8px 24px rgba(44, 36, 22, 0.06);
+  box-shadow: 0 6px 16px rgba(44, 36, 22, 0.06);
 }
 .room-pick--active {
   border-color: #C17F3E;
-  box-shadow: 0 12px 28px rgba(193, 127, 62, 0.18);
+  box-shadow: 0 8px 18px rgba(193, 127, 62, 0.18);
 }
 .room-pick--unfit { opacity: 0.85; }
 .room-pick__photo {
@@ -1026,10 +834,10 @@ function scrollToTop() {
 .room-pick:hover .room-pick__photo img { transform: scale(1.04); }
 .room-pick__check {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 32px;
-  height: 32px;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: #C17F3E;
   display: flex;
@@ -1039,8 +847,8 @@ function scrollToTop() {
 }
 .room-pick__avail {
   position: absolute;
-  bottom: 12px;
-  left: 12px;
+  bottom: 10px;
+  left: 10px;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -1048,16 +856,16 @@ function scrollToTop() {
   backdrop-filter: blur(4px);
   color: white;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
-  padding: 4px 10px;
+  padding: 3px 9px;
   border-radius: 999px;
 }
 .room-pick__avail--low {
   background: rgba(193, 127, 62, 0.92);
 }
 .room-pick__body {
-  padding: 18px 20px 20px;
+  padding: 14px 16px 16px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -1066,32 +874,58 @@ function scrollToTop() {
   background: transparent;
   border: none;
   cursor: pointer;
-  color: #C17F3E;
+  color: #6B5B4A;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  padding: 8px 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 6px 0;
   transition: color 0.2s;
 }
-.room-pick__more:hover { color: #A0653A; }
+.room-pick__more:hover { color: #C17F3E; }
+.room-pick__select {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #2C2416;
+  background: white;
+  border: 1.5px solid #C17F3E;
+  border-radius: 8px;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.room-pick__select:hover {
+  background: #C17F3E;
+  color: white;
+}
+.room-pick__select--active,
+.room-pick__select--active:hover {
+  background: #5C6B3A;
+  border-color: #5C6B3A;
+  color: white;
+}
 
 /* ======== EXTRA CATEGORY TABS ======== */
 .extra-tab {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
   color: #6B5B4A;
   background: transparent;
   border: 1.5px solid #E0D5C8;
   border-radius: 999px;
-  padding: 7px 14px;
+  padding: 6px 12px;
   cursor: pointer;
   transition: all 0.2s;
 }
-@media (min-width: 640px) { .extra-tab { font-size: 15px; padding: 8px 16px; } }
+@media (min-width: 640px) { .extra-tab { font-size: 14px; padding: 7px 14px; } }
 .extra-tab:hover { border-color: #C17F3E; }
 .extra-tab--active {
   background: #2C2416;
@@ -1102,41 +936,42 @@ function scrollToTop() {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 20px;
-  height: 20px;
-  padding: 0 6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
   border-radius: 999px;
   background: #C17F3E;
   color: white;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
 }
 
-/* ======== EXTRA CARDS ======== */
+/* ======== EXTRA CARDS (compact) ======== */
 .extra-card {
   display: flex;
-  gap: 14px;
+  gap: 12px;
   background: white;
   border: 1.5px solid #F0E6D6;
-  border-radius: 14px;
-  padding: 16px;
+  border-radius: 12px;
+  padding: 12px;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .extra-card--active {
   border-color: #C17F3E;
-  box-shadow: 0 8px 18px rgba(193, 127, 62, 0.12);
+  box-shadow: 0 4px 12px rgba(193, 127, 62, 0.1);
 }
 .extra-card__icon {
   flex-shrink: 0;
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #F4F6EE, #E8ECDC);
   color: #5B7A3A;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+.extra-card__icon :deep(svg) { width: 20px; height: 20px; }
 .extra-card__body {
   flex: 1;
   display: flex;
@@ -1149,7 +984,7 @@ function scrollToTop() {
   cursor: pointer;
   color: #6B5B4A;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -1157,100 +992,139 @@ function scrollToTop() {
   transition: color 0.2s;
 }
 .extra-card__more:hover { color: #C17F3E; }
-
-/* ======== LOADER / EMPTY ======== */
-.quiz-loader, .quiz-empty {
-  display: flex;
-  flex-direction: column;
+.extra-card__add {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 14px;
-  padding: 60px 20px;
-  text-align: center;
-  color: #6B5B4A;
-  font-family: 'Source Sans 3', sans-serif;
-  font-size: 16px;
-}
-.quiz-spinner {
-  width: 36px;
-  height: 36px;
-  border: 3px solid #F0E6D6;
-  border-top-color: #C17F3E;
-  border-radius: 50%;
-  animation: quiz-spin 0.8s linear infinite;
-}
-@keyframes quiz-spin { to { transform: rotate(360deg); } }
-
-/* ======== SUMMARY ======== */
-.summary-card { padding: 22px; }
-@media (min-width: 768px) { .summary-card { padding: 32px; } }
-.summary-section {
-  padding-bottom: 18px;
-  margin-bottom: 18px;
-  border-bottom: 1px solid #F0E6D6;
-}
-.summary-section:last-of-type { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
-.summary-section__title {
-  font-family: 'Manrope', sans-serif;
-  font-weight: 500;
-  font-size: 18px;
-  color: #2C2416;
-}
-.summary-edit {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: #6B5B4A;
+  gap: 4px;
   font-family: 'Source Sans 3', sans-serif;
   font-size: 13px;
   font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  padding: 0;
-  transition: color 0.2s;
+  color: #C17F3E;
+  background: transparent;
+  border: 1.5px solid #E0D5C8;
+  border-radius: 7px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
 }
-.summary-edit:hover { color: #C17F3E; }
+.extra-card__add:hover {
+  background: #C17F3E;
+  border-color: #C17F3E;
+  color: white;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ======== SUMMARY CARD ======== */
+.summary-card {
+  background: white;
+  border: 1px solid #F0E6D6;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(44, 36, 22, 0.06);
+}
+@media (min-width: 768px) { .summary-card { padding: 24px; } }
+.summary-card__title {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+  font-size: 19px;
+  color: #2C2416;
+  margin: 0 0 14px;
+}
+.summary-block {
+  padding-bottom: 12px;
+}
+.summary-block--bordered {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed #E8DCC8;
+}
 .summary-row {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 12px;
-  padding: 4px 0;
-}
-.summary-row--multiline {
-  align-items: flex-start;
-  flex-wrap: wrap;
+  gap: 10px;
+  padding: 3px 0;
 }
 .summary-label {
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   color: #6B5B4A;
 }
 .summary-value {
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: #2C2416;
   text-align: right;
 }
+.summary-line {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 3px 0;
+}
 .summary-amount {
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 16px;
+  font-size: 14.5px;
   font-weight: 600;
   color: #2C2416;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 .summary-total {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  margin-top: 22px;
-  padding-top: 18px;
+  margin-top: 16px;
+  padding-top: 14px;
   border-top: 2px solid #F0E6D6;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
-/* ======== MODAL (extra) ======== */
+.reset-link {
+  display: block;
+  margin: 14px auto 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #9A8B73;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s;
+}
+.reset-link:hover { color: #2C2416; }
+
+/* ======== MOBILE BAR ======== */
+.mobile-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: white;
+  border-top: 1px solid #E8DCC8;
+  box-shadow: 0 -8px 24px rgba(44, 36, 22, 0.08);
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0));
+}
+.mobile-bar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ======== MODAL ======== */
 .modal-icon-wrap {
   width: 52px;
   height: 52px;
