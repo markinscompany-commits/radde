@@ -6,7 +6,7 @@
     <section class="error-screen relative overflow-hidden bg-sand-900 flex items-center">
       <img
         :src="`${base}images/hero/hero-2.jpg`"
-        alt=""
+        alt="Горы Дагестана"
         class="absolute inset-0 w-full h-full object-cover"
       />
       <!-- overlay темнее обычного, чтобы текст уверенно читался -->

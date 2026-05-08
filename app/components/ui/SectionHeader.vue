@@ -4,7 +4,7 @@
     <div :class="$slots.actions ? 'flex items-center justify-between gap-4' : ''">
       <h2 class="text-h2" :class="dark ? 'text-white' : 'text-sand-900'">
         <slot>
-          {{ title }}<template v-if="accent"> <span class="section-title-accent">{{ accent }}</span></template>
+          {{ title }}<template v-if="accent">&nbsp;<span class="section-title-accent">{{ accent }}</span></template>
         </slot>
       </h2>
       <slot v-if="$slots.actions" name="actions" />

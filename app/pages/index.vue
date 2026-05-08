@@ -26,9 +26,12 @@
 </template>
 
 <script setup lang="ts">
-useHead({
+useSiteMeta({
   title: 'Радде — Пансионат в горах Дагестана',
+  description: 'Пансионат Радде в реликтовом лесу на высоте 1700 метров — горы Дагестана, природный парк Гуниб. 12 уютных номеров, домашняя кухня, экскурсии и трансфер. Бронирование онлайн.',
+  path: '/',
 })
+useStructuredData().hotel()
 
 const showForm = ref(false)
 

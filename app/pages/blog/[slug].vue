@@ -136,12 +136,57 @@ const related = computed(() => {
     }))
 })
 
-useHead(() => ({
-  title: post.value ? `${post.value.title} — Радде` : 'Статья не найдена — Радде',
-  meta: post.value
-    ? [{ name: 'description', content: post.value.excerpt }]
-    : [{ name: 'robots', content: 'noindex, follow' }],
-}))
+// SEO: title/description/OG/Twitter + Schema.org Article — реактивно зависят от post.
+const SITE_URL = 'https://markinscompany-commits.github.io/radde'
+const sd = useStructuredData()
+watch(post, (val) => {
+  if (val) {
+    sd.article({
+      title: val.title,
+      excerpt: val.excerpt,
+      slug: val.slug,
+      image: val.image,
+      date: val.date,
+      readTime: val.readTime,
+    })
+    sd.breadcrumbs([
+      { name: 'Главная', path: '/' },
+      { name: 'Блог', path: '/blog' },
+      { name: val.title, path: `/blog/${val.slug}` },
+    ])
+  }
+}, { immediate: true })
+useHead(() => {
+  if (!post.value) {
+    return {
+      title: 'Статья не найдена — Радде',
+      meta: [{ name: 'robots', content: 'noindex, follow' }],
+    }
+  }
+  const fullTitle = `${post.value.title} — Радде`
+  const url = `${SITE_URL}/blog/${post.value.slug}`
+  const image = post.value.image?.startsWith('http')
+    ? post.value.image
+    : `${SITE_URL}${post.value.image?.replace(/^\/radde/, '') || '/images/hero/hero-radde.png'}`
+  return {
+    title: fullTitle,
+    meta: [
+      { name: 'description', content: post.value.excerpt },
+      { property: 'og:title', content: fullTitle },
+      { property: 'og:description', content: post.value.excerpt },
+      { property: 'og:type', content: 'article' },
+      { property: 'og:url', content: url },
+      { property: 'og:image', content: image },
+      { property: 'og:site_name', content: 'Пансионат Радде' },
+      { property: 'og:locale', content: 'ru_RU' },
+      { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:title', content: fullTitle },
+      { name: 'twitter:description', content: post.value.excerpt },
+      { name: 'twitter:image', content: image },
+    ],
+    link: [{ rel: 'canonical', href: url }],
+  }
+})
 </script>
 
 <style scoped>

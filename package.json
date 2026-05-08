@@ -10,6 +10,9 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@fontsource/cormorant-garamond": "^5.2.11",
+    "@fontsource/manrope": "^5.2.8",
+    "@fontsource/source-sans-3": "^5.2.9",
     "embla-carousel": "^8.6.0",
     "embla-carousel-vue": "^8.6.0",
     "gsap": "^3.14.2",

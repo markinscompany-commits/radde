@@ -113,17 +113,9 @@
                   <input v-model="transferForm.flight" type="text" placeholder="Например: 15 мая, рейс S7 1234" class="input-light" />
                 </div>
                 <!-- Чекбокс согласия на ПДн — ст. 9 152-ФЗ -->
-                <label class="tr-consent">
-                  <input
-                    v-model="transferConsent"
-                    type="checkbox"
-                    class="tr-consent__check"
-                    :class="{ 'tr-consent__check--error': transferConsentError }"
-                  />
-                  <span class="tr-consent__text">
-                    Я&nbsp;согласен на&nbsp;обработку персональных данных в&nbsp;соответствии с&nbsp;<a :href="`${base}privacy`" target="_blank" rel="noopener" class="tr-consent__link">политикой конфиденциальности</a>
-                  </span>
-                </label>
+                <UiConsentCheckbox v-model="transferConsent" :error="transferConsentError">
+                  Я&nbsp;согласен на&nbsp;обработку персональных данных в&nbsp;соответствии с&nbsp;<a :href="`${base}privacy`" target="_blank" rel="noopener">политикой конфиденциальности</a>
+                </UiConsentCheckbox>
                 <button type="submit" class="btn-primary w-full text-center py-3.5 mt-2" :disabled="transferSubmitting">
                   {{ transferSubmitting ? 'Отправляем...' : 'Отправить заявку' }}
                 </button>
@@ -345,61 +337,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Чекбокс согласия на ПДн (152-ФЗ) — модалка трансфера на светлом фоне */
-.tr-consent {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  cursor: pointer;
-  user-select: none;
-  margin-top: 4px;
-}
-.tr-consent__check {
-  flex-shrink: 0;
-  width: 17px;
-  height: 17px;
-  margin: 1px 0 0;
-  appearance: none;
-  background: white;
-  border: 1.5px solid #C7B89C;
-  border-radius: 4px;
-  cursor: pointer;
-  position: relative;
-  transition: border-color 0.2s, background 0.2s;
-}
-.tr-consent__check:hover { border-color: #C17F3E; }
-.tr-consent__check:checked {
-  background: #C17F3E;
-  border-color: #C17F3E;
-}
-.tr-consent__check:checked::after {
-  content: '';
-  position: absolute;
-  top: 2px;
-  left: 5px;
-  width: 4px;
-  height: 7px;
-  border: solid white;
-  border-width: 0 1.5px 1.5px 0;
-  transform: rotate(45deg);
-}
-.tr-consent__check--error {
-  border-color: #B5483A;
-  box-shadow: 0 0 0 3px rgba(181, 72, 58, 0.18);
-}
-.tr-consent__text {
-  font-family: 'Source Sans 3', sans-serif;
-  font-size: 12.5px;
-  line-height: 1.4;
-  color: #6B5B4A;
-}
-.tr-consent__link {
-  color: #2C2416;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-.tr-consent__link:hover { color: #C17F3E; }
-
 .map-frame {
   height: 320px;
 }

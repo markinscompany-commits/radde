@@ -217,12 +217,13 @@ const sections = [
   { id: 'changes', title: 'Изменения политики' },
 ]
 
-useHead({
+useSiteMeta({
   title: 'Политика конфиденциальности — Пансионат Радде',
-  meta: [
-    { name: 'description', content: 'Как пансионат Радде обрабатывает и хранит персональные данные гостей и посетителей сайта.' },
-    { name: 'robots', content: 'noindex, follow' },
-  ],
+  description: 'Как пансионат Радде обрабатывает и хранит персональные данные гостей и посетителей сайта. Соответствие 152-ФЗ.',
+  path: '/privacy',
+})
+useHead({
+  meta: [{ name: 'robots', content: 'noindex, follow' }],
 })
 </script>
 

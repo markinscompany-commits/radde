@@ -1,4 +1,15 @@
 ﻿<template>
+  <!-- Тень-подложка под прозрачной шапкой: на страницах с фото-фоном
+       градиент сверху делает белый лого/текст читаемыми. После скролла,
+       когда у шапки появляется свой тёмный фон, подложка плавно исчезает. -->
+  <div
+    class="header-veil fixed top-0 left-0 right-0 z-49 pointer-events-none"
+    :style="{
+      opacity: !(scrolled || mobileOpen || solid) && visible ? 1 : 0,
+      transition: 'opacity 0.4s ease',
+    }"
+  ></div>
+
   <div
     class="fixed top-0 left-0 right-0 z-50"
     :class="(scrolled || mobileOpen || solid) ? 'bg-sand-900/95 backdrop-blur-md shadow-lg shadow-sand-900/10' : 'bg-transparent'"
@@ -415,5 +426,24 @@ onMounted(() => {
 .slide-enter-from, .slide-leave-to {
   opacity: 0;
   transform: translateY(-8px);
+}
+
+/* Подложка-тень под прозрачной шапкой:
+   градиент тёмного сверху → прозрачный — даёт читаемость
+   белого логотипа и пунктов меню на любом фото-фоне. */
+.header-veil {
+  height: 130px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0.28) 40%,
+    rgba(0, 0, 0, 0.08) 75%,
+    transparent 100%
+  );
+}
+@media (min-width: 768px) {
+  .header-veil {
+    height: 170px;
+  }
 }
 </style>

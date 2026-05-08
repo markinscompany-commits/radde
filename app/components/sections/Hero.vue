@@ -8,16 +8,11 @@
       class="absolute inset-0 w-full h-full object-cover hero-bg"
       fetchpriority="high"
     />
-    <!-- Затемнение градиентом: слева тёмное (для читаемости текста),
-         справа прозрачное (чтобы пансионат был хорошо виден).
-         На мобильной — равномерное затемнение, текст по центру -->
-    <div class="absolute inset-0 hero-overlay"></div>
-
-    <!-- Заголовок: на md+ выровнен по левой стороне, на мобильной — по центру сверху -->
+    <!-- Заголовок: на md+ выровнен по левой стороне, на мобильной — по центру сверху.
+         Затемнение убрано — читаемость держим через text-shadow на h1. -->
     <div class="hero-title-wrap absolute inset-0 z-10 flex items-start md:items-center justify-center md:justify-start text-center md:text-left px-5 md:pt-0">
-      <h1 ref="titleRef" class="font-display font-500 text-white hero-hidden md:max-w-620px md:ml-8 md:mr-auto lg:ml-16"
-          style="font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: 1.1">
-        Пансионат Радде<br><span class="font-accent italic font-500 text-sand-300 text-[1.2em]">реликтовый лес,<br>горы и&nbsp;гармония</span>
+      <h1 ref="titleRef" class="hero-title font-display font-500 text-white hero-hidden md:max-w-620px md:ml-8 md:mr-auto lg:ml-16">
+        Пансионат Радде<br><span class="font-accent italic font-500 text-sand-300 text-[1.2em]">реликтовый лес, горы<br>и&nbsp;гармония</span>
       </h1>
     </div>
 
@@ -222,21 +217,17 @@ onMounted(() => {
   }
 }
 
-/* Затемнение: на mobile — равномерное (текст по центру);
-   на md+ — градиент слева направо: сильное затемнение слева переходит
-   в почти прозрачное справа, чтобы пансионат был хорошо виден */
-.hero-overlay {
-  background: rgba(44, 36, 22, 0.6);
+/* Размер заголовка: на моб — крупнее (мобильный экран узкий, нужно «бить»),
+   на ПК — оставляем прежний для строгой композиции */
+.hero-title {
+  font-size: clamp(2.4rem, 8.5vw, 3.2rem);
+  line-height: 1.1;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 @media (min-width: 768px) {
-  .hero-overlay {
-    background: linear-gradient(
-      to right,
-      rgba(44, 36, 22, 0.78) 0%,
-      rgba(44, 36, 22, 0.65) 30%,
-      rgba(44, 36, 22, 0.25) 60%,
-      rgba(44, 36, 22, 0.05) 100%
-    );
+  .hero-title {
+    font-size: clamp(2.4rem, 4.6vw, 3.4rem);
+    text-shadow: 0 2px 22px rgba(0, 0, 0, 0.55), 0 1px 4px rgba(0, 0, 0, 0.45);
   }
 }
 

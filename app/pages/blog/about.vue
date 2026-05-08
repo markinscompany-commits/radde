@@ -4,7 +4,7 @@
 
     <!-- Hero -->
     <section class="relative overflow-hidden bg-sand-900 pt-32 md:pt-40 pb-16 md:pb-24">
-      <img :src="`${base}images/hero/hero-1.jpg`" alt="" class="absolute inset-0 w-full h-full object-cover" />
+      <img :src="`${base}images/hero/hero-1.jpg`" alt="Пансионат Радде — общий вид среди гор Гунибского района" class="absolute inset-0 w-full h-full object-cover" />
       <div class="absolute inset-0 bg-sand-900/72"></div>
 
       <div class="container relative z-10">
@@ -155,7 +155,7 @@
 
     <!-- CTA -->
     <section class="bg-sand-900 py-16 md:py-20 relative overflow-hidden">
-      <img :src="`${base}images/hero/hero-4.jpg`" alt="" class="absolute inset-0 w-full h-full object-cover opacity-30" />
+      <img :src="`${base}images/hero/hero-4.jpg`" alt="Горный пейзаж — приглашение в Радде" class="absolute inset-0 w-full h-full object-cover opacity-30" />
       <div class="absolute inset-0 bg-gradient-to-r from-sand-900 via-sand-900/85 to-sand-900/40"></div>
       <div class="container relative z-10">
         <div class="max-w-150">
@@ -271,11 +271,11 @@ const audiences = [
   },
 ]
 
-useHead({
-  title: 'О пансионате Радде — Радде',
-  meta: [
-    { name: 'description', content: 'Пансионат Радде на высоте 1700 метров в природном парке «Верхний Гуниб»: 12 номеров, домашняя кухня, баня, конюшня, прогулочные тропы.' },
-  ],
+useSiteMeta({
+  title: 'О пансионате Радде',
+  description: 'Пансионат Радде на высоте 1700 метров в природном парке «Верхний Гуниб»: 12 номеров, домашняя кухня, баня, конюшня, прогулочные тропы.',
+  path: '/blog/about',
+  type: 'article',
 })
 </script>
 

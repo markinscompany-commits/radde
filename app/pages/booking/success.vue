@@ -6,7 +6,7 @@
     <section class="relative overflow-hidden bg-sand-900 pt-32 md:pt-40 pb-12 md:pb-16">
       <img
         :src="`${base}images/hero/hero-1.jpg`"
-        alt=""
+        alt="Горный пейзаж Гуниба — пансионат Радде"
         class="absolute inset-0 w-full h-full object-cover"
       />
       <div class="absolute inset-0 bg-sand-900/82"></div>
@@ -86,11 +86,13 @@
 const base = useRuntimeConfig().app.baseURL || '/'
 const contacts = useContacts()
 
-useHead({
+useSiteMeta({
   title: 'Заявка отправлена — Радде',
-  meta: [
-    { name: 'robots', content: 'noindex, follow' },
-  ],
+  description: 'Ваша заявка на бронирование принята. Менеджер свяжется в течение 15 минут.',
+  path: '/booking/success',
+})
+useHead({
+  meta: [{ name: 'robots', content: 'noindex, follow' }],
 })
 
 // На странице успеха показываем имя из последней отправленной заявки.

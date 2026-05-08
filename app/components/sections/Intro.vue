@@ -96,7 +96,7 @@
             домашняя кухня и полное единение с природой — лучший выбор для семейного
             отдыха и перезагрузки.
           </p>
-          <UiArrowLink href="/blog/about" class="mb-10">Узнать больше о Радде</UiArrowLink>
+          <UiArrowLink :href="`${base}blog/about`" class="mb-10">Узнать больше о Радде</UiArrowLink>
 
           <!-- Цифры (mobile) -->
           <div class="flex gap-6 sm:gap-10">
@@ -107,7 +107,7 @@
             <div class="w-px bg-sand-200"></div>
             <div>
               <div class="flex items-center gap-2">
-                <span class="font-display font-500 text-sand-900 leading-none" style="font-size: clamp(2rem, 4vw, 2.8rem)">4.8</span>
+                <span class="font-display font-500 text-sand-900 leading-none" style="font-size: clamp(2rem, 4vw, 2.8rem)">5.0</span>
                 <div class="flex gap-0.5 mt-1">
                   <span v-for="n in 5" :key="'m'+n" class="text-4.5" :class="n <= 5 ? 'text-amber-500' : 'text-sand-200'">&#9733;</span>
                 </div>

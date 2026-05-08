@@ -16,21 +16,17 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Пансионат Радде — отдых в горах Дагестана на высоте 1600м в реликтовом лесу. Бронирование номеров, питание, экскурсии.' },
-        // Возрастная категория сайта (добровольно, 436-ФЗ): пансионат не СМИ,
-        // но мета-тег rating помогает родительским фильтрам и поисковикам
+        // Возрастная категория сайта (436-ФЗ, добровольно)
         { name: 'rating', content: 'general' },
-        { property: 'og:title', content: 'Радде — Пансионат в горах Дагестана' },
-        { property: 'og:description', content: 'Отдых в горах на высоте 1600м в реликтовом лесу Гуниба' },
-        { property: 'og:type', content: 'website' },
+        { name: 'theme-color', content: '#2C2416' },
+        // Дефолтные SEO-меты — каждая страница перетирает через useSiteMeta()
       ],
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/radde/favicon.svg' },
         { rel: 'icon', type: 'image/png', sizes: '512x512', href: '/radde/favicon.png' },
         { rel: 'apple-touch-icon', href: '/radde/favicon.png' },
-        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Manrope:wght@300;400;500;600;700;800&family=Source+Sans+3:wght@300;400;500;600;700&display=swap' },
+        // Шрифты — self-hosted через @fontsource (нельзя CDN: 152-ФЗ запрещает
+        // передачу IP пользователей на серверы Google в США). Импорты в global.css.
       ],
     },
   },

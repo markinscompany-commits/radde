@@ -608,6 +608,7 @@ import type { RouteCardData } from '../components/ui/RouteCard.vue'
 
 useHead({
   title: 'Дизайн-система — Радде',
+  meta: [{ name: 'robots', content: 'noindex, follow' }],
 })
 
 const base = useRuntimeConfig().app.baseURL || '/'
@@ -652,7 +653,7 @@ const demoRoom = reactive<Room>({
   bed: 'King-size',
   guests: 3,
   view: 'Панорама на горы',
-  price: '7 000',
+  price: '6 500',
   description: 'Панорамные окна от пола до потолка. Просыпаетесь с видом на горные вершины и реликтовый лес — незабываемое начало каждого дня.',
   fullDescription: 'Полное описание...',
   note: '',
@@ -676,7 +677,7 @@ const demoPosts: BlogPost[] = [
 const demoServices: Service[] = [
   { id: 's1', category: 'food', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14c.83 .642 2.077 1.017 3.5 1c1.423 .017 2.67 -.358 3.5 -1c.83 -.642 2.077 -1.017 3.5 -1c1.423 -.017 2.67 .358 3.5 1"/><path d="M8 3a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2"/><path d="M12 3a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2"/><path d="M3 10h14v5a6 6 0 0 1 -6 6h-2a6 6 0 0 1 -6 -6v-5"/></svg>', title: 'Завтрак', description: 'Сытный домашний завтрак из местных продуктов.', included: true, price: '', duration: '8:00 — 10:00', format: '' },
   { id: 's2', category: 'active', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18l-6.921 -14.612a2.3 2.3 0 0 0 -4.158 0l-6.921 14.612"/><path d="M7.5 11l2 2.5l2.5 -2.5l2 3l2.5 -2"/></svg>', title: 'Экскурсии', description: 'Индивидуальные и групповые поездки по Гунибскому району.', included: false, price: 'от 2 000 ₽', duration: '2-8 часов', format: 'группы' },
-  { id: 's3', category: 'wellness', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16a1 1 0 0 1 1 1v3a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4v-3a1 1 0 0 1 1 -1"/><path d="M6 12v-7a2 2 0 0 1 2 -2h3v2.25"/></svg>', title: 'Сауна и баня', description: 'Русская баня на дровах и финская сауна с видом на лес.', included: false, price: 'от 2 000 ₽', duration: '2 часа', format: 'до 6 чел.' },
+  { id: 's3', category: 'service', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>', title: 'Трансфер', description: 'Встретим в аэропорту Махачкалы и доставим в пансионат с комфортом.', included: false, price: 'от 5 000 ₽', duration: '3-4 часа', format: 'до 4 пассажиров' },
 ]
 
 const demoFaqs = [

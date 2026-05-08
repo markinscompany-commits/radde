@@ -6,7 +6,7 @@
     <section class="relative overflow-hidden bg-sand-900 pt-32 md:pt-40 pb-16 md:pb-20">
       <img
         :src="`${base}images/hero/hero-2.jpg`"
-        alt=""
+        alt="Реликтовый лес Радде — фон страницы блога"
         class="absolute inset-0 w-full h-full object-cover"
       />
       <div class="absolute inset-0 bg-sand-900/80"></div>
@@ -116,12 +116,15 @@ const filtered = computed(() => {
   return allCards.value.filter((p) => p.category === activeCat.value)
 })
 
-useHead({
+useSiteMeta({
   title: 'Блог — Пансионат Радде',
-  meta: [
-    { name: 'description', content: 'Статьи о пансионате Радде, маршрутах по Гунибскому району, дагестанской кухне и семейном отдыхе в горах.' },
-  ],
+  description: 'Статьи о пансионате Радде, маршрутах по Гунибскому району, дагестанской кухне и семейном отдыхе в горах.',
+  path: '/blog',
 })
+useStructuredData().breadcrumbs([
+  { name: 'Главная', path: '/' },
+  { name: 'Блог', path: '/blog' },
+])
 
 // Sticky категории через IntersectionObserver (CSS sticky ломается
 // из-за body overflow-x: hidden, особенно в Safari)

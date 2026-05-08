@@ -6,7 +6,7 @@
     <section class="relative overflow-hidden bg-sand-900 pt-32 md:pt-40 pb-12 md:pb-16">
       <img
         :src="`${base}images/hero/hero-3.jpg`"
-        alt=""
+        alt="Пансионат Радде в горах Дагестана — общий вид"
         class="absolute inset-0 w-full h-full object-cover"
       />
       <div class="absolute inset-0 bg-sand-900/82"></div>
@@ -116,12 +116,15 @@ const base = useRuntimeConfig().app.baseURL || '/'
 const contacts = useContacts()
 const showBooking = ref(false)
 
-useHead({
+useSiteMeta({
   title: 'Контакты — Пансионат Радде',
-  meta: [
-    { name: 'description', content: 'Свяжитесь с пансионатом Радде: телефон, email, мессенджеры, адрес. Гунибский район Дагестана.' },
-  ],
+  description: 'Свяжитесь с пансионатом Радде: телефон, email, мессенджеры, адрес. Гунибский район Дагестана. Бронирование, трансфер из аэропорта Махачкалы.',
+  path: '/contacts',
 })
+useStructuredData().breadcrumbs([
+  { name: 'Главная', path: '/' },
+  { name: 'Контакты', path: '/contacts' },
+])
 </script>
 
 <style scoped>

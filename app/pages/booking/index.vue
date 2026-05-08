@@ -4,7 +4,7 @@
 
     <!-- Hero strip -->
     <section class="relative overflow-hidden bg-sand-900 pt-32 md:pt-36 pb-8 md:pb-10">
-      <img :src="`${base}images/hero/hero-1.jpg`" alt="" class="absolute inset-0 w-full h-full object-cover" />
+      <img :src="`${base}images/hero/hero-1.jpg`" alt="Горы Дагестана — пансионат Радде" class="absolute inset-0 w-full h-full object-cover" />
       <div class="absolute inset-0 bg-sand-900/82"></div>
 
       <div class="container relative z-10">
@@ -357,19 +357,11 @@
 
               <!-- Чекбокс согласия на обработку ПДн — ст. 9 152-ФЗ:
                    отдельный нередактируемый чекбокс, не предустановлен -->
-              <label class="consent-row">
-                <input
-                  ref="consentInputRef"
-                  v-model="consentGiven"
-                  type="checkbox"
-                  class="consent-checkbox"
-                  :class="{ 'consent-checkbox--error': errorField === 'consent' }"
-                />
-                <span class="consent-text">
-                  Я&nbsp;даю согласие на&nbsp;обработку персональных данных
-                  на&nbsp;условиях <a :href="`${base}privacy`" target="_blank" rel="noopener" class="consent-link">политики конфиденциальности</a>
-                </span>
-              </label>
+              <UiConsentCheckbox
+                ref="consentInputRef"
+                v-model="consentGiven"
+                :error="errorField === 'consent'"
+              />
 
               <button
                 type="button"
@@ -468,12 +460,10 @@ import type { ExtraDef } from '~/composables/useBookingExtras'
 const base = useRuntimeConfig().app.baseURL || '/'
 const route = useRoute()
 
-useHead({
+useSiteMeta({
   title: 'Бронирование — Радде',
-  meta: [
-    { name: 'description', content: 'Соберите свой отдых в пансионате Радде: даты, номер, услуги. Менеджер подтвердит бронь в течение 15 минут.' },
-    { name: 'robots', content: 'noindex, follow' },
-  ],
+  description: 'Соберите свой отдых в пансионате Радде: даты, номер, дополнительные услуги. Менеджер подтвердит бронь в течение 15 минут.',
+  path: '/booking',
 })
 
 const extras = useBookingExtras()
@@ -674,7 +664,7 @@ const nameInputRef = ref<HTMLInputElement>()
 const phoneInputRef = ref<HTMLInputElement>()
 const errorField = ref<'name' | 'phone' | 'consent' | null>(null)
 const confirmReset = ref(false)
-const consentInputRef = ref<HTMLInputElement>()
+const consentInputRef = ref<{ focus: () => void } | null>(null)
 const consentGiven = ref(false)
 
 function scrollToEl(el: HTMLElement | undefined, focusEl?: HTMLElement) {
@@ -1351,61 +1341,7 @@ function scrollToTop() {
   color: #2C2416;
 }
 
-/* Чекбокс согласия на ПДн — ст. 9 152-ФЗ */
-.consent-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin: 10px 0 14px;
-  cursor: pointer;
-  user-select: none;
-}
-.consent-checkbox {
-  flex-shrink: 0;
-  width: 18px;
-  height: 18px;
-  margin: 1px 0 0;
-  appearance: none;
-  background: white;
-  border: 1.5px solid #C7B89C;
-  border-radius: 4px;
-  cursor: pointer;
-  position: relative;
-  transition: border-color 0.2s, background 0.2s;
-}
-.consent-checkbox:hover { border-color: #C17F3E; }
-.consent-checkbox:checked {
-  background: #C17F3E;
-  border-color: #C17F3E;
-}
-.consent-checkbox:checked::after {
-  content: '';
-  position: absolute;
-  top: 2px;
-  left: 5px;
-  width: 4px;
-  height: 8px;
-  border: solid white;
-  border-width: 0 1.5px 1.5px 0;
-  transform: rotate(45deg);
-}
-.consent-checkbox--error {
-  border-color: #B5483A;
-  box-shadow: 0 0 0 3px rgba(181, 72, 58, 0.2);
-}
-.consent-text {
-  font-family: 'Source Sans 3', sans-serif;
-  font-size: 12.5px;
-  line-height: 1.4;
-  color: #6B5B4A;
-}
-.consent-link {
-  color: #2C2416;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  transition: color 0.2s;
-}
-.consent-link:hover { color: #C17F3E; }
+/* Чекбокс согласия на ПДн вынесен в UiConsentCheckbox.vue */
 
 /* Подсветка ошибочных полей формы */
 .input-light--error {

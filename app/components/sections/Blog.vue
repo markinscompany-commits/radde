@@ -14,23 +14,34 @@
       </UiSectionHeader>
     </div>
 
-    <!-- Carousel — edge-to-edge -->
+    <!-- Carousel — edge-to-edge.
+         На моб (<lg) — нативный horizontal scroll с scroll-snap, без transform/autoplay.
+         На lg+ — pagination со стрелками и точками. -->
     <div class="relative w-full" ref="carouselWrapRef">
-      <div class="overflow-hidden">
-        <div ref="trackRef" class="flex gap-6 blog-track-animate will-change-transform" :style="{ paddingLeft: containerPad + 'px', transform: `translateX(-${trackOffset}px)` }">
+      <div :class="isMobile ? 'mobile-scroll' : 'overflow-hidden'">
+        <div
+          ref="trackRef"
+          class="flex gap-6 will-change-transform"
+          :class="[
+            !isMobile ? 'blog-track-animate' : '',
+            isMobile ? 'mobile-track' : '',
+          ]"
+          :style="isMobile ? {} : { paddingLeft: containerPad + 'px', transform: `translateX(-${trackOffset}px)` }"
+        >
           <UiBlogCard
             v-for="(post, i) in cards"
             :key="'p' + i"
             :post="post"
             :width="cardWidth"
+            class="mobile-card"
           />
         </div>
       </div>
     </div>
 
-    <!-- Bottom bar: arrows left, dots right -->
+    <!-- Bottom bar — на моб скрыт (нативный скролл) -->
     <div class="container">
-      <div class="flex items-center justify-between mt-8">
+      <div class="hidden lg:flex items-center justify-between mt-8">
         <div class="flex items-center gap-1.5">
           <button @click="prev" class="media-arrow media-arrow--light">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 1.5L3 6l5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -73,6 +84,7 @@ const cardWidth = ref(360)
 const containerPad = ref(20)
 const trackOffset = ref(0)
 const gap = 24
+const isMobile = ref(false)
 
 const { posts } = useBlogPosts()
 const cards = computed(() => posts.map((p) => ({
@@ -95,6 +107,13 @@ const maxIndex = computed(() => Math.max(0, cards.value.length - visibleCount.va
 const totalDots = computed(() => maxIndex.value + 1)
 
 function updateSizes() {
+  const viewportWidth = window.innerWidth
+  isMobile.value = viewportWidth < 1024
+  if (isMobile.value) {
+    cardWidth.value = Math.round(viewportWidth * 0.85)
+    containerPad.value = 20
+    return
+  }
   const containerEl = document.querySelector('.container') as HTMLElement
   if (containerEl) {
     const rect = containerEl.getBoundingClientRect()
@@ -130,6 +149,7 @@ const isVisible = ref(false)
 
 function startAutoplay() {
   if (autoplayInterval) return
+  if (isMobile.value) return
   autoplayInterval = setInterval(() => { next() }, 8000)
 }
 
@@ -171,5 +191,25 @@ onUnmounted(() => {
 <style scoped>
 .blog-track-animate {
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile native horizontal scroll with snap */
+.mobile-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 20px;
+  scrollbar-width: none;
+}
+.mobile-scroll::-webkit-scrollbar {
+  display: none;
+}
+.mobile-track {
+  padding: 0 20px;
+}
+.mobile-track > .mobile-card {
+  scroll-snap-align: start;
+  flex-shrink: 0;
 }
 </style>

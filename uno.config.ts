@@ -90,7 +90,7 @@ export default defineConfig({
     // Section headings — единый паттерн лейбл + заголовок
     'section-label': 'text-label text-olive-600 mb-4 block',
     'section-title': 'text-h2 text-sand-900',
-    'section-title-accent': 'font-accent italic font-500 text-sand-500 text-[1.3em]',
+    'section-title-accent': 'font-accent italic font-500 text-sand-500 text-[1.3em] pl-1',
   },
 
   rules: [

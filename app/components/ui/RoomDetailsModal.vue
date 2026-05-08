@@ -2,11 +2,14 @@
   <Teleport to="body">
     <Transition name="modal">
       <div v-if="room" class="fixed inset-0 z-100 flex items-center justify-center p-4 bg-sand-900/60 backdrop-blur-sm" @click.self="close">
-        <div class="relative bg-sand-50 rounded-3 w-full max-w-160 max-h-[90vh] overflow-y-auto shadow-2xl z-10 modal-body" data-lenis-prevent>
-          <button @click="close" class="sticky top-4 float-right mr-4 mt-4 w-9 h-9 rounded-full bg-sand-200/90 backdrop-blur-sm hover:bg-sand-300 flex items-center justify-center transition-colors z-30 border-none cursor-pointer" style="margin-bottom: -52px;">
+        <div class="relative bg-sand-50 rounded-3 w-full max-w-160 max-h-[90vh] overflow-hidden shadow-2xl z-10 modal-body" data-lenis-prevent>
+          <!-- Кнопка закрытия — absolute поверх корпуса, не зависит от скролла внутри -->
+          <button @click="close" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-sand-200/90 backdrop-blur-sm hover:bg-sand-300 flex items-center justify-center transition-colors z-30 border-none cursor-pointer">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M13 5L5 13M5 5l8 8" stroke="#6B5B4A" stroke-width="1.5" stroke-linecap="round"/></svg>
           </button>
 
+          <!-- Скролл-обёртка: фото примыкает к верху корпуса (без видимого фона sand-50 над фото) -->
+          <div class="modal-scroll max-h-[90vh] overflow-y-auto">
           <!-- Modal gallery -->
           <div class="relative aspect-16/9 overflow-hidden bg-sand-200 cursor-pointer"
                @click="openLightbox(photoIndex)">
@@ -96,6 +99,7 @@
               </button>
               <a v-else :href="bookHref" class="btn-primary">Забронировать</a>
             </div>
+          </div>
           </div>
         </div>
       </div>

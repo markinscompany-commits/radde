@@ -43,17 +43,9 @@
               </div>
 
               <!-- Чекбокс согласия на ПДн — ст. 9 152-ФЗ -->
-              <label class="bm-consent">
-                <input
-                  v-model="consentGiven"
-                  type="checkbox"
-                  class="bm-consent__check"
-                  :class="{ 'bm-consent__check--error': consentError }"
-                />
-                <span class="bm-consent__text">
-                  Я&nbsp;согласен на&nbsp;обработку персональных данных в&nbsp;соответствии с&nbsp;<a :href="`${base}privacy`" target="_blank" rel="noopener" class="bm-consent__link">политикой конфиденциальности</a>
-                </span>
-              </label>
+              <UiConsentCheckbox v-model="consentGiven" :error="consentError">
+                Я&nbsp;согласен на&nbsp;обработку персональных данных в&nbsp;соответствии с&nbsp;<a :href="`${base}privacy`" target="_blank" rel="noopener">политикой конфиденциальности</a>
+              </UiConsentCheckbox>
 
               <button type="submit" class="btn-primary w-full text-center py-3.5 mt-2" :disabled="submitting">
                 {{ submitting ? 'Отправляем...' : 'Отправить заявку' }}
@@ -153,60 +145,6 @@ async function submit() {
 </script>
 
 <style scoped>
-/* Чекбокс согласия на ПДн (152-ФЗ) */
-.bm-consent {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  cursor: pointer;
-  user-select: none;
-}
-.bm-consent__check {
-  flex-shrink: 0;
-  width: 17px;
-  height: 17px;
-  margin: 1px 0 0;
-  appearance: none;
-  background: white;
-  border: 1.5px solid #C7B89C;
-  border-radius: 4px;
-  cursor: pointer;
-  position: relative;
-  transition: border-color 0.2s, background 0.2s;
-}
-.bm-consent__check:hover { border-color: #C17F3E; }
-.bm-consent__check:checked {
-  background: #C17F3E;
-  border-color: #C17F3E;
-}
-.bm-consent__check:checked::after {
-  content: '';
-  position: absolute;
-  top: 2px;
-  left: 5px;
-  width: 4px;
-  height: 7px;
-  border: solid white;
-  border-width: 0 1.5px 1.5px 0;
-  transform: rotate(45deg);
-}
-.bm-consent__check--error {
-  border-color: #B5483A;
-  box-shadow: 0 0 0 3px rgba(181, 72, 58, 0.18);
-}
-.bm-consent__text {
-  font-family: 'Source Sans 3', sans-serif;
-  font-size: 12.5px;
-  line-height: 1.4;
-  color: #6B5B4A;
-}
-.bm-consent__link {
-  color: #2C2416;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-.bm-consent__link:hover { color: #C17F3E; }
-
 /* Убиваем любой outline/shadow на полях в этой модалке */
 input.input-light,
 input.input-light:focus,

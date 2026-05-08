@@ -51,23 +51,36 @@
 
     </div>
 
-    <!-- Carousel — full width edge-to-edge, first card aligned with container -->
+    <!-- Carousel — full width edge-to-edge, first card aligned with container.
+         На моб (<lg) — нативный horizontal scroll с scroll-snap, без cloning/transform/autoplay.
+         На lg+ — infinite-loop карусель со стрелками и точками. -->
     <div class="relative w-full" ref="carouselWrapRef">
-      <div class="overflow-hidden">
-        <div ref="trackRef" class="flex gap-5" :class="trackTransition ? 'track-animate' : ''" :style="{ paddingLeft: containerPadding + 'px', transform: `translateX(-${trackOffset}px)` }">
+      <div :class="isMobile ? 'mobile-scroll' : 'overflow-hidden'">
+        <div
+          ref="trackRef"
+          class="flex gap-5"
+          :class="[
+            !isMobile && trackTransition ? 'track-animate' : '',
+            isMobile ? 'mobile-track' : '',
+          ]"
+          :style="isMobile
+            ? {}
+            : { paddingLeft: containerPadding + 'px', transform: `translateX(-${trackOffset}px)` }"
+        >
           <UiReviewCard
-            v-for="(review, i) in loopedReviews"
+            v-for="(review, i) in (isMobile ? reviews : loopedReviews)"
             :key="'r' + i"
             :review="review"
             :width="cardWidth"
+            class="mobile-card"
             @open="openReview"
           />
         </div>
       </div>
     </div>
 
-    <!-- Bottom bar -->
-    <div class="container">
+    <!-- Bottom bar — на моб скрыт (нативный скролл сам индикатор) -->
+    <div class="container hidden lg:block">
       <div class="flex items-center justify-between mt-6 px-1">
         <div class="flex items-center gap-1.5">
           <button @click="prev" class="media-arrow media-arrow--light">
@@ -161,6 +174,7 @@ const containerPadding = ref(20)
 const trackOffset = ref(0)
 const trackTransition = ref(true)
 const gap = 20
+const isMobile = ref(false)
 
 // loopedReviews and cloneOffset are defined after the reviews array below
 
@@ -238,6 +252,14 @@ function sourceLabel(source: string) {
 function updateCardWidth() {
   if (!carouselWrapRef.value) return
   const viewportWidth = window.innerWidth
+  isMobile.value = viewportWidth < 1024
+  if (isMobile.value) {
+    // Native horizontal scroll: каждая карточка ~85% ширины экрана,
+    // кусочек следующей виден — намёк на скролл
+    cardWidth.value = Math.round(viewportWidth * 0.85)
+    containerPadding.value = 20
+    return
+  }
   // Get exact content offset by finding a .container element on the page
   const containerEl = document.querySelector('.container') as HTMLElement
   if (containerEl) {
@@ -321,6 +343,7 @@ let autoplayInterval: ReturnType<typeof setInterval> | null = null
 
 function startAutoplay() {
   if (autoplayInterval) return
+  if (isMobile.value) return
   autoplayInterval = setInterval(() => { next() }, 10000)
 }
 
@@ -443,6 +466,26 @@ onUnmounted(() => {
 /* Track animation */
 .track-animate {
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile native horizontal scroll with snap */
+.mobile-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 20px;
+  scrollbar-width: none;
+}
+.mobile-scroll::-webkit-scrollbar {
+  display: none;
+}
+.mobile-track {
+  padding: 0 20px;
+}
+.mobile-track > .mobile-card {
+  scroll-snap-align: start;
+  flex-shrink: 0;
 }
 
 /* Modal transition */
