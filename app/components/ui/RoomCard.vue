@@ -13,7 +13,7 @@
             class="absolute inset-0 w-full h-full object-cover room-photo-transition"
             :class="room.activePhoto === pi ? 'opacity-100 z-2' : 'opacity-0 z-1'"
           />
-          <div class="absolute top-4 right-4 z-10" @click.stop>
+          <div class="absolute top-4 left-4 z-10" @click.stop>
             <button @click="$emit('lightbox', room, room.activePhoto)"
                     class="media-arrow"
                     title="Открыть на весь экран">
@@ -115,7 +115,7 @@
                     class="text-small font-600 text-amber-600 hover:text-amber-700 transition-colors bg-transparent border-none cursor-pointer p-0">
               Подробнее
             </button>
-            <a :href="bookHref" class="btn-primary">Забронировать</a>
+            <a :href="bookHref" class="btn-primary">Выбрать</a>
           </div>
         </div>
       </div>

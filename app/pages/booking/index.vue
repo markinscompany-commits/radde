@@ -112,7 +112,6 @@
                     <span
                       class="room-pick__avail"
                       :class="r.availableCount <= 2 ? 'room-pick__avail--low' : ''"
-                      :title="`На выбранные даты в категории «${r.name}» свободно ${r.availableCount} из ${r.totalCount} номеров. После подключения Bnovo число будет обновляться автоматически.`"
                     >
                       <svg v-if="r.availableCount <= 2" width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v3.5M8 10.5h.007" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                       Свободно: {{ r.availableCount }} из {{ r.totalCount }}
@@ -395,26 +394,7 @@
       </div>
     </section>
 
-    <!-- Mobile sticky bottom bar -->
-    <div v-if="totals.total > 0" class="mobile-bar md:hidden">
-      <div class="mobile-bar__inner">
-        <div class="mobile-bar__total">
-          <div class="text-3.25 text-sand-600 leading-tight">Итого{{ nights > 0 ? ` за ${nights} ${nightsWord}` : '' }}</div>
-          <div class="font-display font-500 text-sand-900 text-5.5 leading-tight">{{ totals.total.toLocaleString('ru-RU') }} ₽</div>
-        </div>
-        <div class="mobile-bar__action">
-          <button type="button" class="btn-primary w-full !py-3 !px-5" :disabled="submitting" @click="submit">
-            {{ submitting ? 'Отправляем…' : 'Отправить заявку' }}
-          </button>
-          <p class="mobile-bar__consent">
-            Нажимая «Отправить заявку», вы соглашаетесь с
-            <a :href="`${base}privacy`" class="underline underline-offset-2">политикой конфиденциальности</a>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Room details modal -->
+<!-- Room details modal -->
     <UiRoomDetailsModal
       :room="detailRoom"
       action="select"
@@ -1312,50 +1292,6 @@ function scrollToTop() {
   transition: color 0.2s;
 }
 .reset-link:hover { color: #2C2416; }
-
-/* ======== MOBILE BAR ======== */
-.mobile-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 50;
-  background: white;
-  border-top: 1px solid #E8DCC8;
-  box-shadow: 0 -8px 24px rgba(44, 36, 22, 0.08);
-  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0));
-}
-.mobile-bar__inner {
-  display: flex;
-  align-items: stretch;
-  justify-content: space-between;
-  gap: 12px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-.mobile-bar__total {
-  flex-shrink: 0;
-  align-self: center;
-}
-.mobile-bar__action {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 4px;
-  min-width: 0;
-}
-.mobile-bar__consent {
-  font-family: 'Source Sans 3', sans-serif;
-  font-size: 10.5px;
-  line-height: 1.3;
-  color: #9A8B73;
-  text-align: right;
-  margin: 0;
-}
-.mobile-bar__consent a {
-  color: #6B5B4A;
-}
 
 /* Блок «Условия бронирования» — ПП № 1912 с 01.03.2026 */
 .rules-card {

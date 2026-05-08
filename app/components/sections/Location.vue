@@ -112,12 +112,22 @@
                   <label class="label-light">Дата и рейс <span class="text-sand-600 font-400">(необязательно)</span></label>
                   <input v-model="transferForm.flight" type="text" placeholder="Например: 15 мая, рейс S7 1234" class="input-light" />
                 </div>
+                <!-- Чекбокс согласия на ПДн — ст. 9 152-ФЗ -->
+                <label class="tr-consent">
+                  <input
+                    v-model="transferConsent"
+                    type="checkbox"
+                    class="tr-consent__check"
+                    :class="{ 'tr-consent__check--error': transferConsentError }"
+                  />
+                  <span class="tr-consent__text">
+                    Я&nbsp;согласен на&nbsp;обработку персональных данных в&nbsp;соответствии с&nbsp;<a :href="`${base}privacy`" target="_blank" rel="noopener" class="tr-consent__link">политикой конфиденциальности</a>
+                  </span>
+                </label>
                 <button type="submit" class="btn-primary w-full text-center py-3.5 mt-2" :disabled="transferSubmitting">
                   {{ transferSubmitting ? 'Отправляем...' : 'Отправить заявку' }}
                 </button>
-                <p class="text-small text-sand-700 text-center">
-                  Нажимая кнопку, вы соглашаетесь с <a href="/privacy" class="text-sand-800 underline underline-offset-2 hover:text-amber-600 transition-colors">политикой конфиденциальности</a>
-                </p>
+                <p v-if="transferError" class="text-small text-amber-700 text-center leading-snug">{{ transferError }}</p>
               </form>
             </div>
             <div v-else class="px-7 md:px-9 pt-10 pb-8 flex flex-col items-center text-center">
@@ -136,6 +146,7 @@
 </template>
 
 <script setup lang="ts">
+const base = useRuntimeConfig().app.baseURL || '/'
 const { onInput: phoneMaskInput, onKeydown: phoneMaskKeydown } = usePhoneMask()
 
 interface RouteCard {
@@ -164,6 +175,9 @@ const showTransfer = ref(false)
 const transferSubmitting = ref(false)
 const transferSuccess = ref(false)
 const transferForm = reactive({ name: '', phone: '', flight: '' })
+const transferConsent = ref(false)
+const transferConsentError = ref(false)
+const transferError = ref('')
 
 let mapGuardTimer: ReturnType<typeof setTimeout> | null = null
 
@@ -200,7 +214,21 @@ function handleTransferPhone(e: Event) {
 }
 
 async function submitTransfer() {
-  if (!transferForm.name || !transferForm.phone) return
+  transferError.value = ''
+  transferConsentError.value = false
+  if (!transferForm.name.trim()) {
+    transferError.value = 'Укажите имя — иначе не сможем к вам обратиться'
+    return
+  }
+  if (transferForm.phone.replace(/\D/g, '').length < 11) {
+    transferError.value = 'Укажите корректный телефон в формате +7 (XXX) XXX-XX-XX'
+    return
+  }
+  if (!transferConsent.value) {
+    transferError.value = 'Подтвердите согласие на обработку персональных данных'
+    transferConsentError.value = true
+    return
+  }
   transferSubmitting.value = true
   await new Promise(r => setTimeout(r, 1200))
   transferSubmitting.value = false
@@ -210,6 +238,9 @@ async function submitTransfer() {
 function closeTransfer() {
   showTransfer.value = false
   transferSuccess.value = false
+  transferConsent.value = false
+  transferConsentError.value = false
+  transferError.value = ''
   document.body.style.overflow = ''
   useLenis().instance()?.start()
 }
@@ -217,6 +248,9 @@ function closeTransfer() {
 watch(showTransfer, (v) => {
   if (v) {
     transferSuccess.value = false
+    transferConsent.value = false
+    transferConsentError.value = false
+    transferError.value = ''
     document.body.style.overflow = 'hidden'
     useLenis().instance()?.stop()
   }
@@ -311,6 +345,61 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* Чекбокс согласия на ПДн (152-ФЗ) — модалка трансфера на светлом фоне */
+.tr-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  margin-top: 4px;
+}
+.tr-consent__check {
+  flex-shrink: 0;
+  width: 17px;
+  height: 17px;
+  margin: 1px 0 0;
+  appearance: none;
+  background: white;
+  border: 1.5px solid #C7B89C;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.2s, background 0.2s;
+}
+.tr-consent__check:hover { border-color: #C17F3E; }
+.tr-consent__check:checked {
+  background: #C17F3E;
+  border-color: #C17F3E;
+}
+.tr-consent__check:checked::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 4px;
+  height: 7px;
+  border: solid white;
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(45deg);
+}
+.tr-consent__check--error {
+  border-color: #B5483A;
+  box-shadow: 0 0 0 3px rgba(181, 72, 58, 0.18);
+}
+.tr-consent__text {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: #6B5B4A;
+}
+.tr-consent__link {
+  color: #2C2416;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.tr-consent__link:hover { color: #C17F3E; }
+
 .map-frame {
   height: 320px;
 }

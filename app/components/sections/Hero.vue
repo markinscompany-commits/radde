@@ -15,9 +15,9 @@
 
     <!-- Заголовок: на md+ выровнен по левой стороне, на мобильной — по центру сверху -->
     <div class="hero-title-wrap absolute inset-0 z-10 flex items-start md:items-center justify-center md:justify-start text-center md:text-left px-5 md:pt-0">
-      <h1 ref="titleRef" class="font-display font-500 text-white hero-hidden md:max-w-680px md:ml-8 md:mr-auto lg:ml-16"
-          style="font-size: clamp(2.2rem, 5.6vw, 4.2rem); line-height: 1.05">
-        Пансионат Радде<br><span class="font-accent italic font-500 text-sand-300 text-[1.2em]">реликтовый лес, горы и&nbsp;гармония</span>
+      <h1 ref="titleRef" class="font-display font-500 text-white hero-hidden md:max-w-620px md:ml-8 md:mr-auto lg:ml-16"
+          style="font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: 1.1">
+        Пансионат Радде<br><span class="font-accent italic font-500 text-sand-300 text-[1.2em]">реликтовый лес,<br>горы и&nbsp;гармония</span>
       </h1>
     </div>
 
@@ -84,7 +84,7 @@ const base = useRuntimeConfig().app.baseURL || '/'
 const titleRef = ref<HTMLElement>()
 const bookingRef = ref<HTMLElement>()
 
-const heroImage = `${base}images/hero/hero-1.jpg?v=2`
+const heroImage = `${base}images/hero/hero-radde.png?v=1`
 
 const today = computed(() => new Date().toISOString().split('T')[0])
 
@@ -226,7 +226,7 @@ onMounted(() => {
    на md+ — градиент слева направо: сильное затемнение слева переходит
    в почти прозрачное справа, чтобы пансионат был хорошо виден */
 .hero-overlay {
-  background: rgba(44, 36, 22, 0.7);
+  background: rgba(44, 36, 22, 0.6);
 }
 @media (min-width: 768px) {
   .hero-overlay {

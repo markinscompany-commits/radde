@@ -25,8 +25,10 @@
       <!-- Divider -->
       <div class="h-px bg-white/6 mb-6"></div>
 
-      <!-- Реквизиты исполнителя — требование ст. 9, 10 Закона № 2300-1
-           «О защите прав потребителей» + ПП № 1912 (с 01.03.2026) -->
+      <!-- Реквизиты исполнителя — требование ст. 9, 10 Закона № 2300-1.
+           ЕГРКСМ и тип классификации обязательны по ПП № 1912 (с 01.03.2026)
+           — добавим обратно, когда клиент пройдёт самооценку и получит номер
+           реестровой записи. -->
       <div class="footer-legal">
         <div>
           <span class="footer-legal__label">Исполнитель</span>
@@ -39,14 +41,6 @@
         <div>
           <span class="footer-legal__label">Юр. адрес</span>
           <span class="footer-legal__value">{{ contacts.legal.address }}</span>
-        </div>
-        <div>
-          <span class="footer-legal__label">Реестр ЕГРКСМ</span>
-          <span class="footer-legal__value">{{ contacts.legal.egrksm }}</span>
-        </div>
-        <div>
-          <span class="footer-legal__label">Классификация</span>
-          <span class="footer-legal__value">{{ contacts.legal.classification }}</span>
         </div>
       </div>
 
@@ -110,7 +104,7 @@ const contacts = useContacts()
 }
 @media (min-width: 1024px) {
   .footer-legal {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 .footer-legal > div {

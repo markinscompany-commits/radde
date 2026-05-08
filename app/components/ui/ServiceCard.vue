@@ -29,11 +29,11 @@
               class="font-body text-4 font-600 text-amber-600 hover:text-amber-700 transition-colors bg-transparent border-none cursor-pointer p-0">
         Подробнее
       </button>
-      <button v-if="!service.included"
-              class="font-body text-4 font-600 text-sand-700 bg-sand-100 hover:bg-sand-200 px-3.5 py-1.5 rounded-full border-none cursor-pointer transition-colors"
-              disabled>
-        Добавить к брони
-      </button>
+      <a v-if="!service.included"
+         :href="addToBookingHref"
+         class="font-body text-4 font-600 text-sand-700 bg-sand-100 hover:bg-sand-200 px-3.5 py-1.5 rounded-full transition-colors no-underline">
+        Добавить к&nbsp;брони
+      </a>
     </div>
   </div>
 </template>
@@ -53,13 +53,24 @@ export interface Service {
   format: string
 }
 
-defineProps<{
+const props = defineProps<{
   service: Service
 }>()
 
 defineEmits<{
   open: [service: Service]
 }>()
+
+const base = useRuntimeConfig().app.baseURL || '/'
+// Все «платные» услуги, которые попадают в /booking как extra.
+// Если service.id нет в booking-extras (например, hiking) — просто
+// открываем /booking без выбранной услуги, не ломая интерфейс.
+const bookableExtraIds = new Set(useBookingExtras().map(e => e.id))
+const addToBookingHref = computed(() =>
+  bookableExtraIds.has(props.service.id)
+    ? `${base}booking?extra=${props.service.id}`
+    : `${base}booking`,
+)
 </script>
 
 <style scoped>

@@ -18,7 +18,7 @@
               class="absolute inset-0 w-full h-full object-cover room-photo-transition"
               :class="photoIndex === pi ? 'opacity-100 z-2' : 'opacity-0 z-1'"
             />
-            <div class="absolute top-4 right-4 z-10" @click.stop>
+            <div class="absolute top-4 left-4 z-10" @click.stop>
               <button @click="openLightbox(photoIndex)"
                       class="media-arrow"
                       title="Открыть на весь экран">
