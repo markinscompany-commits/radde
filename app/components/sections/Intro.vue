@@ -33,7 +33,7 @@
               <div class="w-px bg-sand-200"></div>
               <div>
                 <div class="flex items-center gap-2">
-                  <span class="font-display font-500 text-sand-900 leading-none" style="font-size: clamp(2rem, 4vw, 2.8rem)">4.8</span>
+                  <span class="font-display font-500 text-sand-900 leading-none" style="font-size: clamp(2rem, 4vw, 2.8rem)">5.0</span>
                   <div class="flex gap-0.5 mt-1">
                     <span v-for="n in 5" :key="'lg'+n" class="text-4.5" :class="n <= 5 ? 'text-amber-500' : 'text-sand-200'">&#9733;</span>
                   </div>
@@ -131,10 +131,13 @@ const statsRef = ref<HTMLElement>()
 const isVisible = ref(false)
 
 const galleryImages = [
-  `${base}images/hero/hero-2.jpg`,
-  `${base}images/hero/hero-3.jpg`,
-  `${base}images/hero/hero-4.jpg`,
-  `${base}images/hero/hero-1.jpg`,
+  `${base}images/heroblock/1.jpg`,
+  `${base}images/heroblock/2.jpg`,
+  `${base}images/heroblock/3.jpg`,
+  `${base}images/heroblock/4.jpg`,
+  `${base}images/heroblock/5.jpg`,
+  `${base}images/heroblock/6.jpg`,
+  `${base}images/heroblock/7.jpg`,
 ]
 
 const currentSlide = ref(0)

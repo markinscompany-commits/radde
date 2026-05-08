@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UiAppHeader solid @book="showBooking = true" />
+    <UiAppHeader @book="showBooking = true" />
 
     <!-- Hero strip -->
     <section class="relative overflow-hidden bg-sand-900 pt-32 md:pt-40 pb-16 md:pb-20">
@@ -20,7 +20,6 @@
           ]"
           class="mb-6"
         />
-        <span class="text-label text-amber-400 mb-4 block">Блог</span>
         <h1 class="text-h1 text-white mb-5 max-w-200">
           Полезное <span class="section-title-accent">о Радде</span>
         </h1>
@@ -30,44 +29,23 @@
       </div>
     </section>
 
-    <!-- About card + Категории -->
+    <!-- Категории + список -->
     <section class="bg-sand-50 pt-12 md:pt-16">
-      <div class="container">
-        <!-- About: отдельная карточка-баннер -->
-        <a :href="`${base}blog/about`" class="about-card group block mb-10 md:mb-14">
-          <div class="about-card-media">
-            <img :src="`${base}images/hero/hero-1.jpg`" alt="Пансионат Радде" />
-            <div class="about-card-overlay"></div>
+      <!-- Sticky табы: фиксируются под шапкой при скролле -->
+      <div class="cat-bar">
+        <div class="container">
+          <div class="flex items-center gap-2 overflow-x-auto pb-2 -mx-5 px-5 md:mx-0 md:px-0 md:flex-wrap md:overflow-visible">
+            <button
+              v-for="cat in categories"
+              :key="cat"
+              type="button"
+              class="cat-chip"
+              :class="activeCat === cat ? 'cat-chip--active' : ''"
+              @click="activeCat = cat"
+            >
+              {{ cat }}
+            </button>
           </div>
-          <div class="about-card-body">
-            <span class="text-label text-amber-400 mb-3 block">О пансионате</span>
-            <h2 class="text-h2 text-white mb-4">
-              Что такое <span class="section-title-accent">Радде</span>
-            </h2>
-            <p class="text-body-lg text-white/80 mb-6 max-w-130">
-              История пансионата, реликтовый лес на 1700 метрах, философия гостеприимства и подробно о номерах, кухне и активностях.
-            </p>
-            <span class="inline-flex items-center gap-2 font-body font-600 text-amber-400 group-hover:text-white transition-colors">
-              Читать
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-          </div>
-        </a>
-
-        <!-- Категории -->
-        <div class="flex items-center gap-2 overflow-x-auto pb-2 -mx-5 px-5 md:mx-0 md:px-0 md:flex-wrap md:overflow-visible">
-          <button
-            v-for="cat in categories"
-            :key="cat"
-            type="button"
-            class="cat-chip"
-            :class="activeCat === cat ? 'cat-chip--active' : ''"
-            @click="activeCat = cat"
-          >
-            {{ cat }}
-          </button>
         </div>
       </div>
     </section>
@@ -102,20 +80,36 @@ const showBooking = ref(false)
 
 const { posts } = useBlogPosts()
 
-const ALL = 'Все статьи'
-const categories = computed(() => [ALL, ...Array.from(new Set(posts.map((p) => p.category)))])
-const activeCat = ref(ALL)
+// Виртуальный пост «О пансионате» — отдельная страница /blog/about,
+// но в листинге блога показывается как обычная карточка
+const aboutPost = {
+  title: 'О пансионате Радде',
+  excerpt: 'История пансионата, реликтовый лес на 1700 метрах, философия гостеприимства и подробно о номерах, кухне и активностях.',
+  category: 'О пансионате',
+  readTime: '6 мин чтения',
+  image: `${base}images/hero/hero-1.jpg`,
+  href: `${base}blog/about`,
+}
 
-const filtered = computed(() => {
-  const list = activeCat.value === ALL ? posts : posts.filter((p) => p.category === activeCat.value)
-  return list.map((p) => ({
+const allCards = computed(() => [
+  aboutPost,
+  ...posts.map((p) => ({
     title: p.title,
     excerpt: p.excerpt,
     category: p.category,
     readTime: p.readTime,
     image: p.image,
     href: `${base}blog/${p.slug}`,
-  }))
+  })),
+])
+
+const ALL = 'Все статьи'
+const categories = computed(() => [ALL, ...Array.from(new Set(allCards.value.map((p) => p.category)))])
+const activeCat = ref(ALL)
+
+const filtered = computed(() => {
+  if (activeCat.value === ALL) return allCards.value
+  return allCards.value.filter((p) => p.category === activeCat.value)
 })
 
 useHead({
@@ -127,55 +121,20 @@ useHead({
 </script>
 
 <style scoped>
-.about-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  border-radius: 24px;
-  overflow: hidden;
-  text-decoration: none;
-  min-height: 360px;
-  isolation: isolate;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* Sticky-полоска с табами категорий: фиксируется под шапкой при скролле */
+.cat-bar {
+  position: sticky;
+  top: 64px;
+  z-index: 30;
+  background: rgba(250, 246, 240, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #E8DCC8;
+  padding: 10px 0;
 }
-.about-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 40px rgba(44, 36, 22, 0.12);
-}
-
-.about-card-media {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-}
-.about-card-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.about-card:hover .about-card-media img {
-  transform: scale(1.03);
-}
-.about-card-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(44, 36, 22, 0.88) 0%, rgba(44, 36, 22, 0.62) 60%, rgba(44, 36, 22, 0.4) 100%);
-}
-
-.about-card-body {
-  padding: 36px 28px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  flex: 1;
-  min-height: 360px;
-}
-
 @media (min-width: 768px) {
-  .about-card-body {
-    padding: 56px 48px;
-    min-height: 380px;
+  .cat-bar {
+    top: 72px;
+    padding: 14px 0;
   }
 }
 

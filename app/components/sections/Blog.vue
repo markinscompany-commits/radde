@@ -7,7 +7,9 @@
           Полезное <span class="section-title-accent">о Радде</span>
         </template>
         <template #actions>
-          <UiArrowLink :href="`${base}blog`" class="hidden md:inline-flex">Все статьи</UiArrowLink>
+          <div class="hidden md:block">
+            <UiArrowLink :href="`${base}blog`">Все статьи</UiArrowLink>
+          </div>
         </template>
       </UiSectionHeader>
     </div>

@@ -84,6 +84,13 @@ function checkOverflow() {
 }
 
 const photos = [
+  `${base}images/heroblock/1.jpg`,
+  `${base}images/heroblock/2.jpg`,
+  `${base}images/heroblock/3.jpg`,
+  `${base}images/heroblock/4.jpg`,
+  `${base}images/heroblock/5.jpg`,
+  `${base}images/heroblock/6.jpg`,
+  `${base}images/heroblock/7.jpg`,
   `${base}images/hero/hero-1.jpg`,
   `${base}images/hero/hero-2.jpg`,
   `${base}images/usp/food/1.jpg`,
@@ -179,35 +186,14 @@ onMounted(() => {
   }
 }
 
-/* Mobile: горизонтальный скролл с peek справа */
+/* Mobile: 2 колонки masonry, без горизонтального скролла */
 @media (max-width: 767px) {
   .gallery-grid {
-    columns: unset;
-    display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    overflow-y: visible;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    margin-left: -20px;
-    margin-right: -20px;
-    padding: 4px 20px 12px;
-  }
-  .gallery-grid::-webkit-scrollbar {
-    display: none;
+    columns: 2;
+    column-gap: 8px;
   }
   .gallery-item {
-    flex: 0 0 78%;
-    max-width: 320px;
-    margin-bottom: 0;
-    aspect-ratio: 4 / 3;
-    scroll-snap-align: start;
-  }
-  .gallery-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    margin-bottom: 8px;
   }
 }
 

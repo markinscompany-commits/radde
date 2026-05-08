@@ -1,18 +1,22 @@
 ﻿<template>
   <section class="hero-section relative overflow-hidden bg-sand-900">
-    <!-- Фоновая фотография -->
+    <!-- Фоновая фотография: object-position сдвигает фокус кадра влево
+         (чтобы при кадрировании справа пансионат остался виден целиком) -->
     <img
       :src="heroImage"
       alt="Пансионат Радде — горы Дагестана"
-      class="absolute inset-0 w-full h-full object-cover"
+      class="absolute inset-0 w-full h-full object-cover hero-bg"
       fetchpriority="high"
     />
-    <div class="absolute inset-0 bg-sand-900/70"></div>
+    <!-- Затемнение градиентом: слева тёмное (для читаемости текста),
+         справа прозрачное (чтобы пансионат был хорошо виден).
+         На мобильной — равномерное затемнение, текст по центру -->
+    <div class="absolute inset-0 hero-overlay"></div>
 
-    <!-- Заголовок: выше на мобильной (чтобы не уходил за форму бронирования), по центру на md+ -->
-    <div class="hero-title-wrap absolute inset-0 z-10 flex items-start md:items-center justify-center text-center px-5 md:pt-0">
-      <h1 ref="titleRef" class="font-display font-500 text-white hero-hidden max-w-1100px"
-          style="font-size: clamp(2.2rem, 6vw, 4.4rem); line-height: 1.05">
+    <!-- Заголовок: на md+ выровнен по левой стороне, на мобильной — по центру сверху -->
+    <div class="hero-title-wrap absolute inset-0 z-10 flex items-start md:items-center justify-center md:justify-start text-center md:text-left px-5 md:pt-0">
+      <h1 ref="titleRef" class="font-display font-500 text-white hero-hidden md:max-w-680px md:ml-8 md:mr-auto lg:ml-16"
+          style="font-size: clamp(2.2rem, 5.6vw, 4.2rem); line-height: 1.05">
         Пансионат Радде<br><span class="font-accent italic font-500 text-sand-300 text-[1.2em]">реликтовый лес, горы и&nbsp;гармония</span>
       </h1>
     </div>
@@ -64,7 +68,7 @@
               <button
                 @click="handleBooking"
                 class="w-full bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white font-body font-600 text-4 rounded-2 py-3.5 transition-all duration-300 shadow-lg shadow-amber-500/20 cursor-pointer border-none">
-                Забронировать
+                Найти номер
               </button>
             </div>
           </div>
@@ -205,6 +209,35 @@ onMounted(() => {
 .hero-hidden {
   opacity: 0;
   transform: translateY(20px);
+}
+
+/* Hero фон: на md+ кадр сдвигаем влево (object-position) — чтобы при
+   кадрировании по правой стороне пансионат оставался хорошо виден. */
+.hero-bg {
+  object-position: 30% center;
+}
+@media (min-width: 768px) {
+  .hero-bg {
+    object-position: 18% center;
+  }
+}
+
+/* Затемнение: на mobile — равномерное (текст по центру);
+   на md+ — градиент слева направо: сильное затемнение слева переходит
+   в почти прозрачное справа, чтобы пансионат был хорошо виден */
+.hero-overlay {
+  background: rgba(44, 36, 22, 0.7);
+}
+@media (min-width: 768px) {
+  .hero-overlay {
+    background: linear-gradient(
+      to right,
+      rgba(44, 36, 22, 0.78) 0%,
+      rgba(44, 36, 22, 0.65) 30%,
+      rgba(44, 36, 22, 0.25) 60%,
+      rgba(44, 36, 22, 0.05) 100%
+    );
+  }
 }
 
 /* Высота Hero: фиксируем через CSS var --app-height, которую

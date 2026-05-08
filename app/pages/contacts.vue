@@ -21,7 +21,6 @@
           class="mb-6"
         />
         <div class="max-w-180">
-          <span class="text-label text-amber-400 mb-4 block">Контакты</span>
           <h1 class="text-h1 text-white">
             Свяжитесь <span class="section-title-accent text-sand-300">с пансионатом</span>
           </h1>
@@ -65,7 +64,7 @@
                 Instagram*
               </a>
             </div>
-            <span class="text-small text-sand-700 block mt-3">*Meta признана экстремистской организацией и запрещена на территории России</span>
+            <span class="text-small text-sand-700 block mt-3">*Meta признана экстремистской организацией и&nbsp;запрещена на&nbsp;территории России</span>
           </div>
 
           <!-- Телефон -->

@@ -23,7 +23,6 @@
           />
         </div>
         <div class="max-w-160 mx-auto text-center">
-          <span class="text-label text-amber-400 mb-4 block">Бронирование</span>
           <h1 class="text-h1 text-white mb-4">
             Заявка <span class="section-title-accent text-sand-300">отправлена</span>
           </h1>

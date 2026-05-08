@@ -17,6 +17,9 @@ export default defineNuxtConfig({
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'description', content: 'Пансионат Радде — отдых в горах Дагестана на высоте 1600м в реликтовом лесу. Бронирование номеров, питание, экскурсии.' },
+        // Возрастная категория сайта (добровольно, 436-ФЗ): пансионат не СМИ,
+        // но мета-тег rating помогает родительским фильтрам и поисковикам
+        { name: 'rating', content: 'general' },
         { property: 'og:title', content: 'Радде — Пансионат в горах Дагестана' },
         { property: 'og:description', content: 'Отдых в горах на высоте 1600м в реликтовом лесу Гуниба' },
         { property: 'og:type', content: 'website' },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UiAppHeader solid @book="showBooking = true" />
+    <UiAppHeader @book="showBooking = true" />
 
     <!-- Hero -->
     <section class="relative overflow-hidden bg-sand-900 pt-32 md:pt-40 pb-16 md:pb-24">
@@ -192,7 +192,7 @@ const showBooking = ref(false)
 const stats = [
   { value: '1700', label: 'метров над уровнем моря' },
   { value: '12', label: 'уютных номеров' },
-  { value: '4.8', label: 'рейтинг на Яндекс Картах' },
+  { value: '5.0', label: 'рейтинг на Яндекс Картах' },
   { value: '10', label: 'минут до центра Гуниба' },
 ]
 

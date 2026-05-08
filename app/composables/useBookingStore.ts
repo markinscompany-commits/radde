@@ -30,6 +30,7 @@ export interface BookingGuest {
   lastName: string
   email: string
   phone: string
+  city: string
 }
 
 export interface BookingState {
@@ -64,7 +65,7 @@ function defaultState(): BookingState {
     children: 0,
     roomId: null,
     extras: [],
-    guest: { firstName: '', lastName: '', email: '', phone: '' },
+    guest: { firstName: '', lastName: '', email: '', phone: '', city: '' },
     comment: '',
   }
 }

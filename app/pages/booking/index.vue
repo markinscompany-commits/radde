@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UiAppHeader solid @book="scrollToTop" />
+    <UiAppHeader @book="scrollToTop" />
 
     <!-- Hero strip -->
     <section class="relative overflow-hidden bg-sand-900 pt-32 md:pt-36 pb-8 md:pb-10">
@@ -16,14 +16,11 @@
           ]"
           class="mb-5"
         />
-        <div class="flex items-baseline justify-between gap-6 flex-wrap">
-          <div>
-            <span class="text-label text-amber-400 mb-3 block">Бронирование</span>
-            <h1 class="text-h1 text-white">
-              Ваш <span class="section-title-accent text-sand-300">отдых</span>
-            </h1>
-          </div>
-          <p class="font-body text-4 text-white/70 max-w-110">
+        <div class="flex items-end justify-between gap-6 flex-wrap">
+          <h1 class="text-h1 text-white">
+            Ваш <span class="section-title-accent text-sand-300">отдых</span>
+          </h1>
+          <p class="font-body text-4 text-white/70 max-w-110 mb-2">
             Соберите бронь — менеджер свяжется с&nbsp;вами в&nbsp;течение 15&nbsp;минут, чтобы подтвердить детали.
           </p>
         </div>
@@ -33,13 +30,13 @@
     <!-- Checkout layout -->
     <section class="bg-sand-50 py-10 md:py-14">
       <div class="container">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
 
           <!-- LEFT: form sections -->
-          <div class="lg:col-span-8 space-y-5 md:space-y-6">
+          <div class="md:col-span-7 lg:col-span-8 space-y-5 md:space-y-6">
 
             <!-- ============ 1. DATES + GUESTS ============ -->
-            <div class="checkout-card">
+            <div ref="datesSectionRef" class="checkout-card">
               <div class="checkout-head">
                 <span class="checkout-num">1</span>
                 <h2 class="checkout-title">Даты и&nbsp;гости</h2>
@@ -77,7 +74,7 @@
             </div>
 
             <!-- ============ 2. ROOM ============ -->
-            <div class="checkout-card">
+            <div ref="roomSectionRef" class="checkout-card">
               <div class="checkout-head">
                 <span class="checkout-num">2</span>
                 <h2 class="checkout-title">Выберите <span class="section-title-accent text-amber-600">номер</span></h2>
@@ -112,7 +109,11 @@
                     <span v-if="state.roomId === r.id" class="room-pick__check">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12L10 17L19 8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </span>
-                    <span class="room-pick__avail" :class="r.availableCount <= 2 ? 'room-pick__avail--low' : ''">
+                    <span
+                      class="room-pick__avail"
+                      :class="r.availableCount <= 2 ? 'room-pick__avail--low' : ''"
+                      :title="`На выбранные даты в категории «${r.name}» свободно ${r.availableCount} из ${r.totalCount} номеров. После подключения Bnovo число будет обновляться автоматически.`"
+                    >
                       <svg v-if="r.availableCount <= 2" width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v3.5M8 10.5h.007" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                       Свободно: {{ r.availableCount }} из {{ r.totalCount }}
                     </span>
@@ -159,10 +160,13 @@
 
             <!-- ============ 3. EXTRAS ============ -->
             <div class="checkout-card">
-              <div class="checkout-head">
+              <div class="checkout-head checkout-head--with-optional">
                 <span class="checkout-num">3</span>
-                <h2 class="checkout-title">Дополнительные <span class="section-title-accent text-amber-600">услуги</span></h2>
-                <span class="checkout-optional">необязательно</span>
+                <div class="flex-1 min-w-0">
+                  <h2 class="checkout-title">Дополнительные <span class="section-title-accent text-amber-600">услуги</span></h2>
+                  <span class="checkout-optional checkout-optional--mobile">необязательно</span>
+                </div>
+                <span class="checkout-optional checkout-optional--desktop">необязательно</span>
               </div>
               <p class="text-3.75 text-sand-700 mb-4 leading-snug">Завтрак, Wi-Fi, парковка и&nbsp;горный воздух уже включены — добавьте только то, что захотите попробовать сверху.</p>
 
@@ -180,7 +184,7 @@
                 </button>
               </div>
 
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div ref="extrasGridRef" class="extras-grid">
                 <div
                   v-for="extra in visibleExtras"
                   :key="extra.id"
@@ -191,56 +195,76 @@
                   <div class="extra-card__body">
                     <h4 class="font-display font-500 text-sand-900 text-4 mb-1">{{ extra.title }}</h4>
                     <p class="text-3.5 text-sand-700 leading-snug mb-3 line-clamp-2">{{ extra.description }}</p>
-                    <div class="flex items-end justify-between gap-2 flex-wrap">
-                      <div>
-                        <span class="font-display font-500 text-sand-900 text-4">{{ extra.price }}</span>
-                        <span class="text-3.25 text-sand-600 ml-1">{{ extra.unitLabel }}</span>
+                    <div class="extra-card__price-row">
+                      <span class="font-display font-500 text-sand-900 text-4">{{ extra.price }}</span>
+                      <span class="text-3.25 text-sand-600 ml-1">{{ extra.unitLabel }}</span>
+                    </div>
+                    <div class="extra-card__actions">
+                      <button
+                        v-if="extra.fullDescription"
+                        type="button"
+                        class="extra-card__more"
+                        @click="detailExtra = extra"
+                      >Подробнее</button>
+                      <span v-else></span>
+                      <div v-if="getExtraCount(extra.id) > 0" class="counter-light counter-light--sm">
+                        <button type="button" @click="setExtraCount(extra.id, getExtraCount(extra.id) - 1)" class="counter-light__btn">&minus;</button>
+                        <span class="counter-light__val">{{ getExtraCount(extra.id) }}</span>
+                        <button type="button" @click="setExtraCount(extra.id, getExtraCount(extra.id) + 1)" class="counter-light__btn">+</button>
                       </div>
-                      <div class="flex items-center gap-2">
-                        <button
-                          v-if="extra.fullDescription"
-                          type="button"
-                          class="extra-card__more"
-                          @click="detailExtra = extra"
-                        >Подробнее</button>
-                        <div v-if="getExtraCount(extra.id) > 0" class="counter-light counter-light--sm">
-                          <button type="button" @click="setExtraCount(extra.id, getExtraCount(extra.id) - 1)" class="counter-light__btn">&minus;</button>
-                          <span class="counter-light__val">{{ getExtraCount(extra.id) }}</span>
-                          <button type="button" @click="setExtraCount(extra.id, getExtraCount(extra.id) + 1)" class="counter-light__btn">+</button>
-                        </div>
-                        <button v-else type="button" class="extra-card__add" @click="setExtraCount(extra.id, 1)">
-                          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" class="inline-block"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                          Добавить
-                        </button>
-                      </div>
+                      <button v-else type="button" class="extra-card__add" @click="setExtraCount(extra.id, 1)">
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" class="inline-block"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        Добавить
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
+
+              <!-- Mobile scroll hint -->
+              <div v-show="extrasShowHint" class="md:hidden flex justify-center mt-3">
+                <UiScrollHint>Скролльте, чтобы увидеть все услуги</UiScrollHint>
+              </div>
             </div>
 
             <!-- ============ 4. CONTACTS ============ -->
-            <div class="checkout-card">
+            <div ref="contactsSectionRef" class="checkout-card">
               <div class="checkout-head">
                 <span class="checkout-num">4</span>
                 <h2 class="checkout-title">Контакты</h2>
               </div>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                <div>
-                  <label class="label-light">Имя <span class="text-amber-600">*</span></label>
-                  <input v-model="state.guest.firstName" type="text" placeholder="Имя" class="input-light" />
-                </div>
-                <div>
-                  <label class="label-light">Фамилия</label>
-                  <input v-model="state.guest.lastName" type="text" placeholder="Фамилия" class="input-light" />
+                <div class="md:col-span-2">
+                  <label class="label-light">Имя и&nbsp;фамилия <span class="text-amber-600">*</span></label>
+                  <input
+                    ref="nameInputRef"
+                    v-model="state.guest.firstName"
+                    type="text"
+                    placeholder="Например, Иван Петров"
+                    class="input-light"
+                    :class="{ 'input-light--error': errorField === 'name' }"
+                  />
                 </div>
                 <div>
                   <label class="label-light">Телефон <span class="text-amber-600">*</span></label>
-                  <input :value="state.guest.phone" @input="handlePhone" @keydown="phoneMaskKeydown" type="tel" placeholder="+7 (900) 000-00-00" class="input-light" />
+                  <input
+                    ref="phoneInputRef"
+                    :value="state.guest.phone"
+                    @input="handlePhone"
+                    @keydown="phoneMaskKeydown"
+                    type="tel"
+                    placeholder="+7 (900) 000-00-00"
+                    class="input-light"
+                    :class="{ 'input-light--error': errorField === 'phone' }"
+                  />
                 </div>
                 <div>
                   <label class="label-light">Email</label>
                   <input v-model="state.guest.email" type="email" placeholder="you@example.com" class="input-light" />
+                </div>
+                <div class="md:col-span-2">
+                  <label class="label-light">Город <span class="text-sand-500">(откуда вы)</span></label>
+                  <input v-model="state.guest.city" type="text" placeholder="Москва" class="input-light" />
                 </div>
                 <div class="md:col-span-2">
                   <label class="label-light">Пожелания и&nbsp;комментарий <span class="text-sand-500">(необязательно)</span></label>
@@ -248,10 +272,37 @@
                 </div>
               </div>
             </div>
+
+            <!-- ============ Условия бронирования и отмены ============
+                 Требование Постановления Правительства РФ № 1912 (с 01.03.2026):
+                 раскрыть на сайте порядок отмены, время заезда/выезда, оплату.
+                 Без эквайринга отдельный «Договор-оферта» не нужен. -->
+            <div class="rules-card">
+              <h3 class="rules-card__title">Условия бронирования</h3>
+              <ul class="rules-list">
+                <li>
+                  <strong>Заезд</strong> с&nbsp;14:00, <strong>выезд</strong> до&nbsp;12:00. Ранний заезд и&nbsp;поздний выезд&nbsp;— по&nbsp;согласованию и&nbsp;при&nbsp;наличии номеров.
+                </li>
+                <li>
+                  <strong>Оплата</strong> наличными при&nbsp;заселении или&nbsp;банковским переводом по&nbsp;реквизитам пансионата. Все цены&nbsp;— в&nbsp;рублях.
+                </li>
+                <li>
+                  <strong>Отмена брони:</strong>
+                  <span class="rules-cancel">
+                    <span><b>&gt; 7&nbsp;дней</b> до&nbsp;заезда — бесплатно</span>
+                    <span><b>3–7&nbsp;дней</b> — удерживается стоимость первой ночи</span>
+                    <span><b>&lt; 3&nbsp;дней</b> или&nbsp;неявка — без&nbsp;возврата</span>
+                  </span>
+                </li>
+                <li>
+                  При&nbsp;форс-мажоре (закрытие дорог, отмена авиарейсов, болезнь с&nbsp;подтверждением) условия пересматриваем индивидуально.
+                </li>
+              </ul>
+            </div>
           </div>
 
           <!-- RIGHT: sticky summary -->
-          <aside class="lg:col-span-4 lg:sticky lg:top-24 lg:self-start">
+          <aside class="md:col-span-5 lg:col-span-4 md:sticky md:top-24 md:self-start">
             <div class="summary-card">
               <h3 class="summary-card__title">Ваша бронь</h3>
 
@@ -305,6 +356,22 @@
                 Окончательная стоимость подтверждается менеджером после проверки доступности номера на&nbsp;выбранные даты.
               </p>
 
+              <!-- Чекбокс согласия на обработку ПДн — ст. 9 152-ФЗ:
+                   отдельный нередактируемый чекбокс, не предустановлен -->
+              <label class="consent-row">
+                <input
+                  ref="consentInputRef"
+                  v-model="consentGiven"
+                  type="checkbox"
+                  class="consent-checkbox"
+                  :class="{ 'consent-checkbox--error': errorField === 'consent' }"
+                />
+                <span class="consent-text">
+                  Я&nbsp;даю согласие на&nbsp;обработку персональных данных
+                  на&nbsp;условиях <a :href="`${base}privacy`" target="_blank" rel="noopener" class="consent-link">политики конфиденциальности</a>
+                </span>
+              </label>
+
               <button
                 type="button"
                 class="btn-primary w-full py-3.5 text-4"
@@ -314,16 +381,11 @@
                 {{ submitting ? 'Отправляем…' : 'Отправить заявку' }}
               </button>
 
-              <p class="text-3.25 text-sand-700 mt-3 leading-snug text-center">
-                Нажимая «Отправить», вы соглашаетесь с
-                <a :href="`${base}privacy`" class="text-sand-900 underline underline-offset-2 hover:text-amber-600 transition-colors">политикой конфиденциальности</a>
-              </p>
-
               <button
                 v-if="hasAnySelection"
                 type="button"
                 class="reset-link"
-                @click="resetAll"
+                @click="confirmReset = true"
               >
                 Очистить и&nbsp;начать заново
               </button>
@@ -334,15 +396,21 @@
     </section>
 
     <!-- Mobile sticky bottom bar -->
-    <div v-if="totals.total > 0" class="mobile-bar lg:hidden">
+    <div v-if="totals.total > 0" class="mobile-bar md:hidden">
       <div class="mobile-bar__inner">
-        <div>
+        <div class="mobile-bar__total">
           <div class="text-3.25 text-sand-600 leading-tight">Итого{{ nights > 0 ? ` за ${nights} ${nightsWord}` : '' }}</div>
           <div class="font-display font-500 text-sand-900 text-5.5 leading-tight">{{ totals.total.toLocaleString('ru-RU') }} ₽</div>
         </div>
-        <button type="button" class="btn-primary !py-3 !px-5" :disabled="submitting" @click="submit">
-          {{ submitting ? 'Отправляем…' : 'Отправить' }}
-        </button>
+        <div class="mobile-bar__action">
+          <button type="button" class="btn-primary w-full !py-3 !px-5" :disabled="submitting" @click="submit">
+            {{ submitting ? 'Отправляем…' : 'Отправить заявку' }}
+          </button>
+          <p class="mobile-bar__consent">
+            Нажимая «Отправить заявку», вы соглашаетесь с
+            <a :href="`${base}privacy`" class="underline underline-offset-2">политикой конфиденциальности</a>
+          </p>
+        </div>
       </div>
     </div>
 
@@ -384,6 +452,26 @@
               >
                 {{ getExtraCount(detailExtra.id) > 0 ? 'Уже добавлено' : 'Добавить к брони' }}
               </button>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
+
+    <!-- Confirm reset dialog -->
+    <Teleport to="body">
+      <Transition name="modal">
+        <div v-if="confirmReset" class="fixed inset-0 z-100 flex items-center justify-center p-4 bg-sand-900/70 backdrop-blur-sm" @click.self="confirmReset = false">
+          <div class="relative bg-sand-50 rounded-3 w-full max-w-110 shadow-2xl modal-body" data-lenis-prevent>
+            <div class="px-7 md:px-9 pt-7 pb-3">
+              <h3 class="font-display font-500 text-sand-900 mb-3" style="font-size: clamp(1.3rem, 2.5vw, 1.6rem)">Очистить заявку?</h3>
+              <p class="font-body text-4 text-sand-700 leading-relaxed">
+                Все выбранные даты, номер, услуги и&nbsp;контактные данные будут удалены. Это действие нельзя отменить.
+              </p>
+            </div>
+            <div class="px-7 md:px-9 py-5 flex items-center justify-end gap-3">
+              <button type="button" class="btn-secondary" @click="confirmReset = false">Нет, отмена</button>
+              <button type="button" class="btn-danger" @click="confirmResetYes">Да, очистить</button>
             </div>
           </div>
         </div>
@@ -465,7 +553,6 @@ const extraCategories = [
   { id: 'all', label: 'Все' },
   { id: 'food', label: 'Питание' },
   { id: 'active', label: 'Активный отдых' },
-  { id: 'wellness', label: 'Оздоровление' },
   { id: 'service', label: 'Сервис' },
 ] as const
 type ExtraCatId = typeof extraCategories[number]['id']
@@ -571,34 +658,101 @@ const hasAnySelection = computed(() =>
   || state.value.comment,
 )
 
+// ----- Mobile horizontal scroll hint для услуг -----
+const extrasGridRef = ref<HTMLElement>()
+const extrasIsMobile = ref(false)
+const extrasHasOverflow = ref(false)
+const extrasShowHint = computed(() => extrasIsMobile.value && extrasHasOverflow.value)
+
+function checkExtrasOverflow() {
+  if (!extrasGridRef.value) return
+  extrasHasOverflow.value = extrasGridRef.value.scrollWidth > extrasGridRef.value.clientWidth + 1
+}
+
+watch([extraTab, () => visibleExtras.value.length, extrasIsMobile], () => {
+  nextTick(checkExtrasOverflow)
+})
+
+onMounted(() => {
+  if (!import.meta.client) return
+  const mq = window.matchMedia('(max-width: 767px)')
+  extrasIsMobile.value = mq.matches
+  const onMqChange = (e: MediaQueryListEvent) => { extrasIsMobile.value = e.matches }
+  mq.addEventListener('change', onMqChange)
+  onUnmounted(() => mq.removeEventListener('change', onMqChange))
+  nextTick(checkExtrasOverflow)
+  const ro = new ResizeObserver(() => checkExtrasOverflow())
+  if (extrasGridRef.value) ro.observe(extrasGridRef.value)
+  onUnmounted(() => ro.disconnect())
+})
+
+// ----- Refs для скролла к ошибочным полям -----
+const datesSectionRef = ref<HTMLElement>()
+const roomSectionRef = ref<HTMLElement>()
+const contactsSectionRef = ref<HTMLElement>()
+const nameInputRef = ref<HTMLInputElement>()
+const phoneInputRef = ref<HTMLInputElement>()
+const errorField = ref<'name' | 'phone' | 'consent' | null>(null)
+const confirmReset = ref(false)
+const consentInputRef = ref<HTMLInputElement>()
+const consentGiven = ref(false)
+
+function scrollToEl(el: HTMLElement | undefined, focusEl?: HTMLElement) {
+  if (!import.meta.client || !el) return
+  const lenis = useLenis().instance()
+  if (lenis) lenis.scrollTo(el, { offset: -90, duration: 0.6 })
+  else el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  if (focusEl) setTimeout(() => focusEl.focus({ preventScroll: true }), 600)
+}
+
 // ----- Submit -----
 const submitting = ref(false)
 
 async function submit() {
+  errorField.value = null
+
   if (!state.value.arrival || !state.value.departure || nights.value <= 0) {
     toast.error('Укажите даты заезда и выезда')
-    scrollToTop()
+    scrollToEl(datesSectionRef.value)
     return
   }
   if (!state.value.roomId) {
     toast.error('Выберите номер')
-    scrollToSection('room')
+    scrollToEl(roomSectionRef.value)
     return
   }
   if (!state.value.guest.firstName.trim()) {
-    toast.error('Укажите имя')
-    scrollToSection('contacts')
+    toast.error('Укажите имя и фамилию')
+    errorField.value = 'name'
+    scrollToEl(contactsSectionRef.value, nameInputRef.value)
     return
   }
   if (state.value.guest.phone.replace(/\D/g, '').length < 11) {
     toast.error('Укажите корректный телефон')
-    scrollToSection('contacts')
+    errorField.value = 'phone'
+    scrollToEl(contactsSectionRef.value, phoneInputRef.value)
+    return
+  }
+  if (!consentGiven.value) {
+    toast.error('Подтвердите согласие на обработку персональных данных')
+    errorField.value = 'consent'
+    if (consentInputRef.value) consentInputRef.value.focus()
     return
   }
 
   submitting.value = true
 
   const room = selectedAvailable.value
+  // Поле «Имя и фамилия» — одно поле, разбираем на first_name / last_name
+  // (Bnovo и менеджер хотят раздельно: «Иван Петров» → «Иван» / «Петров»).
+  const fullName = state.value.guest.firstName.trim().replace(/\s+/g, ' ')
+  const [firstNamePart, ...rest] = fullName.split(' ')
+  const lastNamePart = rest.join(' ')
+  // Город не у Bnovo, но менеджеру важно знать откуда гость — добавляем
+  // в начало комментария
+  const city = state.value.guest.city.trim()
+  const fullComment = [city ? `Город: ${city}` : '', state.value.comment].filter(Boolean).join('\n').trim()
+
   const payload = {
     arrival: state.value.arrival,
     departure: state.value.departure,
@@ -608,16 +762,17 @@ async function submit() {
       guests: [{ adults: state.value.adults, children: state.value.children }],
     }],
     guest: {
-      first_name: state.value.guest.firstName,
-      last_name: state.value.guest.lastName,
+      first_name: firstNamePart || fullName,
+      last_name: lastNamePart,
       email: state.value.guest.email,
       phone: state.value.guest.phone,
+      city,
     },
     extras: state.value.extras.map(sel => {
       const meta = extras.find(e => e.id === sel.id)
       return { id: meta?.bnovoServiceId ?? null, slug: sel.id, count: sel.count }
     }),
-    comment: state.value.comment,
+    comment: fullComment,
     total_estimate: totals.value.total,
   }
   // eslint-disable-next-line no-console
@@ -646,6 +801,11 @@ function resetAll() {
   scrollToTop()
 }
 
+function confirmResetYes() {
+  confirmReset.value = false
+  resetAll()
+}
+
 function scrollToTop() {
   if (!import.meta.client) return
   const lenis = useLenis().instance()
@@ -653,10 +813,6 @@ function scrollToTop() {
   else window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
-function scrollToSection(_id: 'room' | 'contacts') {
-  // scroll к началу формы — секции рядом, в одном экране
-  scrollToTop()
-}
 </script>
 
 <style scoped>
@@ -709,6 +865,14 @@ function scrollToSection(_id: 'room' | 'contacts') {
   color: #9A8B73;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+}
+/* Mobile/desktop variants для лейбла «необязательно».
+   На мобильной показываем под заголовком, на md+ — справа от него. */
+.checkout-optional--mobile { display: inline-block; margin-top: 4px; }
+.checkout-optional--desktop { display: none; }
+@media (min-width: 768px) {
+  .checkout-optional--mobile { display: none; }
+  .checkout-optional--desktop { display: inline-block; flex-shrink: 0; }
 }
 .checkout-hint {
   display: flex;
@@ -946,6 +1110,40 @@ function scrollToSection(_id: 'room' | 'contacts') {
   font-weight: 700;
 }
 
+/* ======== EXTRAS GRID: desktop сетка / mobile горизонтальный скролл ======== */
+.extras-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 768px) {
+  .extras-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+/* Mobile: edge-to-edge горизонтальный скролл (как на главной в Services) */
+@media (max-width: 767px) {
+  .extras-grid {
+    display: flex;
+    grid-template-columns: unset;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-left: -16px;
+    margin-right: -16px;
+    padding: 4px 16px 12px;
+  }
+  .extras-grid::-webkit-scrollbar { display: none; }
+  .extras-grid > .extra-card {
+    flex: 0 0 78%;
+    max-width: 320px;
+    scroll-snap-align: start;
+  }
+}
+
 /* ======== EXTRA CARDS (compact) ======== */
 .extra-card {
   display: flex;
@@ -977,6 +1175,18 @@ function scrollToSection(_id: 'room' | 'contacts') {
   display: flex;
   flex-direction: column;
   min-width: 0;
+}
+/* Цена в отдельной строке, под описанием */
+.extra-card__price-row {
+  margin-bottom: 10px;
+}
+/* Подробнее — слева, Добавить — справа (Mark: «прижать к правому углу»). */
+.extra-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
 }
 .extra-card__more {
   background: transparent;
@@ -1117,11 +1327,175 @@ function scrollToSection(_id: 'room' | 'contacts') {
 }
 .mobile-bar__inner {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-between;
   gap: 12px;
   max-width: 600px;
   margin: 0 auto;
+}
+.mobile-bar__total {
+  flex-shrink: 0;
+  align-self: center;
+}
+.mobile-bar__action {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  min-width: 0;
+}
+.mobile-bar__consent {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 10.5px;
+  line-height: 1.3;
+  color: #9A8B73;
+  text-align: right;
+  margin: 0;
+}
+.mobile-bar__consent a {
+  color: #6B5B4A;
+}
+
+/* Блок «Условия бронирования» — ПП № 1912 с 01.03.2026 */
+.rules-card {
+  background: #FAF6F0;
+  border: 1px solid #E8DCC8;
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+@media (min-width: 768px) {
+  .rules-card { padding: 22px 26px; }
+}
+.rules-card__title {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+  font-size: 17px;
+  color: #2C2416;
+  margin: 0 0 12px;
+}
+.rules-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #4A3F2E;
+}
+.rules-list li {
+  position: relative;
+  padding-left: 18px;
+}
+.rules-list li::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 0.55em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #C17F3E;
+}
+.rules-list strong {
+  font-weight: 600;
+  color: #2C2416;
+}
+.rules-cancel {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 4px;
+}
+.rules-cancel b {
+  font-weight: 600;
+  color: #2C2416;
+}
+
+/* Чекбокс согласия на ПДн — ст. 9 152-ФЗ */
+.consent-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 10px 0 14px;
+  cursor: pointer;
+  user-select: none;
+}
+.consent-checkbox {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin: 1px 0 0;
+  appearance: none;
+  background: white;
+  border: 1.5px solid #C7B89C;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.2s, background 0.2s;
+}
+.consent-checkbox:hover { border-color: #C17F3E; }
+.consent-checkbox:checked {
+  background: #C17F3E;
+  border-color: #C17F3E;
+}
+.consent-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(45deg);
+}
+.consent-checkbox--error {
+  border-color: #B5483A;
+  box-shadow: 0 0 0 3px rgba(181, 72, 58, 0.2);
+}
+.consent-text {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: #6B5B4A;
+}
+.consent-link {
+  color: #2C2416;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s;
+}
+.consent-link:hover { color: #C17F3E; }
+
+/* Подсветка ошибочных полей формы */
+.input-light--error {
+  border-color: #C17F3E !important;
+  box-shadow: 0 0 0 3px rgba(193, 127, 62, 0.18);
+}
+
+/* Кнопка опасного действия (Да, очистить) */
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: white;
+  background: #B5483A;
+  border: 1.5px solid #B5483A;
+  border-radius: 10px;
+  padding: 9px 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-danger:hover {
+  background: #9C3B2E;
+  border-color: #9C3B2E;
 }
 
 /* ======== MODAL ======== */

@@ -12,6 +12,10 @@
 <script setup lang="ts">
 import { h } from 'vue'
 
+// Instagram* указан как информационная ссылка (не реклама, без призыва).
+// По разъяснениям ФАС: указание ссылки на ресурс Meta допустимо при условии,
+// что нет рекламы услуг через эту ссылку и есть пометка о статусе Meta.
+// Виджеты ленты, пиксели Meta и кнопки «Подписаться» — запрещены.
 const props = withDefaults(defineProps<{
   size?: 'sm' | 'md'
   channels?: ('whatsapp' | 'telegram' | 'max' | 'instagram')[]

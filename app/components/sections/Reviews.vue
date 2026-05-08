@@ -165,13 +165,13 @@ const gap = 20
 // loopedReviews and cloneOffset are defined after the reviews array below
 
 const yandexRating = reactive({
-  score: 4.8,
+  score: 5.0,
   count: 47,
   reviewUrl: 'https://yandex.com/maps/-/CPSTAYNj',
 })
 
 const gisRating = reactive({
-  score: 4.7,
+  score: 4.0,
   count: 32,
   reviewUrl: 'https://go.2gis.com/S1iUK',
 })

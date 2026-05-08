@@ -62,7 +62,7 @@
         {{ contacts.phone.display }}
       </a>
       <a :href="`${base}booking`" class="btn-primary px-5 py-2.5">
-        Забронировать
+        Найти номер
       </a>
     </div>
 
@@ -89,12 +89,38 @@
   <Transition name="slide">
     <div v-if="mobileOpen" class="fixed top-14 md:top-15 left-0 right-0 bottom-0 z-60 lg:hidden bg-sand-900/95 backdrop-blur-md border-t border-white/10 px-5 pt-5 pb-8 overflow-y-auto" data-lenis-prevent>
       <nav class="flex flex-col gap-1 mb-6">
-        <a v-for="link in [...mainNav, ...moreNav]" :key="link.href"
+        <a v-for="link in mainNav" :key="link.href"
            :href="link.href"
            @click.prevent="smoothScroll(link.href); closeMobile()"
            class="mobile-link">
           {{ link.label }}
         </a>
+
+        <!-- Кнопка «Ещё» с раскрытием — как на десктопе -->
+        <button
+          type="button"
+          class="mobile-link mobile-more-toggle"
+          :class="mobileMoreOpen ? 'mobile-more-toggle--open' : ''"
+          @click="mobileMoreOpen = !mobileMoreOpen"
+        >
+          <span>Ещё</span>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" class="transition-transform duration-200" :class="mobileMoreOpen ? 'rotate-180' : ''">
+            <path d="M2 5l5 4l5 -4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <Transition name="more-collapse">
+          <div v-if="mobileMoreOpen" class="mobile-more-list" data-lenis-prevent>
+            <a
+              v-for="link in moreNav"
+              :key="link.href"
+              :href="link.href"
+              @click.prevent="smoothScroll(link.href); closeMobile()"
+              class="mobile-sublink"
+            >
+              {{ link.label }}
+            </a>
+          </div>
+        </Transition>
       </nav>
 
       <!-- Phone -->
@@ -105,14 +131,14 @@
 
       <!-- CTA -->
       <a :href="`${base}booking`" @click="closeMobile()" class="btn-primary w-full py-3.5 mb-6 text-center">
-        Забронировать
+        Найти номер
       </a>
 
-      <!-- Social icons -->
+      <!-- Соцсети и мессенджеры -->
       <div class="pt-5 border-t border-white/10">
         <span class="block text-small text-white/55 mb-3">Мы в соцсетях и мессенджерах</span>
         <UiSocialIcons size="sm" />
-        <span class="block text-small text-white/45 mt-3">*Meta признана экстремистской организацией и запрещена на территории России</span>
+        <span class="block text-small text-white/45 mt-3">*Meta признана экстремистской организацией и&nbsp;запрещена на&nbsp;территории России</span>
       </div>
     </div>
   </Transition>
@@ -158,6 +184,7 @@ const moreNav: NavLink[] = [
 ]
 
 const mobileOpen = ref(false)
+const mobileMoreOpen = ref(false)
 const moreOpen = ref(false)
 const scrolled = ref(false)
 const visible = ref(false)
@@ -198,6 +225,7 @@ function toggleMobile() {
 
 function closeMobile() {
   mobileOpen.value = false
+  mobileMoreOpen.value = false
   document.body.style.overflow = ''
 }
 
@@ -300,6 +328,60 @@ onMounted(() => {
 }
 .mobile-link--active {
   color: #D4944A !important;
+}
+
+/* Кнопка «Ещё» в моб-меню */
+.mobile-more-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  text-align: left;
+}
+.mobile-more-toggle--open {
+  color: white;
+}
+
+/* Раскрывающийся список под «Ещё» — со сдвигом и тонкой левой полосой */
+.mobile-more-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 0 14px;
+  padding: 4px 0 8px 14px;
+  border-left: 2px solid rgba(193, 127, 62, 0.5);
+  overflow: hidden;
+}
+.mobile-sublink {
+  display: block;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 15.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.62);
+  padding: 10px 0;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.mobile-sublink:hover {
+  color: white;
+}
+
+.more-collapse-enter-active,
+.more-collapse-leave-active {
+  transition: max-height 0.3s ease, opacity 0.25s ease;
+}
+.more-collapse-enter-from,
+.more-collapse-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+.more-collapse-enter-to,
+.more-collapse-leave-from {
+  max-height: 600px;
+  opacity: 1;
 }
 
 .dropdown-link {
