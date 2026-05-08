@@ -1,2 +1,7 @@
 User-Agent: *
-Disallow:
+Disallow: /booking
+Disallow: /booking/success
+Disallow: /privacy
+Disallow: /design-system
+
+Sitemap: https://markinscompany-commits.github.io/radde/sitemap.xml
