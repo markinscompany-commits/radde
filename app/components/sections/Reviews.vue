@@ -343,7 +343,20 @@ let autoplayInterval: ReturnType<typeof setInterval> | null = null
 
 function startAutoplay() {
   if (autoplayInterval) return
-  if (isMobile.value) return
+  if (isMobile.value) {
+    // На моб — нативный скролл со scroll-snap. Двигаем scrollLeft, snap
+    // сам выровняет к ближайшей карточке. Если пользователь касается экрана —
+    // тач-пауза, чтобы не вырывать скролл.
+    autoplayInterval = setInterval(() => {
+      const wrap = trackRef.value?.parentElement
+      if (!wrap) return
+      const step = cardWidth.value + gap
+      const max = wrap.scrollWidth - wrap.clientWidth
+      const next = wrap.scrollLeft + step
+      wrap.scrollTo({ left: next > max - 4 ? 0 : next, behavior: 'smooth' })
+    }, 5000)
+    return
+  }
   autoplayInterval = setInterval(() => { next() }, 10000)
 }
 

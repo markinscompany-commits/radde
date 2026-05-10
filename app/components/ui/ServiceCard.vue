@@ -1,5 +1,5 @@
 <template>
-  <div class="service-card">
+  <div class="service-card" @click="$emit('open', service)">
     <div class="flex items-start justify-between mb-4">
       <div class="service-icon-wrap" v-html="service.icon"></div>
       <span v-if="service.included" class="badge badge--included">Включено</span>
@@ -25,12 +25,13 @@
     </div>
 
     <div class="mt-auto pt-4 border-t border-sand-100 flex items-center justify-between">
-      <button @click="$emit('open', service)"
+      <button @click.stop="$emit('open', service)"
               class="font-body text-4 font-600 text-amber-600 hover:text-amber-700 transition-colors bg-transparent border-none cursor-pointer p-0">
         Подробнее
       </button>
       <a v-if="!service.included"
          :href="addToBookingHref"
+         @click.stop
          class="font-body text-4 font-600 text-sand-700 bg-sand-100 hover:bg-sand-200 px-3.5 py-1.5 rounded-full transition-colors no-underline">
         Добавить к&nbsp;брони
       </a>
@@ -83,6 +84,7 @@ const addToBookingHref = computed(() =>
   flex-direction: column;
   transition: all 0.3s ease;
   box-shadow: 0 1px 3px rgba(44, 36, 22, 0.04);
+  cursor: pointer;
 }
 @media (max-width: 767px) {
   .service-card {

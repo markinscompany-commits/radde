@@ -27,9 +27,11 @@ withDefaults(defineProps<{
 .usp-card {
   aspect-ratio: 4 / 3;
 }
+/* В мозаичной раскладке (md+) делаем карточки чуть площе — −10% высоты:
+   было 4/3 (h = w * 0.75), теперь 4/2.7 (h = w * 0.675) */
 @media (min-width: 768px) {
   .usp-wide {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 4 / 2.7;
   }
   .usp-narrow {
     aspect-ratio: auto;

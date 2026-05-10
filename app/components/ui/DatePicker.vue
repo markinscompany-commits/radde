@@ -81,6 +81,11 @@ const monthNames = [
   'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
   'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
 ]
+// Родительный падеж для отображения в инпуте: «10 мая 2026»
+const monthNamesGenitive = [
+  'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+  'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+]
 
 const monthName = computed(() => monthNames[viewMonth.value])
 const year = computed(() => viewYear.value)
@@ -97,7 +102,7 @@ const firstDayOffset = computed(() => {
 const displayValue = computed(() => {
   if (!props.modelValue) return props.placeholder || 'Выберите дату'
   const d = new Date(props.modelValue)
-  return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`
+  return `${d.getDate()} ${monthNamesGenitive[d.getMonth()]} ${d.getFullYear()}`
 })
 
 function isToday(day: number) {

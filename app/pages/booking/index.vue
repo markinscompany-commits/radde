@@ -103,18 +103,12 @@
                     'room-pick--active': state.roomId === r.id,
                     'room-pick--unfit': !r.fitsGuests,
                   }"
+                  @click="r.fitsGuests ? selectRoom(r.id) : null"
                 >
                   <div class="room-pick__photo">
                     <img :src="r.images[0]" :alt="r.name" loading="lazy" />
                     <span v-if="state.roomId === r.id" class="room-pick__check">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12L10 17L19 8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </span>
-                    <span
-                      class="room-pick__avail"
-                      :class="r.availableCount <= 2 ? 'room-pick__avail--low' : ''"
-                    >
-                      <svg v-if="r.availableCount <= 2" width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v3.5M8 10.5h.007" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                      Свободно: {{ r.availableCount }} из {{ r.totalCount }}
                     </span>
                   </div>
                   <div class="room-pick__body">
@@ -139,14 +133,14 @@
                       <span class="leading-snug">{{ r.note }}</span>
                     </p>
                     <div class="flex items-center justify-between gap-2 mt-auto pt-2">
-                      <button type="button" class="room-pick__more" @click="detailRoom = r">
+                      <button type="button" class="room-pick__more" @click.stop="detailRoom = r">
                         Подробнее
                       </button>
                       <button
                         type="button"
                         class="room-pick__select"
                         :class="state.roomId === r.id ? 'room-pick__select--active' : ''"
-                        @click="selectRoom(r.id)"
+                        @click.stop="selectRoom(r.id)"
                       >
                         <svg v-if="state.roomId === r.id" width="14" height="14" viewBox="0 0 24 24" fill="none" class="mr-1.5 inline-block"><path d="M5 12L10 17L19 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         {{ state.roomId === r.id ? 'Выбран' : 'Выбрать' }}
@@ -189,6 +183,7 @@
                   :key="extra.id"
                   class="extra-card"
                   :class="getExtraCount(extra.id) > 0 ? 'extra-card--active' : ''"
+                  @click="extra.fullDescription ? (detailExtra = extra) : null"
                 >
                   <div class="extra-card__icon" v-html="extra.icon"></div>
                   <div class="extra-card__body">
@@ -203,15 +198,15 @@
                         v-if="extra.fullDescription"
                         type="button"
                         class="extra-card__more"
-                        @click="detailExtra = extra"
+                        @click.stop="detailExtra = extra"
                       >Подробнее</button>
                       <span v-else></span>
-                      <div v-if="getExtraCount(extra.id) > 0" class="counter-light counter-light--sm">
+                      <div v-if="getExtraCount(extra.id) > 0" class="counter-light counter-light--sm" @click.stop>
                         <button type="button" @click="setExtraCount(extra.id, getExtraCount(extra.id) - 1)" class="counter-light__btn">&minus;</button>
                         <span class="counter-light__val">{{ getExtraCount(extra.id) }}</span>
                         <button type="button" @click="setExtraCount(extra.id, getExtraCount(extra.id) + 1)" class="counter-light__btn">+</button>
                       </div>
-                      <button v-else type="button" class="extra-card__add" @click="setExtraCount(extra.id, 1)">
+                      <button v-else type="button" class="extra-card__add" @click.stop="setExtraCount(extra.id, 1)">
                         <svg width="14" height="14" viewBox="0 0 16 16" fill="none" class="inline-block"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                         Добавить
                       </button>
@@ -355,14 +350,6 @@
                 Окончательная стоимость подтверждается менеджером после проверки доступности номера на&nbsp;выбранные даты.
               </p>
 
-              <!-- Чекбокс согласия на обработку ПДн — ст. 9 152-ФЗ:
-                   отдельный нередактируемый чекбокс, не предустановлен -->
-              <UiConsentCheckbox
-                ref="consentInputRef"
-                v-model="consentGiven"
-                :error="errorField === 'consent'"
-              />
-
               <button
                 type="button"
                 class="btn-primary w-full py-3.5 text-4"
@@ -371,6 +358,14 @@
               >
                 {{ submitting ? 'Отправляем…' : 'Отправить заявку' }}
               </button>
+
+              <!-- Чекбокс согласия на обработку ПДн — ст. 9 152-ФЗ.
+                   Расположен ПОСЛЕ кнопки submit (по требованию Mark) -->
+              <UiConsentCheckbox
+                ref="consentInputRef"
+                v-model="consentGiven"
+                :error="errorField === 'consent'"
+              />
 
               <button
                 v-if="hasAnySelection"
@@ -539,14 +534,28 @@ function categoryAddedCount(catId: ExtraCatId): number {
   return state.value.extras.filter(s => ids.has(s.id)).length
 }
 
+// Extras и Room модалки на /booking — блокируем body для iOS,
+// иначе на iPhone страница продолжает скроллиться за модалкой.
+const bodyLock = useBodyLock()
 const detailExtra = ref<ExtraDef | null>(null)
 function addExtraFromModal() {
   if (!detailExtra.value) return
   if (getExtraCount(detailExtra.value.id) === 0) setExtraCount(detailExtra.value.id, 1)
   detailExtra.value = null
 }
+watch(detailExtra, (val, prev) => {
+  if (!import.meta.client) return
+  if (val && !prev) {
+    bodyLock.lock()
+    useLenis().instance()?.stop()
+  } else if (!val && prev) {
+    bodyLock.unlock()
+    useLenis().instance()?.start()
+  }
+})
 
 // ----- Room modal -----
+// RoomDetailsModal сама лочит body через useBodyLock — здесь только ref
 const detailRoom = ref<typeof availableRooms.value[0] | null>(null)
 
 // ----- Phone -----
@@ -941,6 +950,10 @@ function scrollToTop() {
   border-radius: 12px;
   overflow: hidden;
   transition: border-color 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+.room-pick--unfit {
+  cursor: default;
 }
 .room-pick:hover {
   border-color: #D4BC96;
@@ -1123,6 +1136,7 @@ function scrollToTop() {
   border-radius: 12px;
   padding: 12px;
   transition: border-color 0.2s, box-shadow 0.2s;
+  cursor: pointer;
 }
 .extra-card--active {
   border-color: #C17F3E;

@@ -149,7 +149,19 @@ const isVisible = ref(false)
 
 function startAutoplay() {
   if (autoplayInterval) return
-  if (isMobile.value) return
+  if (isMobile.value) {
+    // На моб — нативный horizontal scroll. Двигаем scrollLeft по таймеру,
+    // пользовательский свайп пользователя не ломаем.
+    autoplayInterval = setInterval(() => {
+      const wrap = trackRef.value?.parentElement
+      if (!wrap) return
+      const step = cardWidth.value + gap
+      const max = wrap.scrollWidth - wrap.clientWidth
+      const next = wrap.scrollLeft + step
+      wrap.scrollTo({ left: next > max - 4 ? 0 : next, behavior: 'smooth' })
+    }, 4500)
+    return
+  }
   autoplayInterval = setInterval(() => { next() }, 8000)
 }
 

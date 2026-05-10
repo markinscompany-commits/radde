@@ -112,13 +112,13 @@
                   <label class="label-light">Дата и рейс <span class="text-sand-600 font-400">(необязательно)</span></label>
                   <input v-model="transferForm.flight" type="text" placeholder="Например: 15 мая, рейс S7 1234" class="input-light" />
                 </div>
-                <!-- Чекбокс согласия на ПДн — ст. 9 152-ФЗ -->
-                <UiConsentCheckbox v-model="transferConsent" :error="transferConsentError">
-                  Я&nbsp;согласен на&nbsp;обработку персональных данных в&nbsp;соответствии с&nbsp;<a :href="`${base}privacy`" target="_blank" rel="noopener">политикой конфиденциальности</a>
-                </UiConsentCheckbox>
                 <button type="submit" class="btn-primary w-full text-center py-3.5 mt-2" :disabled="transferSubmitting">
                   {{ transferSubmitting ? 'Отправляем...' : 'Отправить заявку' }}
                 </button>
+                <!-- Чекбокс согласия на ПДн — ст. 9 152-ФЗ. ПОСЛЕ кнопки submit. -->
+                <UiConsentCheckbox v-model="transferConsent" :error="transferConsentError">
+                  Я&nbsp;согласен на&nbsp;обработку персональных данных в&nbsp;соответствии с&nbsp;<a :href="`${base}privacy`" target="_blank" rel="noopener">политикой конфиденциальности</a>
+                </UiConsentCheckbox>
                 <p v-if="transferError" class="text-small text-amber-700 text-center leading-snug">{{ transferError }}</p>
               </form>
             </div>

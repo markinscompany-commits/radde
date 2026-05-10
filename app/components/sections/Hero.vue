@@ -1,18 +1,24 @@
 ﻿<template>
   <section class="hero-section relative overflow-hidden bg-sand-900">
-    <!-- Фоновая фотография: object-position сдвигает фокус кадра влево
-         (чтобы при кадрировании справа пансионат остался виден целиком) -->
-    <img
-      :src="heroImage"
-      alt="Пансионат Радде — горы Дагестана"
-      class="absolute inset-0 w-full h-full object-cover hero-bg"
-      fetchpriority="high"
-    />
-    <!-- Заголовок: на md+ выровнен по левой стороне, на мобильной — по центру сверху.
-         Затемнение убрано — читаемость держим через text-shadow на h1. -->
+    <!-- Фоновая фотография: разные кадры для ПК и мобильной (через <picture>).
+         object-position сдвигает фокус кадра влево, чтобы пансионат не обрезался. -->
+    <picture>
+      <source media="(min-width: 768px)" :srcset="heroImageDesktop" />
+      <img
+        :src="heroImageMobile"
+        alt="Пансионат Радде — горы Дагестана"
+        class="absolute inset-0 w-full h-full object-cover hero-bg"
+        fetchpriority="high"
+      />
+    </picture>
+    <!-- Затемнение: на ПК градиент слева → прозрачный (50% от прежней интенсивности),
+         на мобильной — равномерное по всему фото (тоже 50% от прежней). -->
+    <div class="absolute inset-0 hero-overlay"></div>
+
+    <!-- Заголовок: на md+ выровнен по левой стороне, на мобильной — по центру сверху. -->
     <div class="hero-title-wrap absolute inset-0 z-10 flex items-start md:items-center justify-center md:justify-start text-center md:text-left px-5 md:pt-0">
       <h1 ref="titleRef" class="hero-title font-display font-500 text-white hero-hidden md:max-w-620px md:ml-8 md:mr-auto lg:ml-16">
-        Пансионат Радде<br><span class="font-accent italic font-500 text-sand-300 text-[1.2em]">реликтовый лес, горы<br>и&nbsp;гармония</span>
+        Пансионат Радде<br><span class="font-accent italic font-500 text-sand-300 text-[1.2em]">реликтовый лес,<br>горы и&nbsp;гармония</span>
       </h1>
     </div>
 
@@ -79,7 +85,8 @@ const base = useRuntimeConfig().app.baseURL || '/'
 const titleRef = ref<HTMLElement>()
 const bookingRef = ref<HTMLElement>()
 
-const heroImage = `${base}images/hero/hero-radde.png?v=1`
+const heroImageDesktop = `${base}images/hero/hero-radde-desktop.webp`
+const heroImageMobile = `${base}images/hero/hero-radde-mobile.webp`
 
 const today = computed(() => new Date().toISOString().split('T')[0])
 
@@ -217,17 +224,33 @@ onMounted(() => {
   }
 }
 
-/* Размер заголовка: на моб — крупнее (мобильный экран узкий, нужно «бить»),
+/* Размер заголовка: на моб — крупнее (мобильный экран узкий),
    на ПК — оставляем прежний для строгой композиции */
 .hero-title {
   font-size: clamp(2.4rem, 8.5vw, 3.2rem);
   line-height: 1.1;
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 @media (min-width: 768px) {
   .hero-title {
     font-size: clamp(2.4rem, 4.6vw, 3.4rem);
-    text-shadow: 0 2px 22px rgba(0, 0, 0, 0.55), 0 1px 4px rgba(0, 0, 0, 0.45);
+  }
+}
+
+/* Затемнение: интенсивность на 50% от прежнего (моб 60→30%, ПК градиент → /2).
+   На моб — равномерное по всей картинке;
+   на ПК — градиент слева направо (текст слева на тёмном, пансионат справа виден). */
+.hero-overlay {
+  background: rgba(44, 36, 22, 0.30);
+}
+@media (min-width: 768px) {
+  .hero-overlay {
+    background: linear-gradient(
+      to right,
+      rgba(44, 36, 22, 0.39) 0%,
+      rgba(44, 36, 22, 0.32) 30%,
+      rgba(44, 36, 22, 0.12) 60%,
+      rgba(44, 36, 22, 0.025) 100%
+    );
   }
 }
 

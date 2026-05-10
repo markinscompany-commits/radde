@@ -83,21 +83,23 @@ function checkOverflow() {
   hasOverflow.value = gridRef.value.scrollWidth > gridRef.value.clientWidth + 1
 }
 
+// Не дублируем фото из Intro-галереи (heroblock 1-4 + hero/hero-1..4).
+// Здесь — другие фото: номера, USP, виды.
 const photos = [
-  `${base}images/heroblock/1.jpg`,
-  `${base}images/heroblock/2.jpg`,
-  `${base}images/heroblock/3.jpg`,
-  `${base}images/heroblock/4.jpg`,
-  `${base}images/heroblock/5.jpg`,
-  `${base}images/heroblock/6.jpg`,
-  `${base}images/heroblock/7.jpg`,
-  `${base}images/hero/hero-1.jpg`,
-  `${base}images/hero/hero-2.jpg`,
   `${base}images/usp/food/1.jpg`,
-  `${base}images/rooms/panorama/1.jpg`,
-  `${base}images/hero/hero-4.jpg`,
-  `${base}images/rooms/vip/1.jpg`,
+  `${base}images/usp/food/2.jpg`,
+  `${base}images/usp/landmarks/1.jpg`,
+  `${base}images/usp/landmarks/2.jpg`,
   `${base}images/usp/nature/1.jpg`,
+  `${base}images/usp/nature/2.jpg`,
+  `${base}images/usp/bbq/1.jpg`,
+  `${base}images/rooms/vip/1.jpg`,
+  `${base}images/rooms/vip/3.jpg`,
+  `${base}images/rooms/panorama/1.jpg`,
+  `${base}images/rooms/panorama/4.jpg`,
+  `${base}images/rooms/lux/1.jpg`,
+  `${base}images/rooms/lux/5.jpg`,
+  `${base}images/rooms/standard/1.jpg`,
 ]
 
 function openLightbox(index: number) {

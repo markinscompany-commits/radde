@@ -31,12 +31,10 @@
 
     <!-- Категории + список -->
     <section class="bg-sand-50 pt-12 md:pt-16 pb-20 md:pb-26">
-      <!-- Sentinel: невидимая точка перед табами. Когда уходит за верх
-           viewport — IntersectionObserver добавляет класс is-stuck к табам,
-           и они становятся fixed под шапкой. CSS position:sticky ломается
-           из-за body overflow-x: hidden — поэтому используем JS-подход. -->
-      <div ref="catBarSentinel" class="cat-bar-sentinel"></div>
-      <div ref="catBarRef" class="cat-bar" :class="catBarStuck ? 'cat-bar--stuck' : ''">
+      <!-- Sticky-табы через чистый CSS: после перевода body overflow-x на `clip`
+           position: sticky снова работает в Safari + не ломается Lenis-трансформом.
+           До этого были на JS IntersectionObserver — таблы пропадали при анимации скролла. -->
+      <div class="cat-bar">
         <div class="container">
           <div class="flex items-center gap-2 overflow-x-auto pb-2 -mx-5 px-5 md:mx-0 md:px-0 md:flex-wrap md:overflow-visible">
             <button
@@ -52,9 +50,6 @@
           </div>
         </div>
       </div>
-      <!-- Spacer: занимает место табов когда они становятся fixed,
-           чтобы контент не "прыгал" вверх -->
-      <div v-show="catBarStuck" :style="{ height: `${catBarHeight}px` }"></div>
 
       <div class="container pt-8 md:pt-10">
         <div v-if="filtered.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -125,69 +120,24 @@ useStructuredData().breadcrumbs([
   { name: 'Главная', path: '/' },
   { name: 'Блог', path: '/blog' },
 ])
-
-// Sticky категории через IntersectionObserver (CSS sticky ломается
-// из-за body overflow-x: hidden, особенно в Safari)
-const catBarSentinel = ref<HTMLElement>()
-const catBarRef = ref<HTMLElement>()
-const catBarStuck = ref(false)
-const catBarHeight = ref(0)
-
-onMounted(() => {
-  if (!import.meta.client) return
-  if (!catBarSentinel.value) return
-
-  // Запоминаем высоту блока с табами один раз
-  if (catBarRef.value) catBarHeight.value = catBarRef.value.offsetHeight
-
-  // rootMargin: -64px сверху — учёт фиксированной шапки сайта
-  const headerOffset = window.innerWidth >= 768 ? 72 : 64
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      if (!entry) return
-      // Когда sentinel НЕ виден сверху — фиксируем табы
-      catBarStuck.value = !entry.isIntersecting && entry.boundingClientRect.top < 0
-    },
-    { rootMargin: `-${headerOffset}px 0px 0px 0px`, threshold: 0 },
-  )
-  observer.observe(catBarSentinel.value)
-  onUnmounted(() => observer.disconnect())
-})
 </script>
 
 <style scoped>
-/* Невидимый sentinel перед табами — для IntersectionObserver */
-.cat-bar-sentinel {
-  height: 1px;
-  margin-bottom: -1px;
-  pointer-events: none;
-}
-
-/* Полоска с табами категорий: при скролле через JS получает is-stuck
-   и становится fixed под шапкой (sticky не работает из-за body overflow-x). */
+/* Sticky-табы категорий блога. Работает через CSS благодаря body { overflow-x: clip }. */
 .cat-bar {
+  position: sticky;
+  top: 64px;
+  z-index: 30;
   background: rgba(250, 246, 240, 0.92);
   backdrop-filter: blur(8px);
   padding: 10px 0;
+  border-bottom: 1px solid transparent;
   transition: box-shadow 0.2s, border-color 0.2s;
 }
 @media (min-width: 768px) {
   .cat-bar {
-    padding: 14px 0;
-  }
-}
-.cat-bar--stuck {
-  position: fixed;
-  top: 64px;
-  left: 0;
-  right: 0;
-  z-index: 30;
-  border-bottom: 1px solid #E8DCC8;
-  box-shadow: 0 4px 14px rgba(44, 36, 22, 0.04);
-}
-@media (min-width: 768px) {
-  .cat-bar--stuck {
     top: 72px;
+    padding: 14px 0;
   }
 }
 

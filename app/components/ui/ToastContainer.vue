@@ -76,35 +76,38 @@ const { toasts, dismiss } = useToast()
   border-left: 4px solid currentColor;
 }
 
-/* Error — амбер-акцент на тёмном бежевом фоне (sand-900),
-   заметно отличается от обычных бежевых элементов сайта */
+/* Error — глубокий красный (вынесен из палитры sand/amber/olive чтобы
+   гарантированно бросался в глаза на любом фоне сайта) */
 .toast--error {
-  background: #2C2416;
-  color: #D4944A;
+  background: #C8362B;
+  color: #FFD9D5;
+  border-left-color: #FFD9D5;
 }
 .toast--error .toast-message,
 .toast--error .toast-close {
-  color: rgba(255, 255, 255, 0.95);
+  color: white;
 }
 
-/* Success — олива */
+/* Success — насыщенная олива (отличается от sand/amber фонов) */
 .toast--success {
-  background: #4A6330;
-  color: #B3C08E;
+  background: #2F6B3D;
+  color: #C9EAD0;
+  border-left-color: #C9EAD0;
 }
 .toast--success .toast-message,
 .toast--success .toast-close {
-  color: rgba(255, 255, 255, 0.95);
+  color: white;
 }
 
-/* Info — нейтральный */
+/* Info — индиго (контраст с тёплой бежевой палитрой) */
 .toast--info {
-  background: #6B5B4A;
-  color: #E8D5B7;
+  background: #2E4A6B;
+  color: #C5D9F0;
+  border-left-color: #C5D9F0;
 }
 .toast--info .toast-message,
 .toast--info .toast-close {
-  color: rgba(255, 255, 255, 0.95);
+  color: white;
 }
 
 .toast-icon {

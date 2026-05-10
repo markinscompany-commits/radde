@@ -28,6 +28,16 @@ html {
   scroll-behavior: auto; /* Lenis handles smooth scroll */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Резервируем место под скроллбар постоянно — иначе при открытии модалки
+     (body { overflow: hidden }) исчезающий scrollbar сдвигает sticky sidebar
+     на /booking и появляется визуальный «отступ под модалкой». */
+  scrollbar-gutter: stable;
+  /* Убираем iOS rubber-band overscroll — на iPhone/iPad после футера
+     показывалась большая белая полоса при отпугивании пальца. */
+  overscroll-behavior-y: none;
+  /* Совпадает с цветом футера (sand-900) — если overscroll всё-таки
+     случится, видно будет цвет футера, не белое тело страницы. */
+  background-color: #2C2416;
 }
 
 body {
@@ -35,7 +45,11 @@ body {
   background-color: #FAF6F0;
   color: #2C2416;
   line-height: 1.6;
-  overflow-x: hidden;
+  /* `clip` вместо `hidden`: подрезает горизонтальное переполнение БЕЗ создания
+     scroll container — иначе ломается position: sticky (Safari) и fixed-элементы
+     внутри Lenis-трансформа (на скролле теги категорий /blog исчезали). */
+  overflow-x: clip;
+  overscroll-behavior-y: none;
 }
 
 /* Lenis smooth scroll */

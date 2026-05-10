@@ -74,18 +74,18 @@
               </span>
             </div>
 
-            <p class="font-body text-4 text-sand-800 leading-relaxed mb-6">{{ room.fullDescription }}</p>
-
-            <div v-if="room.note" class="flex items-start gap-2.5 bg-amber-400/8 border border-amber-400/20 rounded-2 px-4 py-3 mb-6">
-              <svg class="flex-shrink-0 mt-0.5 text-amber-500" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v3.5M8 10.5h.007" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-              <span class="font-body text-4 text-amber-700 font-500">{{ room.note }}</span>
-            </div>
-
             <h4 class="text-label text-sand-700 mb-3">Удобства в номере</h4>
-            <div class="flex flex-wrap gap-2 mb-8">
+            <div class="flex flex-wrap gap-2 mb-6">
               <span v-for="tag in room.tags" :key="tag" class="amenity-chip">
                 {{ tag }}
               </span>
+            </div>
+
+            <p class="font-body text-4 text-sand-800 leading-relaxed mb-6">{{ room.fullDescription }}</p>
+
+            <div v-if="room.note" class="flex items-start gap-2.5 bg-amber-400/8 border border-amber-400/20 rounded-2 px-4 py-3 mb-8">
+              <svg class="flex-shrink-0 mt-0.5 text-amber-500" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v3.5M8 10.5h.007" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              <span class="font-body text-4 text-amber-700 font-500">{{ room.note }}</span>
             </div>
 
             <div class="flex flex-wrap items-center justify-between gap-4 pt-5 border-t border-sand-200">
@@ -176,16 +176,18 @@ const lightbox = reactive({
   zoom: 1,
 })
 
+const bodyLock = useBodyLock()
+
 watch(() => props.room, (val, prev) => {
   if (val && val !== prev) {
     photoIndex.value = 0
     if (import.meta.client) {
-      document.body.style.overflow = 'hidden'
+      bodyLock.lock()
       useLenis().instance()?.stop()
     }
   } else if (!val && prev) {
     if (import.meta.client) {
-      document.body.style.overflow = ''
+      bodyLock.unlock()
       useLenis().instance()?.start()
     }
   }
@@ -212,17 +214,18 @@ function openLightbox(startIndex: number) {
   lightbox.index = startIndex
   lightbox.zoom = 1
   lightbox.open = true
+  // body уже залочен (модалка номера открыта) — но lock count учтёт повторный вызов
   if (import.meta.client) {
-    document.body.style.overflow = 'hidden'
+    bodyLock.lock()
     useLenis().instance()?.stop()
   }
 }
 
 function closeLightbox() {
   lightbox.open = false
-  if (!props.room && import.meta.client) {
-    document.body.style.overflow = ''
-    useLenis().instance()?.start()
+  if (import.meta.client) {
+    bodyLock.unlock()
+    if (!props.room) useLenis().instance()?.start()
   }
 }
 

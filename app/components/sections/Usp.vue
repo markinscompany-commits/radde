@@ -32,12 +32,12 @@ const usps = [
   {
     title: 'Эмоциональная перезагрузка',
     description: 'Расположены в заповедном парке — далеко от городской суеты. Тишина и чистый горный воздух.',
-    image: `${base}images/usp/nature/1.jpg`,
+    image: `${base}images/usp/nature/main.jpg`,
   },
   {
     title: 'Точки притяжения',
     description: 'Природные и исторические памятники в шаговой доступности. Гунибская крепость, водопады, каньоны.',
-    image: `${base}images/usp/landmarks/1.jpg`,
+    image: `${base}images/usp/landmarks/main.webp`,
   },
   {
     title: 'Современная инфраструктура',

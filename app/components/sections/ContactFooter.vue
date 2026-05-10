@@ -57,13 +57,13 @@
                     <textarea v-model="contactForm.comment" placeholder="Пожелания, вопросы..." rows="3" class="input-dark" style="height:auto;min-height:80px;padding:10px 14px;resize:vertical;line-height:1.5"></textarea>
                   </div>
                 </div>
-                <!-- Чекбокс согласия на ПДн — ст. 9 152-ФЗ -->
+                <button type="submit" class="btn-primary w-full text-center py-4 mt-2" :disabled="contactSubmitting">
+                  {{ contactSubmitting ? 'Отправляем...' : 'Отправить заявку' }}
+                </button>
+                <!-- Чекбокс согласия на ПДн — ст. 9 152-ФЗ. ПОСЛЕ кнопки submit. -->
                 <UiConsentCheckbox v-model="consentGiven" :error="consentError" dark>
                   Я&nbsp;даю согласие на&nbsp;обработку персональных данных в&nbsp;соответствии с&nbsp;<a :href="`${base}privacy`" target="_blank" rel="noopener">политикой конфиденциальности</a>
                 </UiConsentCheckbox>
-                <button type="submit" class="btn-primary w-full text-center py-4 mt-4" :disabled="contactSubmitting">
-                  {{ contactSubmitting ? 'Отправляем...' : 'Отправить заявку' }}
-                </button>
                 <p v-if="contactError" class="text-small text-amber-300 mt-3 text-center leading-snug">{{ contactError }}</p>
               </form>
               <div v-else class="flex flex-col items-center text-center py-4">

@@ -46,7 +46,11 @@
 
         <!-- Галерея — на lg справа, на mobile между абзацами -->
         <div ref="imageRef" class="relative order-2">
-          <div class="aspect-5/6 rounded-3 overflow-hidden shadow-xl relative">
+          <div
+            class="aspect-5/6 rounded-3 overflow-hidden shadow-xl relative gallery-touch"
+            @touchstart.passive="onTouchStart"
+            @touchend="onTouchEnd"
+          >
             <transition-group name="gallery">
               <img
                 v-for="(src, idx) in galleryImages"
@@ -54,8 +58,9 @@
                 :key="src"
                 :src="src"
                 :alt="`Пансионат Радде — фото ${idx + 1}`"
-                class="absolute inset-0 w-full h-full object-cover"
+                class="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
                 loading="lazy"
+                draggable="false"
               />
             </transition-group>
 
@@ -135,9 +140,10 @@ const galleryImages = [
   `${base}images/heroblock/2.jpg`,
   `${base}images/heroblock/3.jpg`,
   `${base}images/heroblock/4.jpg`,
-  `${base}images/heroblock/5.jpg`,
-  `${base}images/heroblock/6.jpg`,
-  `${base}images/heroblock/7.jpg`,
+  `${base}images/hero/hero-1.jpg`,
+  `${base}images/hero/hero-2.jpg`,
+  `${base}images/hero/hero-3.jpg`,
+  `${base}images/hero/hero-4.jpg`,
 ]
 
 const currentSlide = ref(0)
@@ -172,6 +178,20 @@ function stopAutoplay() {
 function restartInterval() {
   stopAutoplay()
   if (isVisible.value) startAutoplay()
+}
+
+// Touch-свайп: переключение слайдов жестом влево/вправо в любой области фото
+let touchStartX = 0
+function onTouchStart(e: TouchEvent) {
+  touchStartX = e.changedTouches[0]?.clientX ?? 0
+}
+function onTouchEnd(e: TouchEvent) {
+  const endX = e.changedTouches[0]?.clientX ?? 0
+  const dx = endX - touchStartX
+  // ~30px — минимальная дистанция чтобы случайный тап не считался свайпом
+  if (Math.abs(dx) < 30) return
+  if (dx < 0) nextSlide()
+  else prevSlide()
 }
 
 onMounted(() => {
