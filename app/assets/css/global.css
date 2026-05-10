@@ -40,8 +40,7 @@ body {
   font-family: 'Source Sans 3', system-ui, sans-serif;
   /* Цвет совпадает с футером (sand-900). На страницах body не виден
      (каждая секция имеет собственный фон), но при iPad Safari rubber-band
-     overscroll внизу — браузер показывает фон body, а не html.
-     Поэтому даже если html уже sand-900, ставим то же на body. */
+     overscroll внизу — браузер показывает фон body, а не html. */
   background-color: #2C2416;
   color: #2C2416;
   line-height: 1.6;
@@ -50,18 +49,6 @@ body {
      внутри Lenis-трансформа (на скролле теги категорий /blog исчезали). */
   overflow-x: clip;
   overscroll-behavior-y: none;
-}
-
-/* Слой ниже футера для iOS Safari rubber-band overscroll.
-   100vh высоты, но negative margin = влияет на page height нулём.
-   На overscroll вниз iPhone/iPad показывает этот слой вместо белого. */
-.ios-overscroll-fill {
-  height: 100vh;
-  margin-bottom: -100vh;
-  background-color: #2C2416;
-  pointer-events: none;
-  position: relative;
-  z-index: -1;
 }
 
 /* Lenis smooth scroll */
