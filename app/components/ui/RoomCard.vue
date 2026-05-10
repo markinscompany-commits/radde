@@ -5,13 +5,16 @@
       <div class="relative lg:w-[60%] flex-shrink-0">
         <div class="aspect-4/3 lg:aspect-auto lg:h-full relative overflow-hidden bg-sand-200 cursor-pointer"
              @click="$emit('lightbox', room, room.activePhoto)">
-          <img
+          <UiPicture
             v-for="(src, pi) in room.images"
             :key="src"
             :src="src"
+            sizes="(min-width: 1024px) 60vw, 100vw"
             :alt="`${room.name} — фото ${pi + 1}`"
             class="absolute inset-0 w-full h-full object-cover room-photo-transition"
             :class="room.activePhoto === pi ? 'opacity-100 z-2' : 'opacity-0 z-1'"
+            loading="lazy"
+            decoding="async"
           />
           <div class="absolute top-4 left-4 z-10" @click.stop>
             <button @click="$emit('lightbox', room, room.activePhoto)"

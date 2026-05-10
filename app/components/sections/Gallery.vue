@@ -7,7 +7,8 @@
         <div v-for="(src, i) in photos" :key="i"
              class="gallery-item rounded-2 overflow-hidden cursor-pointer group"
              @click="openLightbox(i)">
-          <img :src="src"
+          <UiPicture :src="src"
+               sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 50vw"
                :alt="`Пансионат Радде — фото ${i + 1}`"
                class="block transition-transform duration-500 group-hover:scale-105"
                loading="lazy"
@@ -31,8 +32,10 @@
           </button>
 
           <!-- Photo -->
-          <img
+          <UiPicture
+            :key="lightboxIndex"
             :src="photos[lightboxIndex]"
+            sizes="90vw"
             :alt="`Фото ${lightboxIndex + 1}`"
             class="max-w-[90vw] max-h-[90vh] object-contain select-none"
             :style="{ transform: `scale(${lightboxZoom})`, transition: 'transform 0.2s ease' }"

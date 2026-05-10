@@ -52,11 +52,12 @@
             @touchend="onTouchEnd"
           >
             <transition-group name="gallery">
-              <img
+              <UiPicture
                 v-for="(src, idx) in galleryImages"
                 v-show="currentSlide === idx"
                 :key="src"
                 :src="src"
+                sizes="(min-width: 1024px) 50vw, 100vw"
                 :alt="`Пансионат Радде — фото ${idx + 1}`"
                 class="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
                 loading="lazy"

@@ -5,7 +5,7 @@
     <template v-if="post">
       <!-- Hero статьи -->
       <section class="relative overflow-hidden bg-sand-900 pt-32 md:pt-40 pb-12 md:pb-16">
-        <img :src="post.image" :alt="post.title" class="absolute inset-0 w-full h-full object-cover" />
+        <UiPicture :src="post.image" :alt="post.title" sizes="100vw" class="absolute inset-0 w-full h-full object-cover" decoding="async" />
         <div class="absolute inset-0 bg-sand-900/72"></div>
 
         <div class="container relative z-10">

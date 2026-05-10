@@ -4,7 +4,7 @@
 
     <!-- Hero -->
     <section class="relative overflow-hidden bg-sand-900 pt-32 md:pt-40 pb-16 md:pb-24">
-      <img :src="`${base}images/hero/hero-1.jpg`" alt="Пансионат Радде — общий вид среди гор Гунибского района" class="absolute inset-0 w-full h-full object-cover" />
+      <UiPicture :src="`${base}images/hero/hero-1.jpg`" alt="Пансионат Радде — общий вид среди гор Гунибского района" sizes="100vw" class="absolute inset-0 w-full h-full object-cover" decoding="async" />
       <div class="absolute inset-0 bg-sand-900/72"></div>
 
       <div class="container relative z-10">
@@ -60,7 +60,7 @@
           </div>
           <div class="relative">
             <div class="aspect-4/5 rounded-3 overflow-hidden shadow-xl">
-              <img :src="`${base}images/hero/hero-3.jpg`" alt="Пансионат Радде в горах" class="w-full h-full object-cover" />
+              <UiPicture :src="`${base}images/hero/hero-3.jpg`" alt="Пансионат Радде в горах" sizes="(min-width: 1024px) 50vw, 100vw" class="w-full h-full object-cover" loading="lazy" decoding="async" />
             </div>
             <div class="absolute -bottom-4 -left-4 w-24 h-24 bg-olive-100 rounded-3 -z-1"></div>
             <div class="absolute -top-4 -right-4 w-16 h-16 bg-amber-400/20 rounded-full -z-1"></div>
@@ -155,7 +155,7 @@
 
     <!-- CTA -->
     <section class="bg-sand-900 py-16 md:py-20 relative overflow-hidden">
-      <img :src="`${base}images/hero/hero-4.jpg`" alt="Горный пейзаж — приглашение в Радде" class="absolute inset-0 w-full h-full object-cover opacity-30" />
+      <UiPicture :src="`${base}images/hero/hero-4.jpg`" alt="Горный пейзаж — приглашение в Радде" sizes="100vw" class="absolute inset-0 w-full h-full object-cover opacity-30" loading="lazy" decoding="async" />
       <div class="absolute inset-0 bg-gradient-to-r from-sand-900 via-sand-900/85 to-sand-900/40"></div>
       <div class="container relative z-10">
         <div class="max-w-150">

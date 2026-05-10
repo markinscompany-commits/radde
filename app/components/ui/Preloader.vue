@@ -72,7 +72,7 @@ async function waitForReady(): Promise<void> {
     promises.push(document.fonts.ready)
   }
 
-  const heroSrc = `${base}images/hero/hero-1.jpg`
+  const heroSrc = `${base}images/hero/hero-radde-mobile-480w.webp`
   promises.push(new Promise<void>((resolve) => {
     const img = new Image()
     img.onload = () => resolve()

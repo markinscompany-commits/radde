@@ -1,7 +1,7 @@
 <template>
   <a :href="post.href" class="blog-card flex-shrink-0 group" :style="widthStyle">
     <div class="blog-card-img">
-      <img :src="post.image" :alt="post.title" class="w-full h-full object-cover" loading="lazy" decoding="async" />
+      <UiPicture :src="post.image" :alt="post.title" sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 80vw" class="w-full h-full object-cover" loading="lazy" decoding="async" />
       <span class="blog-badge">{{ post.category }}</span>
     </div>
     <div class="p-5 flex flex-col flex-1">

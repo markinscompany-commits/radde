@@ -13,13 +13,16 @@
           <!-- Modal gallery -->
           <div class="relative aspect-16/9 overflow-hidden bg-sand-200 cursor-pointer"
                @click="openLightbox(photoIndex)">
-            <img
+            <UiPicture
               v-for="(src, pi) in room.images"
               :key="src"
               :src="src"
+              sizes="(min-width: 768px) 640px, 100vw"
               :alt="`${room.name} — фото ${pi + 1}`"
               class="absolute inset-0 w-full h-full object-cover room-photo-transition"
               :class="photoIndex === pi ? 'opacity-100 z-2' : 'opacity-0 z-1'"
+              loading="lazy"
+              decoding="async"
             />
             <div class="absolute top-4 left-4 z-10" @click.stop>
               <button @click="openLightbox(photoIndex)"
@@ -114,8 +117,10 @@
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M15 5L5 15M5 5l10 10" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
         </button>
 
-        <img
+        <UiPicture
+          :key="lightbox.index"
           :src="lightbox.images[lightbox.index]"
+          sizes="90vw"
           :alt="`Фото ${lightbox.index + 1}`"
           class="max-w-[90vw] max-h-[90vh] object-contain select-none lightbox-img"
           @wheel.prevent="handleLightboxZoom"

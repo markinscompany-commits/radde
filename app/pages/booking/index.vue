@@ -4,7 +4,7 @@
 
     <!-- Hero strip -->
     <section class="relative overflow-hidden bg-sand-900 pt-32 md:pt-36 pb-8 md:pb-10">
-      <img :src="`${base}images/hero/hero-1.jpg`" alt="Горы Дагестана — пансионат Радде" class="absolute inset-0 w-full h-full object-cover" />
+      <UiPicture :src="`${base}images/hero/hero-1.jpg`" alt="Горы Дагестана — пансионат Радде" sizes="100vw" class="absolute inset-0 w-full h-full object-cover" decoding="async" />
       <div class="absolute inset-0 bg-sand-900/82"></div>
 
       <div class="container relative z-10">

@@ -4,10 +4,12 @@
 
     <!-- 404 — фит в один экран -->
     <section class="error-screen relative overflow-hidden bg-sand-900 flex items-center">
-      <img
+      <UiPicture
         :src="`${base}images/hero/hero-2.jpg`"
         alt="Горы Дагестана"
+        sizes="100vw"
         class="absolute inset-0 w-full h-full object-cover"
+        decoding="async"
       />
       <!-- overlay темнее обычного, чтобы текст уверенно читался -->
       <div class="absolute inset-0 bg-sand-900/88"></div>

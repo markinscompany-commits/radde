@@ -4,10 +4,12 @@
 
     <!-- Hero strip с адресом -->
     <section class="relative overflow-hidden bg-sand-900 pt-32 md:pt-40 pb-12 md:pb-16">
-      <img
+      <UiPicture
         :src="`${base}images/hero/hero-3.jpg`"
         alt="Пансионат Радде в горах Дагестана — общий вид"
+        sizes="100vw"
         class="absolute inset-0 w-full h-full object-cover"
+        decoding="async"
       />
       <div class="absolute inset-0 bg-sand-900/82"></div>
 

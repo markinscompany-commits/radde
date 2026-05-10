@@ -1,7 +1,8 @@
 <template>
   <div class="usp-card group relative rounded-3 overflow-hidden cursor-default"
        :class="wide ? 'usp-wide' : 'usp-narrow'">
-    <img :src="image" :alt="title"
+    <UiPicture :src="image" :alt="title"
+         sizes="(min-width: 768px) 50vw, 100vw"
          class="absolute inset-0 w-full h-full object-cover"
          loading="lazy" />
     <div class="absolute inset-0 bg-gradient-to-t from-sand-900/80 via-sand-900/30 to-transparent"></div>

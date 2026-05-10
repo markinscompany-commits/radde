@@ -3,12 +3,23 @@
     <!-- Фоновая фотография: разные кадры для ПК и мобильной (через <picture>).
          object-position сдвигает фокус кадра влево, чтобы пансионат не обрезался. -->
     <picture>
-      <source media="(min-width: 768px)" :srcset="heroImageDesktop" />
+      <source
+        type="image/webp"
+        media="(min-width: 768px)"
+        :srcset="heroDesktopSrcset"
+        sizes="100vw"
+      />
+      <source
+        type="image/webp"
+        :srcset="heroMobileSrcset"
+        sizes="100vw"
+      />
       <img
         :src="heroImageMobile"
         alt="Пансионат Радде — горы Дагестана"
         class="absolute inset-0 w-full h-full object-cover hero-bg"
         fetchpriority="high"
+        decoding="async"
       />
     </picture>
     <!-- Затемнение: на ПК градиент слева → прозрачный (50% от прежней интенсивности),
@@ -85,8 +96,14 @@ const base = useRuntimeConfig().app.baseURL || '/'
 const titleRef = ref<HTMLElement>()
 const bookingRef = ref<HTMLElement>()
 
-const heroImageDesktop = `${base}images/hero/hero-radde-desktop.webp`
 const heroImageMobile = `${base}images/hero/hero-radde-mobile.webp`
+
+const heroDesktopSrcset = [1280, 1600, 1920]
+  .map(w => `${base}images/hero/hero-radde-desktop-${w}w.webp ${w}w`)
+  .join(', ')
+const heroMobileSrcset = [480, 768, 1024]
+  .map(w => `${base}images/hero/hero-radde-mobile-${w}w.webp ${w}w`)
+  .join(', ')
 
 const today = computed(() => new Date().toISOString().split('T')[0])
 

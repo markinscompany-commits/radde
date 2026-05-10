@@ -2,7 +2,7 @@
   <div>
     <!-- Contact section -->
     <section id="contacts" class="relative section-padding overflow-hidden">
-      <div class="absolute inset-0 bg-sand-900" :style="{ backgroundImage: `url(${base}images/hero/hero-3.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center' }">
+      <div class="absolute inset-0 bg-sand-900" :style="{ backgroundImage: `url(${base}images/hero/hero-3-1600w.webp)`, backgroundSize: 'cover', backgroundPosition: 'center' }">
         <div class="absolute inset-0 bg-sand-900/85"></div>
       </div>
 

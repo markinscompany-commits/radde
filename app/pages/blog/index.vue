@@ -4,10 +4,12 @@
 
     <!-- Hero strip -->
     <section class="relative overflow-hidden bg-sand-900 pt-32 md:pt-40 pb-16 md:pb-20">
-      <img
+      <UiPicture
         :src="`${base}images/hero/hero-2.jpg`"
         alt="Реликтовый лес Радде — фон страницы блога"
+        sizes="100vw"
         class="absolute inset-0 w-full h-full object-cover"
+        decoding="async"
       />
       <div class="absolute inset-0 bg-sand-900/80"></div>
 
