@@ -115,8 +115,8 @@
                 <button type="submit" class="btn-primary w-full text-center py-3.5 mt-2" :disabled="transferSubmitting">
                   {{ transferSubmitting ? 'Отправляем...' : 'Отправить заявку' }}
                 </button>
-                <!-- Чекбокс согласия на ПДн — ст. 9 152-ФЗ. ПОСЛЕ кнопки submit. -->
-                <UiConsentCheckbox v-model="transferConsent" :error="transferConsentError">
+                <!-- Чекбокс согласия на ПДн — ст. 9 152-ФЗ. ПОСЛЕ кнопки submit, mt-4. -->
+                <UiConsentCheckbox v-model="transferConsent" :error="transferConsentError" class="mt-4">
                   Я&nbsp;согласен на&nbsp;обработку персональных данных в&nbsp;соответствии с&nbsp;<a :href="`${base}privacy`" target="_blank" rel="noopener">политикой конфиденциальности</a>
                 </UiConsentCheckbox>
                 <p v-if="transferError" class="text-small text-amber-700 text-center leading-snug">{{ transferError }}</p>

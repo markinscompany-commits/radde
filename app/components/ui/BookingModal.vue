@@ -46,8 +46,8 @@
                 {{ submitting ? 'Отправляем...' : 'Отправить заявку' }}
               </button>
 
-              <!-- Чекбокс согласия на ПДн — ст. 9 152-ФЗ. ПОСЛЕ кнопки submit. -->
-              <UiConsentCheckbox v-model="consentGiven" :error="consentError">
+              <!-- Чекбокс согласия на ПДн — ст. 9 152-ФЗ. ПОСЛЕ кнопки submit, mt-4 — единый отступ. -->
+              <UiConsentCheckbox v-model="consentGiven" :error="consentError" class="mt-4">
                 Я&nbsp;согласен на&nbsp;обработку персональных данных в&nbsp;соответствии с&nbsp;<a :href="`${base}privacy`" target="_blank" rel="noopener">политикой конфиденциальности</a>
               </UiConsentCheckbox>
 

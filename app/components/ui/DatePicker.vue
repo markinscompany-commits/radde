@@ -149,16 +149,24 @@ function nextMonth() {
   }
 }
 
-// Позиционирование popup рядом с input
+// Позиционирование popup рядом с input.
+// На узких экранах попап (~280px) может уйти за правый край viewport
+// (особенно для второго поля «Выезд», расположенного справа в форме брони).
+// Поэтому: clamp left так, чтобы popup всегда вмещался + был отступ 8px от края.
 watch(open, (val) => {
   if (val && wrapRef.value) {
     const rect = wrapRef.value.getBoundingClientRect()
     const spaceBelow = window.innerHeight - rect.bottom
     const showAbove = spaceBelow < 340
+    const popupWidth = 280
+    const margin = 8
+    const minLeft = margin
+    const maxLeft = Math.max(margin, window.innerWidth - popupWidth - margin)
+    const clampedLeft = Math.min(Math.max(rect.left, minLeft), maxLeft)
 
     popupStyle.value = {
       position: 'fixed',
-      left: `${rect.left}px`,
+      left: `${clampedLeft}px`,
       ...(showAbove
         ? { bottom: `${window.innerHeight - rect.top + 8}px` }
         : { top: `${rect.bottom + 8}px` }

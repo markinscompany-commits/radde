@@ -103,7 +103,11 @@
                     'room-pick--active': state.roomId === r.id,
                     'room-pick--unfit': !r.fitsGuests,
                   }"
-                  @click="r.fitsGuests ? selectRoom(r.id) : null"
+                  :role="r.fitsGuests ? 'button' : undefined"
+                  :tabindex="r.fitsGuests ? 0 : undefined"
+                  @click="pickRoom(r)"
+                  @keydown.enter.prevent="pickRoom(r)"
+                  @keydown.space.prevent="pickRoom(r)"
                 >
                   <div class="room-pick__photo">
                     <img :src="r.images[0]" :alt="r.name" loading="lazy" />
@@ -360,11 +364,13 @@
               </button>
 
               <!-- Чекбокс согласия на обработку ПДн — ст. 9 152-ФЗ.
-                   Расположен ПОСЛЕ кнопки submit (по требованию Mark) -->
+                   Расположен ПОСЛЕ кнопки submit (по требованию Mark).
+                   mt-4 — такой же отступ, как у текста про подтверждение перед кнопкой. -->
               <UiConsentCheckbox
                 ref="consentInputRef"
                 v-model="consentGiven"
                 :error="errorField === 'consent'"
+                class="mt-4"
               />
 
               <button
@@ -501,6 +507,14 @@ const selectedAvailable = computed(() => availableRooms.value.find(r => r.id ===
 
 function selectRoom(id: string) {
   setRoom(state.value.roomId === id ? null : id)
+}
+
+// Клик по карточке номера всегда выбирает (без toggle).
+// На кнопке «Выбрать» оставляем toggle, чтобы её можно было нажать повторно
+// для отмены выбора. При клике по самой карточке — toggle сбивал бы UX.
+function pickRoom(r: { id: string; fitsGuests: boolean }) {
+  if (!r.fitsGuests) return
+  setRoom(r.id)
 }
 
 // ----- Pre-select from URL -----

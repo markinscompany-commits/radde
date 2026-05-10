@@ -3,6 +3,11 @@
     <UiPreloader @done="onPreloaderDone" />
     <NuxtRouteAnnouncer />
     <NuxtPage />
+    <!-- Слой-заглушка ниже футера для iOS Safari rubber-band overscroll:
+         занимает 100vh, но через отрицательный margin-bottom не влияет на
+         реальную высоту страницы. Виден только когда iPhone/iPad вытягивает
+         содержимое вверх (rubber-band внизу) — цвет совпадает с футером. -->
+    <div class="ios-overscroll-fill" aria-hidden="true"></div>
     <UiCookieBanner />
     <UiToastContainer />
   </div>

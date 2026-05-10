@@ -236,11 +236,10 @@ onMounted(() => {
   }
 }
 
-/* Затемнение: интенсивность на 50% от прежнего (моб 60→30%, ПК градиент → /2).
-   На моб — равномерное по всей картинке;
+/* Затемнение. На моб — равномерное (по фидбеку Mark подняли на 20%: 30% → 36%);
    на ПК — градиент слева направо (текст слева на тёмном, пансионат справа виден). */
 .hero-overlay {
-  background: rgba(44, 36, 22, 0.30);
+  background: rgba(44, 36, 22, 0.36);
 }
 @media (min-width: 768px) {
   .hero-overlay {
@@ -270,9 +269,10 @@ onMounted(() => {
   min-height: var(--app-height, 100svh);
 }
 .hero-title-wrap {
-  padding-top: 20vh;
-  padding-top: 20svh;
-  padding-top: calc(var(--app-height, 100svh) * 0.2);
+  /* По фидбеку Mark подняли заголовок выше на 10%: 20vh → 18vh */
+  padding-top: 18vh;
+  padding-top: 18svh;
+  padding-top: calc(var(--app-height, 100svh) * 0.18);
 }
 @media (min-width: 768px) {
   .hero-title-wrap {

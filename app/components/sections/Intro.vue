@@ -141,9 +141,6 @@ const galleryImages = [
   `${base}images/heroblock/3.jpg`,
   `${base}images/heroblock/4.jpg`,
   `${base}images/hero/hero-1.jpg`,
-  `${base}images/hero/hero-2.jpg`,
-  `${base}images/hero/hero-3.jpg`,
-  `${base}images/hero/hero-4.jpg`,
 ]
 
 const currentSlide = ref(0)

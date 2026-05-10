@@ -87,7 +87,6 @@ function checkOverflow() {
 // Здесь — другие фото: номера, USP, виды.
 const photos = [
   `${base}images/usp/food/1.jpg`,
-  `${base}images/usp/food/2.jpg`,
   `${base}images/usp/landmarks/1.jpg`,
   `${base}images/usp/landmarks/2.jpg`,
   `${base}images/usp/nature/1.jpg`,
