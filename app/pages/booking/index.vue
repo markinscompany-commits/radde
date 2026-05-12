@@ -767,9 +767,8 @@ async function submit() {
     }),
     comment: fullComment,
     total_estimate: totals.value.total,
+    consent: true as const,
   }
-  // eslint-disable-next-line no-console
-  console.log('[booking] outgoing payload', payload)
 
   if (import.meta.client) {
     try {
@@ -780,7 +779,14 @@ async function submit() {
     } catch { /* ignore */ }
   }
 
-  await new Promise(resolve => setTimeout(resolve, 800))
+  try {
+    await $fetch('/api/booking', { method: 'POST', body: payload })
+  } catch (err: any) {
+    submitting.value = false
+    const msg = err?.data?.message || err?.statusMessage || err?.message || 'Не удалось отправить заявку. Попробуйте ещё раз или позвоните нам.'
+    toast.error(msg)
+    return
+  }
 
   state.value.roomId = null
   state.value.extras = []

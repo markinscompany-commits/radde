@@ -137,7 +137,7 @@ const related = computed(() => {
 })
 
 // SEO: title/description/OG/Twitter + Schema.org Article — реактивно зависят от post.
-const SITE_URL = 'https://markinscompany-commits.github.io/radde'
+const SITE_URL = 'https://radde.ru'
 const sd = useStructuredData()
 watch(post, (val) => {
   if (val) {

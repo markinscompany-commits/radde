@@ -120,10 +120,23 @@ async function submitContact() {
     return
   }
   contactSubmitting.value = true
-  // TODO: отправка на сервер → SQLite → Telegram
-  await new Promise(r => setTimeout(r, 1200))
-  contactSubmitting.value = false
-  contactSuccess.value = true
+  try {
+    await $fetch('/api/contact', {
+      method: 'POST',
+      body: {
+        name: contactForm.name.trim(),
+        phone: contactForm.phone,
+        comment: contactForm.comment,
+        source: 'contact_footer',
+        consent: true,
+      },
+    })
+    contactSuccess.value = true
+  } catch (err: any) {
+    contactError.value = err?.data?.message || err?.statusMessage || err?.message || 'Не удалось отправить заявку. Попробуйте ещё раз или позвоните нам.'
+  } finally {
+    contactSubmitting.value = false
+  }
 }
 
 function resetContact() {

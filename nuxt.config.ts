@@ -1,15 +1,24 @@
+// Прод-деплой: Beget VPS (Node.js + PM2 + Nginx). Сервер работает
+// как Node-приложение (Nitro preset node-server), domain root = '/'.
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   ssr: false,
   nitro: {
-    preset: 'github-pages',
+    preset: 'node-server',
   },
 
   modules: ['@unocss/nuxt'],
 
+  runtimeConfig: {
+    databaseUrl: '',
+    telegramBotToken: '',
+    telegramChatId: '',
+    public: {},
+  },
+
   app: {
-    baseURL: '/radde/',
+    baseURL: '/',
     head: {
       htmlAttrs: { lang: 'ru' },
       title: 'Радде — Пансионат в горах Дагестана',
@@ -22,9 +31,9 @@ export default defineNuxtConfig({
         // Дефолтные SEO-меты — каждая страница перетирает через useSiteMeta()
       ],
       link: [
-        { rel: 'icon', type: 'image/svg+xml', href: '/radde/favicon.svg' },
-        { rel: 'icon', type: 'image/png', sizes: '512x512', href: '/radde/favicon.png' },
-        { rel: 'apple-touch-icon', href: '/radde/favicon.png' },
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'icon', type: 'image/png', sizes: '512x512', href: '/favicon.png' },
+        { rel: 'apple-touch-icon', href: '/favicon.png' },
         // Шрифты — self-hosted через @fontsource (нельзя CDN: 152-ФЗ запрещает
         // передачу IP пользователей на серверы Google в США). Импорты в global.css.
       ],

@@ -222,9 +222,22 @@ async function submitTransfer() {
     return
   }
   transferSubmitting.value = true
-  await new Promise(r => setTimeout(r, 1200))
-  transferSubmitting.value = false
-  transferSuccess.value = true
+  try {
+    await $fetch('/api/transfer', {
+      method: 'POST',
+      body: {
+        name: transferForm.name.trim(),
+        phone: transferForm.phone,
+        flight: transferForm.flight,
+        consent: true,
+      },
+    })
+    transferSuccess.value = true
+  } catch (err: any) {
+    transferError.value = err?.data?.message || err?.statusMessage || err?.message || 'Не удалось отправить заявку. Попробуйте ещё раз или позвоните нам.'
+  } finally {
+    transferSubmitting.value = false
+  }
 }
 
 function closeTransfer() {

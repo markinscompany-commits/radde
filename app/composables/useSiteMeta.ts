@@ -14,8 +14,7 @@ interface SiteMetaOpts {
 }
 
 const SITE_NAME = 'Радде'
-// При смене домена с GitHub Pages на боевой radde.ru — поменять SITE_URL
-const SITE_URL = 'https://markinscompany-commits.github.io/radde'
+const SITE_URL = 'https://radde.ru'
 const DEFAULT_OG_IMAGE = `${SITE_URL}/images/hero/hero-radde.png`
 
 export function useSiteMeta(opts: SiteMetaOpts) {

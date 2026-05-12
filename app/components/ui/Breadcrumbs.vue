@@ -55,7 +55,7 @@ const props = withDefaults(defineProps<{
   variant: 'dark',
 })
 
-const SITE_URL = 'https://markinscompany-commits.github.io'
+const SITE_URL = 'https://radde.ru'
 
 useHead(() => ({
   script: [

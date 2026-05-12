@@ -137,10 +137,22 @@ async function submit() {
     return
   }
   submitting.value = true
-  // TODO: отправка на сервер → SQLite → Telegram
-  await new Promise(resolve => setTimeout(resolve, 1200))
-  submitting.value = false
-  isSuccess.value = true
+  try {
+    await $fetch('/api/contact', {
+      method: 'POST',
+      body: {
+        name: form.name.trim(),
+        phone: form.phone,
+        source: 'booking_modal',
+        consent: true,
+      },
+    })
+    isSuccess.value = true
+  } catch (err: any) {
+    errorMessage.value = err?.data?.message || err?.statusMessage || err?.message || 'Не удалось отправить заявку. Попробуйте ещё раз или позвоните нам.'
+  } finally {
+    submitting.value = false
+  }
 }
 </script>
 

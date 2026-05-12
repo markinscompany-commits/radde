@@ -3,5 +3,6 @@ Disallow: /booking
 Disallow: /booking/success
 Disallow: /privacy
 Disallow: /design-system
+Disallow: /admin
 
-Sitemap: https://markinscompany-commits.github.io/radde/sitemap.xml
+Sitemap: https://radde.ru/sitemap.xml

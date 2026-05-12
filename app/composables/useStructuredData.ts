@@ -1,7 +1,7 @@
 // Schema.org JSON-LD для поисковых систем (Яндекс, Google).
 // Подключение: useStructuredData('hotel') / .article(post) / .breadcrumbs([...]).
 
-const SITE_URL = 'https://markinscompany-commits.github.io/radde'
+const SITE_URL = 'https://radde.ru'
 
 export function useStructuredData() {
   function inject(json: object) {
