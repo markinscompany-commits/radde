@@ -213,7 +213,7 @@
                     <div class="flex flex-wrap gap-1.5 mb-3">
                       <span class="spec-chip text-3.25! py-0.75! px-2!">{{ r.area }} м²</span>
                       <span class="spec-chip text-3.25! py-0.75! px-2!">{{ r.bed }}</span>
-                      <span class="spec-chip text-3.25! py-0.75! px-2!">до {{ r.guests }} гостей</span>
+                      <span class="spec-chip text-3.25! py-0.75! px-2!">до {{ r.effectiveCapacity }} гостей</span>
                     </div>
                     <!-- Порядок проверок:
                          1) Не помещается по числу гостей → подсказка с лимитом и кнопками

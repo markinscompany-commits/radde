@@ -89,15 +89,19 @@ export function useAvailableRooms(query: AvailabilityQuery) {
           priceVariants: [],
         }
       }
-      // fits проверяем по физическому r.guests (статика из useRooms) — это «правда»
-      // о вместимости номера. capacity_max из PMS может быть меньше (если подкатегория
-      // не настроена), но для гостя важна реальная физическая вместимость.
+      // Вместимость берём из Bnovo capacity_max — это «правда» о том, на сколько
+      // гостей категория реально продаётся в PMS (включая новые подкатегории-составы,
+      // которые Mark добавляет в Bnovo — например «Люкс на 3»). Так новые варианты
+      // подтягиваются на сайт автоматически, без правки кода. Если PMS вернул 0/пусто
+      // (подкатегории не настроены / категории нет в ответе) — fallback на статичный
+      // r.guests из useRooms.
+      const cap = (b.capacity_max && b.capacity_max > 0) ? b.capacity_max : r.guests
       return {
         ...r,
         availableCount: b.available_count,
         pricePerNight: b.price_per_night ?? r.priceValue,
-        fitsGuests: guests <= r.guests,
-        effectiveCapacity: r.guests,
+        fitsGuests: guests <= cap,
+        effectiveCapacity: cap,
         available: b.available,
         nextAvailableFrom: b.next_available_from,
         nextAvailableTo: b.next_available_to,
