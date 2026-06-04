@@ -2,10 +2,11 @@
  * Единый источник правды для номеров пансионата.
  * Используется в SectionsRooms (главная) и в pages/booking.vue (выбор номера).
  *
- * Поля bnovoRoomTypeId / bnovoRateId зарезервированы под интеграцию с Bnovo —
- * заполнятся, когда придут данные от клиента (lcode, маппинг номеров на тарифы).
- * До того страница /booking работает без онлайн-подтверждения, заявка
- * отправляется как лид с собранной структурой, готовой под Bnovo POST /bookings.
+ * price / priceValue здесь — fallback на случай, если /api/availability упал.
+ * В обычной ситуации фронт показывает live-цены из Bnovo (см. useAvailableRooms.ts).
+ *
+ * bnovoRoomTypeId соответствует room_type_id в Bnovo (см.
+ * server/utils/bnovo-mapping.ts — это серверная сторона той же таблицы).
  */
 export interface RoomDef {
   id: string
@@ -14,7 +15,7 @@ export interface RoomDef {
   bed: string
   guests: number
   view: string
-  price: string         // отображаемая цена «от X ₽»
+  price: string         // fallback «от X ₽» для главной (когда Bnovo молчит)
   priceValue: number    // числовое значение для расчётов /ночь
   description: string
   fullDescription: string
@@ -22,7 +23,6 @@ export interface RoomDef {
   tags: string[]
   images: string[]
   bnovoRoomTypeId?: number | null
-  bnovoRateId?: number | null
 }
 
 const VIP_COUNT = 9
@@ -39,7 +39,7 @@ export function useRooms(): RoomDef[] {
       name: 'VIP',
       area: 50,
       bed: 'King-size',
-      guests: 4,
+      guests: 2,
       view: 'Панорама на горы и долину',
       price: '8 000',
       priceValue: 8000,
@@ -48,15 +48,14 @@ export function useRooms(): RoomDef[] {
       note: '',
       tags: ['Гостиная', 'Камин', 'Терраса', 'Ванна', 'Дождевой душ', 'Халаты', 'Мини-бар'],
       images: range(VIP_COUNT).map(n => `${base}images/rooms/vip/${n}.jpg`),
-      bnovoRoomTypeId: null,
-      bnovoRateId: null,
+      bnovoRoomTypeId: 193604,
     },
     {
       id: 'panorama',
       name: 'Люкс с панорамной спальней',
       area: 35,
       bed: 'King-size',
-      guests: 3,
+      guests: 2,
       view: 'Панорама на горы',
       price: '7 000',
       priceValue: 7000,
@@ -65,14 +64,13 @@ export function useRooms(): RoomDef[] {
       note: '',
       tags: ['Панорамные окна', 'Терраса', 'Дождевой душ', 'Собственный санузел', 'Мини-бар', 'Кресло у окна'],
       images: range(PANORAMA_COUNT).map(n => `${base}images/rooms/panorama/${n}.jpg`),
-      bnovoRoomTypeId: null,
-      bnovoRateId: null,
+      bnovoRoomTypeId: 241615,
     },
     {
       id: 'lux',
       name: 'Люкс',
       area: 30,
-      bed: 'Двуспальная кровать',
+      bed: 'Две односпальные кровати',
       guests: 3,
       view: 'Вид на горы',
       price: '5 500',
@@ -82,8 +80,7 @@ export function useRooms(): RoomDef[] {
       note: '',
       tags: ['Собственный санузел', 'Балкон', 'Телевизор', 'Мини-бар'],
       images: range(LUX_COUNT).map(n => `${base}images/rooms/lux/${n}.jpg`),
-      bnovoRoomTypeId: null,
-      bnovoRateId: null,
+      bnovoRoomTypeId: 193603,
     },
     {
       id: 'standard',
@@ -99,8 +96,7 @@ export function useRooms(): RoomDef[] {
       note: 'Санузел в коридоре — один на два номера',
       tags: ['Рабочее место', 'Шкаф', 'Вид на лес'],
       images: range(STANDARD_COUNT).map(n => `${base}images/rooms/standard/${n}.jpg`),
-      bnovoRoomTypeId: null,
-      bnovoRateId: null,
+      bnovoRoomTypeId: 193602,
     },
   ]
 }

@@ -14,7 +14,20 @@ export default defineNuxtConfig({
     databaseUrl: '',
     telegramBotToken: '',
     telegramChatId: '',
-    public: {},
+    // Bnovo PMS — write через серый-канал reservationsteps.ru, read через парсинг
+    // публичной формы. Маппинг слаг→room_type_id зашит в server/utils/bnovo-mapping.ts.
+    bnovoAccountId: '',
+    bnovoApiKey: '',
+    bnovoLcode: '',          // UID объекта в URL модуля бронирования
+    bnovoPlanId: '91433',    // ID тарифа в Bnovo (по умолчанию «Стандартный с завтраком»)
+    bnovoWarrantyType: 'onlinepay', // 'onlinepay' (HAR-дефолт) или другое — зависит от тарифа в Bnovo
+    adminProbeToken: '',     // /api/admin/bnovo-probe — токен для диагностических POST
+    public: {
+      // ID счётчика Яндекс.Метрики. Задаётся через NUXT_PUBLIC_METRIKA_ID на проде.
+      // Пусто — Метрика не грузится (см. plugins/metrika.client.ts). Счётчик
+      // подключается ТОЛЬКО после согласия на аналитические cookie.
+      metrikaId: '',
+    },
   },
 
   app: {

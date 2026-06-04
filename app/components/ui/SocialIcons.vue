@@ -44,6 +44,10 @@ const Instagram = () => h('svg', { width: iconPx.value, height: iconPx.value, vi
 
 const contacts = useContacts()
 
+// Скрытые каналы — по просьбе клиента (06.2026) ВК и Max временно не показываем.
+// Код иконок и данные НЕ удаляем: чтобы вернуть — убери канал из этого списка.
+const HIDDEN_CHANNELS = ['max', 'vk']
+
 const items = computed(() => {
   const map: Record<string, { title: string, href: string, svg?: any, img?: string }> = {
     whatsapp: { title: 'WhatsApp', href: contacts.whatsapp, svg: Whatsapp },
@@ -51,6 +55,9 @@ const items = computed(() => {
     max: { title: 'Max', href: contacts.max, img: `${base}images/icon-max.svg` },
     instagram: { title: 'Instagram*', href: contacts.instagram, svg: Instagram },
   }
-  return props.channels.map(c => map[c]).filter(Boolean)
+  return props.channels
+    .filter(c => !HIDDEN_CHANNELS.includes(c))
+    .map(c => map[c])
+    .filter(Boolean)
 })
 </script>

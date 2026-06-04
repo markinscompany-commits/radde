@@ -10,6 +10,7 @@
           :key="i"
           :room="room"
           :reverse="i % 2 === 1"
+          :availability="availabilityFor(room.id)"
           @details="openDetails"
           @lightbox="openLightbox"
         />
@@ -20,6 +21,7 @@
     <UiRoomDetailsModal
       :room="detailRoom"
       action="book"
+      :availability="detailAvailability"
       @close="closeDetails"
     />
 
@@ -121,6 +123,51 @@ if (import.meta.client) {
 // Берём номера из общего источника (composables/useRooms.ts), добавляем
 // локальное UI-поле activePhoto для индекса слайда галереи в карточках.
 const rooms = reactive(useRooms().map(r => ({ ...r, activePhoto: 0 })))
+
+// --- Live-цены и availability из Bnovo на дефолтные даты «сегодня → завтра, 2 взр.».
+// Это снимок «сейчас доступно». На /booking гость выбирает свои даты и видит реальные цены.
+const isoToday = computed(() => new Date().toISOString().slice(0, 10))
+const isoTomorrow = computed(() => {
+  const d = new Date()
+  d.setDate(d.getDate() + 1)
+  return d.toISOString().slice(0, 10)
+})
+const adultsRef = ref(2)
+const childrenRef = ref(0)
+const { rooms: liveRooms } = useAvailableRooms({
+  arrival: isoToday,
+  departure: isoTomorrow,
+  adults: adultsRef,
+  children: childrenRef,
+})
+function availabilityFor(slug: string) {
+  const found = liveRooms.value.find(r => r.id === slug)
+  if (!found) return null
+  return {
+    available: found.available,
+    availableCount: found.availableCount,
+    pricePerNight: found.pricePerNight ?? null,
+    nextAvailableFrom: found.nextAvailableFrom,
+    nextAvailableTo: found.nextAvailableTo,
+    nextAvailableNights: found.nextAvailableNights,
+  }
+}
+
+// Снапшот для модалки: цены и слоты по составу из PMS на дефолтные даты.
+// Гость ещё не выбрал даты, поэтому модалка показывает «прайс по составам»
+// именно на «сегодня→завтра, 2 взр.» — это срез реальной цены, без дисклеймеров.
+const detailAvailability = computed(() => {
+  if (!detailRoom.value) return null
+  const live = liveRooms.value.find(r => r.id === detailRoom.value!.id)
+  if (!live) return null
+  return {
+    pricePerNight: live.pricePerNight,
+    priceVariants: live.priceVariants,
+    nights: 1,
+    adults: adultsRef.value,
+    children: childrenRef.value,
+  }
+})
 
 onMounted(() => {
   if (!import.meta.client) return

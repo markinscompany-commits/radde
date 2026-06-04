@@ -65,6 +65,11 @@
               />
             </transition-group>
 
+            <!-- Лупа (верхний правый угол): открыть фото на весь экран -->
+            <button @click="openLightbox" class="gallery-zoom-btn" aria-label="Открыть фото на весь экран">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35M11 8v6M8 11h6"/></svg>
+            </button>
+
             <!-- Bottom bar: arrows left, dots right (same as Rooms) -->
             <div class="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-between px-4 py-3">
               <!-- Arrows (bottom-left) -->
@@ -124,6 +129,33 @@
         </div>
       </div>
     </div>
+
+    <!-- Лайтбокс: фото на весь экран -->
+    <Teleport to="body">
+      <Transition name="lightbox">
+        <div v-if="lightboxOpen" class="lightbox" @click.self="closeLightbox" data-lenis-prevent>
+          <button @click="closeLightbox" class="lightbox-close" aria-label="Закрыть">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+          <button @click="prevSlide" class="lightbox-arrow lightbox-arrow--prev" aria-label="Предыдущее фото">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <img :src="galleryImages[currentSlide]" :alt="`Пансионат Радде — фото ${currentSlide + 1}`" class="lightbox-img" @click.self="closeLightbox" />
+          <button @click="nextSlide" class="lightbox-arrow lightbox-arrow--next" aria-label="Следующее фото">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+          <div class="lightbox-dots">
+            <button
+              v-for="(_, idx) in galleryImages"
+              :key="idx"
+              @click="goToSlide(idx)"
+              class="media-dot"
+              :class="currentSlide === idx ? 'bg-white w-5' : 'bg-white/45 w-2'"
+            ></button>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </section>
 </template>
 
@@ -145,7 +177,29 @@ const galleryImages = [
 ]
 
 const currentSlide = ref(0)
+const lightboxOpen = ref(false)
 let slideInterval: ReturnType<typeof setInterval> | null = null
+
+function openLightbox() {
+  lightboxOpen.value = true
+  stopAutoplay()
+  document.body.style.overflow = 'hidden'
+  useLenis().instance()?.stop()
+}
+
+function closeLightbox() {
+  lightboxOpen.value = false
+  document.body.style.overflow = ''
+  useLenis().instance()?.start()
+  if (isVisible.value) startAutoplay()
+}
+
+function onLightboxKey(e: KeyboardEvent) {
+  if (!lightboxOpen.value) return
+  if (e.key === 'Escape') closeLightbox()
+  else if (e.key === 'ArrowLeft') prevSlide()
+  else if (e.key === 'ArrowRight') nextSlide()
+}
 
 function goToSlide(idx: number) {
   currentSlide.value = idx
@@ -163,7 +217,7 @@ function prevSlide() {
 }
 
 function startAutoplay() {
-  if (slideInterval) return
+  if (slideInterval || lightboxOpen.value) return
   slideInterval = setInterval(() => {
     currentSlide.value = (currentSlide.value + 1) % galleryImages.length
   }, 3000)
@@ -204,10 +258,13 @@ onMounted(() => {
   if (sectionRef.value) observer.observe(sectionRef.value)
   onUnmounted(() => observer.disconnect())
 
+  window.addEventListener('keydown', onLightboxKey)
 })
 
 onUnmounted(() => {
   stopAutoplay()
+  window.removeEventListener('keydown', onLightboxKey)
+  document.body.style.overflow = ''
 })
 </script>
 
@@ -218,4 +275,108 @@ onUnmounted(() => {
 }
 .gallery-enter-from { opacity: 0; }
 .gallery-leave-to { opacity: 0; }
+
+/* Кнопка-лупа в углу галереи */
+.gallery-zoom-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2C2416;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.gallery-zoom-btn:hover {
+  background: #fff;
+  transform: scale(1.05);
+}
+
+/* Лайтбокс */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(20, 16, 10, 0.92);
+  backdrop-filter: blur(6px);
+}
+.lightbox-img {
+  max-width: min(92vw, 1400px);
+  max-height: 88vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  user-select: none;
+}
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.lightbox-close:hover { background: rgba(255, 255, 255, 0.24); }
+.lightbox-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.lightbox-arrow:hover { background: rgba(255, 255, 255, 0.22); }
+.lightbox-arrow--prev { left: 16px; }
+.lightbox-arrow--next { right: 16px; }
+.lightbox-dots {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+@media (max-width: 640px) {
+  .lightbox-arrow { width: 40px; height: 40px; }
+  .lightbox-arrow--prev { left: 6px; }
+  .lightbox-arrow--next { right: 6px; }
+}
+
+.lightbox-enter-active { transition: opacity 0.25s ease; }
+.lightbox-enter-active .lightbox-img { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+.lightbox-leave-active { transition: opacity 0.2s ease; }
+.lightbox-enter-from { opacity: 0; }
+.lightbox-enter-from .lightbox-img { transform: scale(0.94); }
+.lightbox-leave-to { opacity: 0; }
 </style>

@@ -1,78 +1,39 @@
 /**
  * Доступные номера на выбранные даты + кол-во гостей.
- *
- * Сейчас возвращает реалистичный mock — структура совпадает с тем, что вернёт
- * реальный Bnovo `/api/v2/availability` (см. radde/Bnovo API — справочник).
- * Когда клиент пришлёт API-ключ + lcode, заменим внутренности fetchAvailability()
- * на $fetch к нашему Nuxt-server-route, прокидывающему запрос в Bnovo.
+ * Источник — наш серверный роут /api/availability, который ходит на форму
+ * Bnovo и парсит live-цены/availability/альтернативные даты.
  *
  * Одна карточка на ТИП номера (vip/panorama/lux/standard), а не на каждый
- * физический room_id из 17 «Люксов». Bnovo сам агрегирует доступность по
- * room_type_id, конкретный номер назначает менеджер при подтверждении —
- * для гостя это «один из 17 свободных Люксов».
+ * физический room_id. Bnovo сам агрегирует.
  *
- * Доступность псевдо-случайная, но детерминированная по дате заезда + id типа,
- * чтобы при перезагрузке страницы в один день цифры не прыгали.
+ * Если /api/availability упал или вернул error — отдаём fallback из useRooms()
+ * (статичные «от X ₽» цены), чтобы UI не ломался.
  */
 import type { RoomDef } from './useRooms'
+import type { AvailabilityResponse, AvailabilityForSlug, PriceVariant } from '~~/shared/bnovo'
 
 export interface AvailableRoom extends RoomDef {
-  /** Сколько номеров этого типа свободно на выбранные даты */
+  /** Сколько номеров этого типа свободно на выбранные даты (0 если закрыт) */
   availableCount: number
-  /** Общее кол-во номеров этого типа в фонде */
-  totalCount: number
-  /** Цена за ночь на выбранные даты (может отличаться от базовой по сезону) */
+  /** Цена за ночь на выбранные даты (минимум по типу). Может равняться priceValue если PMS не ответил. */
   pricePerNight: number
   /** Подходит ли номер под выбранное кол-во гостей */
   fitsGuests: boolean
-}
-
-const TOTAL_BY_TYPE: Record<string, number> = {
-  vip: 9,
-  panorama: 8,
-  lux: 17,
-  standard: 3,
-}
-
-/** Простейший детерминированный «hash» на базе строки */
-function hashString(s: string): number {
-  let h = 0
-  for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0
-  return Math.abs(h)
-}
-
-/** Сезонный коэффициент: летом дороже */
-function seasonalMultiplier(arrivalIso: string): number {
-  const m = new Date(arrivalIso).getMonth() // 0..11
-  // Высокий: июнь–август (5–7), низкий: ноябрь–март (10,11,0,1,2)
-  if (m >= 5 && m <= 7) return 1.15
-  if (m >= 10 || m <= 2) return 0.92
-  return 1.0
-}
-
-function mockAvailability(
-  rooms: RoomDef[],
-  arrival: string,
-  departure: string,
-  guests: number,
-): AvailableRoom[] {
-  const seasonal = seasonalMultiplier(arrival)
-  return rooms.map(r => {
-    const total = TOTAL_BY_TYPE[r.id] ?? 1
-    // Доступность: 40–95% от фонда, зависит от даты + типа
-    const seed = hashString(`${arrival}|${r.id}`)
-    const minFree = Math.max(1, Math.floor(total * 0.4))
-    const range = total - minFree + 1
-    const available = minFree + (seed % range)
-    const price = Math.round((r.priceValue * seasonal) / 50) * 50
-    return {
-      ...r,
-      availableCount: available,
-      totalCount: total,
-      pricePerNight: price,
-      fitsGuests: guests <= r.guests,
-    }
-  })
+  /** Доступен ли вообще на эти даты */
+  available: boolean
+  /** Реальный лимит, по которому проверяется fitsGuests (capacity_max из PMS или static r.guests). */
+  effectiveCapacity: number
+  /** Ближайшая дата заезда (ISO YYYY-MM-DD) когда категория свободна — null если она и так свободна */
+  nextAvailableFrom: string | null
+  /** Дата выезда предлагаемой альтернативы (ISO) — обычно arrival+requestedNights */
+  nextAvailableTo: string | null
+  /** Длительность предлагаемой альтернативы в ночах (= длительности исходного запроса при удачном matche) */
+  nextAvailableNights: number | null
+  /**
+   * Прайс-сетка по составам гостей из PMS (отсортирована по цене).
+   * Пустой массив если PMS молчит или у категории нет подкатегорий.
+   */
+  priceVariants: PriceVariant[]
 }
 
 export interface AvailabilityQuery {
@@ -88,29 +49,85 @@ export function useAvailableRooms(query: AvailabilityQuery) {
   const loading = ref(false)
   const error = ref<string>('')
 
+  function buildFallback(adults: number, children: number): AvailableRoom[] {
+    const guests = Math.max(1, adults + children)
+    return allRooms.map(r => ({
+      ...r,
+      availableCount: 0,
+      pricePerNight: r.priceValue,
+      fitsGuests: guests <= r.guests,
+      effectiveCapacity: r.guests,
+      available: false,
+      nextAvailableFrom: null,
+      nextAvailableTo: null,
+      nextAvailableNights: null,
+      priceVariants: [],
+    }))
+  }
+
+  function mergeWithBnovo(
+    bnovoRooms: AvailabilityForSlug[],
+    adults: number,
+    children: number,
+  ): AvailableRoom[] {
+    const bySlug = new Map<string, AvailabilityForSlug>()
+    for (const r of bnovoRooms) bySlug.set(r.slug, r)
+
+    const guests = Math.max(1, adults + children)
+    return allRooms.map(r => {
+      const b = bySlug.get(r.id)
+      if (!b) {
+        return {
+          ...r,
+          availableCount: 0,
+          pricePerNight: r.priceValue,
+          fitsGuests: guests <= r.guests,
+          effectiveCapacity: r.guests,
+          available: false,
+          nextAvailableFrom: null,
+          nextAvailableNights: null,
+          priceVariants: [],
+        }
+      }
+      // fits проверяем по физическому r.guests (статика из useRooms) — это «правда»
+      // о вместимости номера. capacity_max из PMS может быть меньше (если подкатегория
+      // не настроена), но для гостя важна реальная физическая вместимость.
+      return {
+        ...r,
+        availableCount: b.available_count,
+        pricePerNight: b.price_per_night ?? r.priceValue,
+        fitsGuests: guests <= r.guests,
+        effectiveCapacity: r.guests,
+        available: b.available,
+        nextAvailableFrom: b.next_available_from,
+        nextAvailableTo: b.next_available_to,
+        nextAvailableNights: b.next_available_nights,
+        priceVariants: b.variants ?? [],
+      }
+    })
+  }
+
   async function fetchAvailability() {
     const arrival = unref(query.arrival)
     const departure = unref(query.departure)
+    const adults = unref(query.adults)
+    const children = unref(query.children)
     if (!arrival || !departure || departure <= arrival) {
       rooms.value = []
       return
     }
-    const guests = Math.max(1, unref(query.adults) + unref(query.children))
     loading.value = true
     error.value = ''
     try {
-      // === Когда подключим Bnovo: ===
-      // const data = await $fetch<AvailableRoom[]>('/api/availability', {
-      //   query: { arrival, departure, adults: query.adults, children: query.children }
-      // })
-      // rooms.value = data
-      //
-      // Сейчас — mock с задержкой 250 мс, чтобы UI показал loader
-      await new Promise(r => setTimeout(r, 250))
-      rooms.value = mockAvailability(allRooms, arrival, departure, guests)
+      const data = await $fetch<AvailabilityResponse>('/api/availability', {
+        query: { arrival, departure, adults, children },
+      })
+      rooms.value = mergeWithBnovo(data.rooms, adults, children)
+      if (data.error) error.value = data.error
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Не удалось загрузить доступность'
-      rooms.value = []
+      // Fallback: показываем статичные карточки с базовой ценой
+      rooms.value = buildFallback(adults, children)
     } finally {
       loading.value = false
     }

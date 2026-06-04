@@ -6,23 +6,29 @@
  * изменения, чтобы данные не терялись при переходах между страницами,
  * закрытии вкладки и т.п.
  *
- * Структура совместима с Bnovo API v2 (POST /bookings):
- *   - arrival / departure → строки YYYY-MM-DD
- *   - rooms[]: { room_type_id, rate_id, guests: [{ adults, children }] }
- *   - guest: { first_name, last_name, email, phone }
- *   - extras: [{ id: bnovoServiceId, count }]
- *   - comment, source_id
- *
- * `toBnovoPayload(state)` собирает готовый body. До того как клиент
- * пришлёт lcode + маппинг номеров на bnovoRoomTypeId/RateId, payload
- * остаётся «черновиком» (поля null) и отправляется как лид.
+ * Payload для /api/booking собирается прямо на странице /booking,
+ * формат — см. server/utils/schemas.ts (bookingSchema).
  */
 import type { ExtraDef } from './useBookingExtras'
 import type { RoomDef } from './useRooms'
 
 export interface BookingExtraSelection {
   id: string
+  /**
+   * Количество услуг.
+   *  - unit='session': сколько раз заказывают (1 экскурсия, 2 экскурсии…).
+   *  - unit='night': сколько раз × nights.
+   *  - unit='guest', perNight=false: сколько раз каждый участник получает услугу
+   *    (например 2 конные прогулки).
+   *  - unit='guest', perNight=true: множитель за ночь (обычно 1).
+   */
   count: number
+  /**
+   * Только для extras с unit='guest': сколько гостей участвует.
+   * По умолчанию — все гости (totalGuests).
+   * Игнорируется для unit='night' и unit='session'.
+   */
+  people?: number
 }
 
 export interface BookingGuest {
@@ -33,12 +39,29 @@ export interface BookingGuest {
   city: string
 }
 
+export interface BookingMultiRoomItem {
+  /** slug категории номера (vip/panorama/lux/standard) */
+  id: string
+  /** Сколько физических номеров этого типа */
+  count: number
+}
+
 export interface BookingState {
   arrival: string
   departure: string
   adults: number
   children: number
+  /** Возрасты детей (0-17), длина массива должна равняться `children`.
+   *  Bnovo требует именно массив возрастов для правильного расчёта цены —
+   *  на сайте показываем по одному селекту на каждого ребёнка. */
+  childrenAges: number[]
   roomId: string | null
+  /**
+   * Мульти-номер выбор для большой компании. Если задан — используется вместо
+   * `roomId`. UI и backend обрабатывают набор как один заказ из N номеров.
+   * Null = одиночный режим, выбор через `roomId`.
+   */
+  multiRoom: BookingMultiRoomItem[] | null
   extras: BookingExtraSelection[]
   guest: BookingGuest
   comment: string
@@ -63,7 +86,9 @@ function defaultState(): BookingState {
     departure: plusDays(arrival, 2),
     adults: 2,
     children: 0,
+    childrenAges: [],
     roomId: null,
+    multiRoom: null,
     extras: [],
     guest: { firstName: '', lastName: '', email: '', phone: '', city: '' },
     comment: '',
@@ -88,8 +113,26 @@ function loadFromStorage(): BookingState {
       departure,
       adults: parsed.adults ?? fallback.adults,
       children: parsed.children ?? fallback.children,
+      childrenAges: Array.isArray(parsed.childrenAges)
+        ? parsed.childrenAges.filter((a: unknown): a is number => typeof a === 'number' && a >= 0 && a <= 17)
+        : [],
       roomId: parsed.roomId ?? null,
-      extras: Array.isArray(parsed.extras) ? parsed.extras.filter(e => e && typeof e.id === 'string' && e.count > 0) : [],
+      multiRoom: Array.isArray(parsed.multiRoom)
+        ? parsed.multiRoom
+            .filter((m): m is BookingMultiRoomItem =>
+              !!m && typeof m.id === 'string' && typeof m.count === 'number' && m.count > 0,
+            )
+            .map(m => ({ id: m.id, count: m.count }))
+        : null,
+      extras: Array.isArray(parsed.extras)
+        ? parsed.extras
+            .filter(e => e && typeof e.id === 'string' && e.count > 0)
+            .map(e => ({
+              id: e.id,
+              count: e.count,
+              people: typeof e.people === 'number' && e.people > 0 ? e.people : undefined,
+            }))
+        : [],
       guest: { ...fallback.guest, ...(parsed.guest || {}) },
       comment: parsed.comment ?? '',
     }
@@ -145,20 +188,41 @@ export function useBookingStore() {
 
   function setRoom(id: string | null) {
     state.value.roomId = id
+    // Одиночный и мульти-номер выбор взаимоисключаются — выбор одного зануляет другой.
+    if (id) state.value.multiRoom = null
   }
 
-  function setExtraCount(id: string, count: number) {
+  function setMultiRoom(items: BookingMultiRoomItem[] | null) {
+    state.value.multiRoom = items && items.length > 0 ? items.map(m => ({ ...m })) : null
+    if (state.value.multiRoom) state.value.roomId = null
+  }
+
+  function setExtraCount(id: string, count: number, opts?: { people?: number }) {
     const idx = state.value.extras.findIndex(e => e.id === id)
     if (count <= 0) {
       if (idx >= 0) state.value.extras.splice(idx, 1)
       return
     }
-    if (idx >= 0) state.value.extras[idx]!.count = count
-    else state.value.extras.push({ id, count })
+    if (idx >= 0) {
+      state.value.extras[idx]!.count = count
+      if (typeof opts?.people === 'number') state.value.extras[idx]!.people = opts.people
+    } else {
+      state.value.extras.push({ id, count, people: opts?.people })
+    }
   }
 
   function getExtraCount(id: string): number {
     return state.value.extras.find(e => e.id === id)?.count || 0
+  }
+
+  function getExtraPeople(id: string, fallback: number): number {
+    const p = state.value.extras.find(e => e.id === id)?.people
+    return typeof p === 'number' && p > 0 ? p : fallback
+  }
+
+  function setExtraPeople(id: string, people: number) {
+    const sel = state.value.extras.find(e => e.id === id)
+    if (sel) sel.people = Math.max(1, people)
   }
 
   function clearExtras() {
@@ -174,8 +238,11 @@ export function useBookingStore() {
     nights,
     setQuery,
     setRoom,
+    setMultiRoom,
     setExtraCount,
     getExtraCount,
+    getExtraPeople,
+    setExtraPeople,
     clearExtras,
     reset,
   }
@@ -183,13 +250,35 @@ export function useBookingStore() {
 
 // ----- расчёт стоимости -----
 
-export function extraSubtotal(extra: ExtraDef, count: number, adults: number, nights: number): number {
-  if (count <= 0) return 0
+/**
+ * Эффективное число участников guest-extra. Если `people` не задан — по умолчанию
+ * все гости. Иначе берём указанное число, ограниченное сверху общим составом.
+ */
+export function extraGuestPeople(sel: BookingExtraSelection, totalGuests: number): number {
+  if (typeof sel.people === 'number' && sel.people > 0) {
+    return Math.min(sel.people, Math.max(1, totalGuests))
+  }
+  return Math.max(1, totalGuests)
+}
+
+export function extraSubtotal(
+  extra: ExtraDef,
+  sel: BookingExtraSelection,
+  totalGuests: number,
+  nights: number,
+): number {
+  if (sel.count <= 0) return 0
   switch (extra.unit) {
-    case 'guest': return extra.priceValue * count * Math.max(1, adults) * Math.max(1, nights)
-    case 'night': return extra.priceValue * count * Math.max(1, nights)
+    case 'guest': {
+      const people = extraGuestPeople(sel, totalGuests)
+      const perNightMul = extra.perNight ? Math.max(1, nights) : 1
+      return extra.priceValue * people * sel.count * perNightMul
+    }
+    case 'night':
+      return extra.priceValue * sel.count * Math.max(1, nights)
     case 'session':
-    default: return extra.priceValue * count
+    default:
+      return extra.priceValue * sel.count
   }
 }
 
@@ -201,59 +290,12 @@ export function calculateTotal(
 ): { roomTotal: number; extrasTotal: number; total: number } {
   const roomTotal = room ? room.priceValue * Math.max(1, nights) : 0
   let extrasTotal = 0
+  const totalGuests = state.adults + state.children
   for (const sel of state.extras) {
     const meta = extrasMeta.find(e => e.id === sel.id)
     if (!meta) continue
-    extrasTotal += extraSubtotal(meta, sel.count, state.adults, nights)
+    extrasTotal += extraSubtotal(meta, sel, totalGuests, nights)
   }
   return { roomTotal, extrasTotal, total: roomTotal + extrasTotal }
 }
 
-// ----- маппинг под Bnovo -----
-
-export interface BnovoBookingPayload {
-  arrival: string
-  departure: string
-  rooms: Array<{
-    room_type_id: number | null
-    rate_id: number | null
-    guests: Array<{ adults: number; children: number }>
-  }>
-  guest: {
-    first_name: string
-    last_name: string
-    email: string
-    phone: string
-  }
-  extras: Array<{ id: number | null; slug: string; count: number }>
-  comment: string
-}
-
-export function toBnovoPayload(
-  state: BookingState,
-  room: RoomDef | undefined,
-  extrasMeta: ExtraDef[],
-): BnovoBookingPayload {
-  return {
-    arrival: state.arrival,
-    departure: state.departure,
-    rooms: [
-      {
-        room_type_id: room?.bnovoRoomTypeId ?? null,
-        rate_id: room?.bnovoRateId ?? null,
-        guests: [{ adults: state.adults, children: state.children }],
-      },
-    ],
-    guest: {
-      first_name: state.guest.firstName,
-      last_name: state.guest.lastName,
-      email: state.guest.email,
-      phone: state.guest.phone,
-    },
-    extras: state.extras.map(sel => {
-      const meta = extrasMeta.find(e => e.id === sel.id)
-      return { id: meta?.bnovoServiceId ?? null, slug: sel.id, count: sel.count }
-    }),
-    comment: state.comment,
-  }
-}

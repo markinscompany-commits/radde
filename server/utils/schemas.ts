@@ -24,8 +24,10 @@ export const bookingSchema = z.object({
       rate_id: z.string().nullish(),
       guests: z.array(
         z.object({
-          adults: z.number().int().min(1).max(10),
-          children: z.number().int().min(0).max(10),
+          adults: z.number().int().min(1).max(18),
+          children: z.number().int().min(0).max(18),
+          /** Возрасты детей (0-17). Длина должна равняться `children`. Bnovo считает цену по возрасту. */
+          childrenAges: z.array(z.number().int().min(0).max(17)).optional().default([]),
         }),
       ).min(1),
     }),
@@ -33,7 +35,8 @@ export const bookingSchema = z.object({
   guest: z.object({
     first_name: nameSchema,
     last_name: z.string().trim().max(120).optional().default(''),
-    email: z.string().trim().max(120).email().optional().or(z.literal('')),
+    // Email обязательный — Bnovo не принимает броню без него
+    email: z.string().trim().min(3).max(120).email('Введите корректный email'),
     phone: phoneSchema,
     city: z.string().trim().max(120).optional().default(''),
   }),
@@ -42,6 +45,8 @@ export const bookingSchema = z.object({
       id: z.string().nullish(),
       slug: z.string().min(1),
       count: z.number().int().min(1).max(20),
+      /** Только для guest-extras: на скольких гостей оказывается услуга. */
+      people: z.number().int().min(1).max(20).optional(),
     }),
   ).optional().default([]),
   comment: z.string().trim().max(2000).optional().default(''),

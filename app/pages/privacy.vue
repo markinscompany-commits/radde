@@ -19,7 +19,7 @@
         <p class="text-body-lg text-sand-700 max-w-130">
           Мы бережно относимся к личным данным гостей пансионата. На этой странице — что и зачем мы собираем, сколько храним и как вы можете удалить свои данные.
         </p>
-        <span class="text-small text-sand-600 block mt-6">Редакция от 2&nbsp;мая 2026&nbsp;г.</span>
+        <span class="text-small text-sand-600 block mt-6">Редакция от 4&nbsp;июня 2026&nbsp;г.</span>
       </div>
     </section>
 

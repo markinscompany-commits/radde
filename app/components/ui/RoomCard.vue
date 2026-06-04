@@ -1,9 +1,10 @@
 <template>
-  <div class="room-card bg-white rounded-3 overflow-hidden border border-sand-200 shadow-sm">
+  <div class="room-card bg-white rounded-3 overflow-hidden border border-sand-200 shadow-sm"
+       :class="{ 'room-card--unavailable': isUnavailable }">
     <div class="flex flex-col lg:flex-row" :class="reverse ? 'lg:flex-row-reverse' : ''">
       <!-- Photo carousel (60%) -->
       <div class="relative lg:w-[60%] flex-shrink-0">
-        <div class="aspect-4/3 lg:aspect-auto lg:h-full relative overflow-hidden bg-sand-200 cursor-pointer"
+        <div class="aspect-4/3 lg:aspect-auto lg:h-full relative overflow-hidden bg-sand-200 cursor-pointer room-card__media"
              @click="$emit('lightbox', room, room.activePhoto)">
           <UiPicture
             v-for="(src, pi) in room.images"
@@ -65,37 +66,10 @@
           <span class="text-small text-amber-700 font-500 leading-snug">{{ room.note }}</span>
         </div>
 
+        <!-- На главной (showcase) показываем только теги-удобства. Характеристики
+             (площадь/кровать/гости/вид) и бейдж «Последний номер» — это детали
+             страницы бронирования, на главной их не выводим (фидбек Mark 06.2026). -->
         <div class="flex flex-wrap gap-2 mb-auto pb-5">
-          <span class="spec-chip">
-            <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
-              <rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.3"/>
-              <path d="M2 7h14M7 2v14" stroke="currentColor" stroke-width="1.3"/>
-            </svg>
-            {{ room.area }} м²
-          </span>
-          <span class="spec-chip">
-            <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
-              <rect x="1.5" y="8" width="15" height="7" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
-              <path d="M3 8V6a3 3 0 016 0v2M9 8V6a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.3"/>
-              <path d="M1.5 11.5h15" stroke="currentColor" stroke-width="1.3"/>
-            </svg>
-            {{ room.bed }}
-          </span>
-          <span class="spec-chip">
-            <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
-              <circle cx="9" cy="5.5" r="3" stroke="currentColor" stroke-width="1.3"/>
-              <path d="M3 16c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-            </svg>
-            до {{ room.guests }} гостей
-          </span>
-          <span class="spec-chip">
-            <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
-              <path d="M2 13c2-4 4.5-7 7-7s5 2 7 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-              <path d="M1 15h16" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-              <circle cx="13" cy="4" r="2" stroke="currentColor" stroke-width="1.3"/>
-            </svg>
-            {{ room.view }}
-          </span>
           <span v-for="(tag, ti) in room.tags.slice(0, 4)" :key="ti" class="amenity-chip">
             {{ tag }}
           </span>
@@ -108,9 +82,11 @@
 
         <div class="pt-4 border-t border-sand-100">
           <div class="text-left mb-4">
-            <span class="font-display font-500 text-sand-900" style="font-size: clamp(1.3rem, 2vw, 1.6rem)">от {{ room.price }} ₽</span>
+            <span class="font-display font-500 text-sand-900" style="font-size: clamp(1.3rem, 2vw, 1.6rem)">от {{ displayPrice }} ₽</span>
             <span class="text-small text-sand-600 ml-1">/ ночь</span>
-            <span class="block text-small text-sand-600 mt-0.5">за 2 взрослых</span>
+            <!-- На главной — только цена «от». Без подписи «за N взрослых», без
+                 бейджа «Последний номер»/alt-дат. Реальная доступность и точная
+                 цена под состав показываются на /booking после выбора дат. -->
           </div>
           <div class="flex flex-wrap items-center justify-end gap-x-4 gap-y-3">
             <button v-if="room.fullDescription"
@@ -143,9 +119,20 @@ export interface Room {
   activePhoto: number
 }
 
+export interface RoomAvailability {
+  available: boolean
+  availableCount: number
+  pricePerNight: number | null
+  nextAvailableFrom: string | null  // ISO YYYY-MM-DD — заезд
+  nextAvailableTo: string | null    // ISO YYYY-MM-DD — выезд той же длительности
+  nextAvailableNights: number | null
+}
+
 const props = defineProps<{
   room: Room
   reverse?: boolean
+  /** Live-данные из /api/availability — необязательны, без них показываем fallback */
+  availability?: RoomAvailability | null
 }>()
 
 defineEmits<{
@@ -155,6 +142,23 @@ defineEmits<{
 
 const base = useRuntimeConfig().app.baseURL || '/'
 const bookHref = computed(() => props.room.id ? `${base}booking?room=${props.room.id}` : `${base}booking`)
+
+// Live-цена (если /api/availability ответил), иначе fallback из useRooms.
+const displayPrice = computed(() => {
+  const live = props.availability?.pricePerNight
+  if (live && live > 0) return Math.round(live).toLocaleString('ru-RU')
+  return props.room.price
+})
+
+// Флаг «номер не подходит» — для визуального заглушения карточки (Ч/Б + штриховка).
+// Срабатывает когда категория недоступна на эти даты (закрыта или нет свободных
+// физических номеров). Для гостя это сигнал «этот вариант мимо», и его внимание
+// направляется на оставшиеся карточки.
+const isUnavailable = computed(() => {
+  const av = props.availability
+  if (!av) return false
+  return !av.available
+})
 
 function nextPhoto() {
   props.room.activePhoto = (props.room.activePhoto + 1) % props.room.images.length
@@ -174,5 +178,14 @@ function prevPhoto() {
 
 .room-photo-transition {
   transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Недоступный номер на главной — Ч/Б фото без штриховки. Текст и цены
+   остаются читаемыми. Информация про альтернативный период подчёркнуто видна
+   за счёт оставшегося акцентного бейджа. На /booking (другая страница) у нас
+   есть отдельный room-pick--unfit с более жёсткой визуализацией для шага выбора. */
+.room-card--unavailable .room-card__media img,
+.room-card--unavailable .room-photo-transition {
+  filter: grayscale(0.95) brightness(0.85) contrast(0.92);
 }
 </style>

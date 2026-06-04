@@ -26,21 +26,35 @@
       <div class="h-px bg-white/6 mb-6"></div>
 
       <!-- Реквизиты исполнителя — требование ст. 9, 10 Закона № 2300-1.
-           ЕГРКСМ и тип классификации обязательны по ПП № 1912 (с 01.03.2026)
-           — добавим обратно, когда клиент пройдёт самооценку и получит номер
-           реестровой записи. -->
+           Реестровая запись и тип классификации обязательны по ПП № 1912
+           (с 01.03.2026) — данные из выписки ЕРОК (Росаккредитация). -->
       <div class="footer-legal">
         <div>
           <span class="footer-legal__label">Исполнитель</span>
           <span class="footer-legal__value">{{ contacts.legal.entityName }}</span>
         </div>
         <div>
-          <span class="footer-legal__label">ИНН / ОГРН</span>
+          <span class="footer-legal__label">ИНН / ОГРНИП</span>
           <span class="footer-legal__value">{{ contacts.legal.inn }} / {{ contacts.legal.ogrn }}</span>
         </div>
         <div>
           <span class="footer-legal__label">Юр. адрес</span>
           <span class="footer-legal__value">{{ contacts.legal.address }}</span>
+        </div>
+        <div>
+          <span class="footer-legal__label">Классификация</span>
+          <span class="footer-legal__value">{{ contacts.legal.classification }}</span>
+        </div>
+        <div>
+          <span class="footer-legal__label">Реестровая запись</span>
+          <span class="footer-legal__value">{{ contacts.legal.egrksm }}</span>
+        </div>
+        <div>
+          <span class="footer-legal__label">Документы</span>
+          <span class="footer-legal__value flex flex-wrap gap-x-3 gap-y-0.5">
+            <a :href="`${base}${contacts.legal.vypiskaUrl}`" target="_blank" rel="noopener" class="footer-legal__link">Выписка из реестра</a>
+            <a :href="contacts.legal.registryUrl" target="_blank" rel="noopener" class="footer-legal__link">Запись в реестре</a>
+          </span>
         </div>
       </div>
 
@@ -124,6 +138,15 @@ const contacts = useContacts()
   font-size: 13px;
   color: rgba(255, 255, 255, 0.7);
   line-height: 1.4;
+}
+.footer-legal__link {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s;
+}
+.footer-legal__link:hover {
+  color: white;
 }
 
 /* Footer bottom row meta (copyright, политика, Meta-disclaimer, Разработано) — намеренно мельче 16px */

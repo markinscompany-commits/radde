@@ -16,8 +16,10 @@ export interface SiteLegal {
   inn: string              // ИНН
   ogrn: string             // ОГРН/ОГРНИП
   address: string          // юридический адрес
-  egrksm: string           // номер реестровой записи ЕГРКСМ
-  classification: string   // тип/категория (например, «Пансионат, без категории»)
+  egrksm: string           // номер реестровой записи в реестре классификации (ЕРОК)
+  classification: string   // тип/категория средства размещения
+  registryUrl: string      // ссылка на запись в реестре tourism.fsa.gov.ru
+  vypiskaUrl: string       // ссылка на PDF-выписку из реестра (лежит в public/docs)
 }
 
 export interface SiteContacts {
@@ -34,8 +36,8 @@ export interface SiteContacts {
 
 const CONTACTS: SiteContacts = {
   phone: {
-    display: '+7 (900) 123-45-67',
-    tel: '+79001234567',
+    display: '+7 (988) 277-77-55',
+    tel: '+79882777755',
   },
   email: 'info@radde.ru',
   address: {
@@ -43,20 +45,21 @@ const CONTACTS: SiteContacts = {
     full: 'Республика Дагестан, Гунибский район, с. Гуниб, пансионат Радде',
     mapUrl: 'https://yandex.ru/maps/-/CPfFnT2P',
   },
-  schedule: 'Ежедневно с 9:00 до 21:00',
-  whatsapp: 'https://wa.me/79001234567',
+  schedule: 'Работаем круглосуточно',
+  whatsapp: 'https://wa.me/79882777755',
   telegram: 'https://t.me/radde_pansion',
   max: 'https://max.ru/radde_pansion',
-  instagram: 'https://www.instagram.com/radde.pansion',
-  // PLACEHOLDER — заменить, когда клиент пришлёт регистрационные данные
-  // и пройдёт самооценку в ЕГРКСМ (Постановление № 1951 от 27.12.2024).
+  instagram: 'https://www.instagram.com/pansionat_radde/',
+  // Реквизиты из выписки ЕРОК (Росаккредитация) + реквизитов ИП, 2026.
   legal: {
-    entityName: 'ИП «Пансионат Радде»',
-    inn: '0000000000',
-    ogrn: '000000000000000',
-    address: 'Республика Дагестан, Гунибский район, с. Гуниб',
-    egrksm: 'будет указан после регистрации в реестре',
-    classification: 'Пансионат',
+    entityName: 'ИП Нахибашева Индира Нурмагомедовна',
+    inn: '056296889839',
+    ogrn: '316057100110150',
+    address: '368340, Республика Дагестан, Гунибский район, с. Гуниб',
+    egrksm: 'С052026022444',
+    classification: 'Гостиница, без категории',
+    registryUrl: 'https://tourism.fsa.gov.ru/ru/resorts/hotels/019cdc36-cb7f-7894-b94e-7a4928d8e994/about-resort',
+    vypiskaUrl: 'docs/vypiska-reestr-radde.pdf', // префикс base добавляется в шаблоне
   },
 }
 

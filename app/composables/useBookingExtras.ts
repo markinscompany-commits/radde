@@ -22,6 +22,12 @@ export interface ExtraDef {
   priceValue: number    // числовое значение, рубли
   unit: ExtraUnit
   unitLabel: string     // человекочитаемое: «за человека», «за сутки», «за услугу»
+  /**
+   * Только для unit='guest': услуга оказывается каждую ночь проживания
+   * (обед/ужин — true) или это разовая сессия (конная прогулка — false).
+   * Влияет на расчёт цены: perNight=true → ×nights; false → одноразово.
+   */
+  perNight?: boolean
   icon: string          // SVG-разметка
   bnovoServiceId?: number | null
 }
@@ -37,10 +43,11 @@ export function useBookingExtras(): ExtraDef[] {
       title: 'Обед',
       description: 'Полноценный обед из трёх блюд — суп, горячее, салат, домашний хлеб.',
       fullDescription: 'Обед — это сердце дагестанского гостеприимства. Наваристые супы, горячее из местной баранины и говядины, свежие салаты из овощей с грядки, домашний хлеб. Время обслуживания — 13:00–15:00. Меню меняется ежедневно, порции от души.',
-      price: '600 ₽',
-      priceValue: 600,
+      price: '750 ₽',
+      priceValue: 750,
       unit: 'guest',
       unitLabel: 'за человека / сутки',
+      perNight: true,
       icon: `<svg ${i}><path d="M19 3v12h-5c-.023 -3.681 .184 -7.406 5 -12m0 12v6h-1v-3m-10 -14v17m-3 -17v3a3 3 0 1 0 6 0v-3" /></svg>`,
       bnovoServiceId: null,
     },
@@ -50,10 +57,11 @@ export function useBookingExtras(): ExtraDef[] {
       title: 'Ужин',
       description: 'Дагестанская кухня: хинкал, чуду, курзе, свежий хлеб из тандыра, травяной чай.',
       fullDescription: 'Вечером, когда горы становятся фиолетовыми за окном, на столе появляются лучшие блюда дагестанской кухни. Хинкал, чуду, курзе, свежий хлеб из тандыра. Время — 18:30–20:30. Меню по предзаказу, возможен вегетарианский вариант, детское меню по запросу.',
-      price: '700 ₽',
-      priceValue: 700,
+      price: '750 ₽',
+      priceValue: 750,
       unit: 'guest',
       unitLabel: 'за человека / сутки',
+      perNight: true,
       icon: `<svg ${i}><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454l0 .008" /><path d="M17 4a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2" /><path d="M19 11h2m-1 -1v2" /></svg>`,
       bnovoServiceId: null,
     },
@@ -81,7 +89,8 @@ export function useBookingExtras(): ExtraDef[] {
       price: '1 500 ₽',
       priceValue: 1500,
       unit: 'guest',
-      unitLabel: 'за человека',
+      unitLabel: 'за человека / прогулку',
+      perNight: false,
       icon: `<svg ${i}><path d="M7 10l-.85 8.507a1.357 1.357 0 0 0 1.35 1.493h.146a2 2 0 0 0 1.857 -1.257l.994 -2.486a2 2 0 0 1 1.857 -1.257h1.292a2 2 0 0 1 1.857 1.257l.994 2.486a2 2 0 0 0 1.857 1.257h.146a1.37 1.37 0 0 0 1.364 -1.494l-.864 -9.506h-8c0 -3 -3 -5 -6 -5l-3 6l2 2l3 -2" /></svg>`,
       bnovoServiceId: null,
     },
