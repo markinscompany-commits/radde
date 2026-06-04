@@ -102,6 +102,14 @@
                         {{ age - 1 === 0 ? '<1' : age - 1 }}
                       </button>
                     </div>
+                    <!-- Подсказка появляется только когда выбран возраст 15+ -->
+                    <p
+                      v-if="state.childrenAges[idx] != null && state.childrenAges[idx] >= 15"
+                      class="children-ages__callout children-ages__callout--adult"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v3.5M8 10.5h.007"/></svg>
+                      <span>С&nbsp;15&nbsp;лет считаем по&nbsp;тарифу взрослого</span>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -212,7 +220,7 @@
                     <div v-if="!r.fitsGuests" class="room-pick__limit">
                       <p class="room-pick__limit-msg">
                         <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v3.5M8 10.5h.007"/></svg>
-                        <span>Вмещает до&nbsp;{{ r.effectiveCapacity }}&nbsp;{{ guestsWord(r.effectiveCapacity) }} — для&nbsp;{{ state.adults + state.children }}&nbsp;маловато</span>
+                        <span>Вмещает до&nbsp;{{ r.effectiveCapacity }}&nbsp;{{ guestsWord(r.effectiveCapacity) }}</span>
                       </p>
                       <div class="room-pick__limit-actions">
                         <button v-if="biggestRoomName && biggestRoomCap > r.effectiveCapacity" type="button" class="room-pick__limit-btn room-pick__limit-btn--primary" @click.stop="scrollToBiggestRoom">
