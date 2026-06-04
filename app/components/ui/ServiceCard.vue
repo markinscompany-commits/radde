@@ -3,7 +3,7 @@
     <div class="flex items-start justify-between mb-4">
       <div class="service-icon-wrap" v-html="service.icon"></div>
       <span v-if="service.included" class="badge badge--included">Включено</span>
-      <span v-else-if="service.price" class="badge badge--price">{{ service.price }}</span>
+      <span v-else-if="service.price" class="badge badge--price">от {{ service.price }}</span>
     </div>
 
     <h3 class="font-display font-500 text-sand-900 mb-2" style="font-size: clamp(1.15rem, 2vw, 1.35rem)">{{ service.title }}</h3>

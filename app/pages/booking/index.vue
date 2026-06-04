@@ -77,7 +77,7 @@
               <div v-if="state.children > 0" class="children-ages">
                 <div class="children-ages__title">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
-                  <span>Возраст детей <span class="text-3.25 text-sand-500 font-400">— нужен ресепшну для&nbsp;подготовки номера</span></span>
+                  <span>Возраст детей</span>
                 </div>
                 <div class="children-ages__list">
                   <div v-for="(_, idx) in state.children" :key="idx" class="children-ages__row">
@@ -102,20 +102,8 @@
                         {{ age - 1 === 0 ? '<1' : age - 1 }}
                       </button>
                     </div>
-                    <!-- Callout только для 15+ (важно для гостя — повлияет на цену).
-                         Для <15 — без плашки: возраст нужен ресепшну, но цена не меняется. -->
-                    <p
-                      v-if="state.childrenAges[idx] != null && state.childrenAges[idx] >= 15"
-                      class="children-ages__callout children-ages__callout--adult"
-                    >
-                      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v3.5M8 10.5h.007"/></svg>
-                      <span>Считается как взрослый — по&nbsp;тарифу взрослого</span>
-                    </p>
                   </div>
                 </div>
-                <p class="children-ages__hint">
-                  С&nbsp;15&nbsp;лет ребёнок считается по&nbsp;тарифу взрослого.
-                </p>
               </div>
               <div v-if="nights > 0" class="checkout-hint">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/><path d="M12 7v5l3 3"/></svg>
@@ -156,8 +144,8 @@
                     <button type="button" class="period-empty__btn" @click="scrollToEl(datesSectionRef)">
                       Изменить даты
                     </button>
-                    <button type="button" class="period-empty__btn period-empty__btn--ghost" @click="shrinkPeriodToWeek">
-                      Попробовать ближайшие 3&nbsp;ночи
+                    <button type="button" class="period-empty__btn period-empty__btn--ghost" :disabled="searchingDates" @click="applyNearestWindow(3)">
+                      {{ searchingDates ? 'Ищем свободные даты…' : 'Найти ближайшие свободные 3 ночи' }}
                     </button>
                   </div>
                 </div>
@@ -222,17 +210,16 @@
                          Универсальный fallback «недоступен» убран — если редкий кейс
                          (fits=true, available=false, нет alternative) — карточка просто disabled. -->
                     <div v-if="!r.fitsGuests" class="room-pick__limit">
-                      <div class="room-pick__limit-head">
-                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v3.5M8 10.5h.007"/></svg>
-                      <span>У&nbsp;вас {{ state.adults + state.children }}&nbsp;{{ guestsWord(state.adults + state.children) }}, а&nbsp;{{ r.name }} вмещает до&nbsp;{{ r.effectiveCapacity }}.</span>
-                      </div>
+                      <p class="room-pick__limit-msg">
+                        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v3.5M8 10.5h.007"/></svg>
+                        <span>Вмещает до&nbsp;{{ r.effectiveCapacity }}&nbsp;{{ guestsWord(r.effectiveCapacity) }} — для&nbsp;{{ state.adults + state.children }}&nbsp;маловато</span>
+                      </p>
                       <div class="room-pick__limit-actions">
-                        <button v-if="biggestRoomName && biggestRoomCap > r.effectiveCapacity" type="button" class="room-pick__limit-link" @click.stop="scrollToBiggestRoom">
-                          Выбрать {{ biggestRoomName }} (до&nbsp;{{ biggestRoomCap }})
+                        <button v-if="biggestRoomName && biggestRoomCap > r.effectiveCapacity" type="button" class="room-pick__limit-btn room-pick__limit-btn--primary" @click.stop="scrollToBiggestRoom">
+                          {{ biggestRoomName }} · до&nbsp;{{ biggestRoomCap }}
                         </button>
-                        <span v-if="biggestRoomName && biggestRoomCap > r.effectiveCapacity" class="room-pick__limit-or">или</span>
-                        <button type="button" class="room-pick__limit-link" @click.stop="suggestSplitRooms">
-                          забронировать несколько номеров
+                        <button type="button" class="room-pick__limit-btn" @click.stop="suggestSplitRooms">
+                          Несколько номеров
                         </button>
                       </div>
                     </div>
@@ -251,11 +238,12 @@
                     <button
                       v-else-if="!r.available && !r.nextAvailableFrom"
                       type="button"
-                      class="room-pick__suggest room-pick__suggest--muted"
-                      @click.stop="scrollToEl(datesSectionRef)"
+                      class="room-pick__suggest"
+                      :disabled="searchingDates"
+                      @click.stop="applyNearestWindow(nights, r.id)"
                     >
-                      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v3.5M8 10.5h.007"/></svg>
-                      <span>Занят на&nbsp;весь период — сократите даты, чтобы&nbsp;найти свободное окно</span>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+                      <span>{{ searchingDates ? 'Ищем ближайшие свободные даты…' : `Подобрать ближайшие свободные даты на ${nights} ${nightsLabel(nights)}` }}</span>
                     </button>
                     <p v-else-if="r.note" class="text-3.25 text-amber-700 mb-3 flex items-start gap-1.5">
                       <svg class="flex-shrink-0 mt-0.5" width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v3.5M8 10.5h.007" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
@@ -367,8 +355,8 @@
                     <button type="button" class="period-empty__btn" @click="scrollToEl(datesSectionRef)">
                       Изменить даты
                     </button>
-                    <button type="button" class="period-empty__btn period-empty__btn--ghost" @click="shrinkPeriodToWeek">
-                      Попробовать ближайшие 3&nbsp;ночи
+                    <button type="button" class="period-empty__btn period-empty__btn--ghost" :disabled="searchingDates" @click="applyNearestWindow(3)">
+                      {{ searchingDates ? 'Ищем свободные даты…' : 'Найти ближайшие свободные 3 ночи' }}
                     </button>
                   </div>
                 </div>
@@ -385,8 +373,6 @@
                 </div>
                 <span class="checkout-optional checkout-optional--desktop">необязательно</span>
               </div>
-              <p class="text-3.75 text-sand-700 mb-4 leading-snug">Завтрак, Wi-Fi, парковка и&nbsp;горный воздух уже включены — добавьте только то, что захотите попробовать сверху.</p>
-
               <div class="flex flex-wrap gap-2 mb-4">
                 <button
                   v-for="cat in extraCategories"
@@ -414,7 +400,7 @@
                     <h4 class="font-display font-500 text-sand-900 text-4 mb-1">{{ extra.title }}</h4>
                     <p class="text-3.5 text-sand-700 leading-snug mb-3 line-clamp-2">{{ extra.description }}</p>
                     <div class="extra-card__price-row">
-                      <span class="font-display font-500 text-sand-900 text-4">{{ extra.price }}</span>
+                      <span class="font-display font-500 text-sand-900 text-4">от {{ extra.price }}</span>
                     </div>
                     <!-- Услуга = простой переключатель «Добавить / Убрать». Без
                          модификаторов «На скольких / Раз в день» — все услуги
@@ -517,8 +503,14 @@
                  Требование Постановления Правительства РФ № 1912 (с 01.03.2026):
                  раскрыть на сайте порядок отмены, время заезда/выезда, оплату.
                  Без эквайринга отдельный «Договор-оферта» не нужен. -->
-            <div class="rules-card">
-              <h3 class="rules-card__title">Условия бронирования</h3>
+            <div class="rules-card" :class="{ 'rules-card--open': rulesOpen }">
+              <button type="button" class="rules-card__toggle" :aria-expanded="rulesOpen" @click="rulesOpen = !rulesOpen">
+                <h3 class="rules-card__title">Условия бронирования</h3>
+                <span class="rules-card__chev" :class="rulesOpen ? 'rules-card__chev--open' : ''" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4.5l4 4 4-4" stroke="#6B5B4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+              </button>
+              <div class="rules-card__body" :class="rulesOpen ? 'rules-card__body--open' : ''">
               <ul class="rules-list">
                 <li>
                   <strong>Заезд</strong> с&nbsp;14:00, <strong>выезд</strong> до&nbsp;12:00. Ранний заезд и&nbsp;поздний выезд&nbsp;— по&nbsp;согласованию и&nbsp;при&nbsp;наличии номеров.
@@ -538,6 +530,7 @@
                   При&nbsp;форс-мажоре (закрытие дорог, отмена авиарейсов, болезнь с&nbsp;подтверждением) условия пересматриваем индивидуально.
                 </li>
               </ul>
+              </div>
             </div>
           </div>
 
@@ -637,7 +630,7 @@
                       <span class="summary-extras-toggle__count">{{ summaryExtras.length }} {{ extrasCountWord(summaryExtras.length) }} · оплата отдельно</span>
                     </span>
                   </span>
-                  <span class="summary-amount summary-amount--muted">{{ fmtPrice(summaryExtrasTotal) }} ₽</span>
+                  <span class="summary-amount summary-amount--muted">от {{ fmtPrice(summaryExtrasTotal) }} ₽</span>
                 </button>
                 <Transition name="extras-expand">
                   <ul v-if="summaryExtrasOpen" id="summary-extras-list" class="summary-extras-list">
@@ -645,7 +638,7 @@
                       <div class="flex-1 min-w-0">
                         <div class="font-body text-3.75 text-sand-900 truncate">{{ line.title }}</div>
                       </div>
-                      <span class="summary-amount">{{ fmtPrice(line.amount) }} ₽</span>
+                      <span class="summary-amount">от {{ fmtPrice(line.amount) }} ₽</span>
                     </li>
                     <li class="summary-extras-note">
                       <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v3.5M8 10.5h.007"/></svg>
@@ -680,9 +673,8 @@
                 :error="errorField === 'consent'"
                 class="mt-4"
               >
-                Нажимая «Забронировать», я&nbsp;соглашаюсь с&nbsp;условиями бронирования
-                и&nbsp;отмены (указаны на&nbsp;этой странице) и&nbsp;даю согласие на&nbsp;<a :href="`${base}privacy`" target="_blank" rel="noopener">обработку персональных данных</a>.
-                Оплата аванса проходит через&nbsp;защищённый платёжный шлюз Bnovo.
+                Нажимая «Забронировать», я&nbsp;принимаю <a :href="`${base}offer`" target="_blank" rel="noopener">условия оферты</a>
+                и&nbsp;даю согласие на&nbsp;<a :href="`${base}privacy`" target="_blank" rel="noopener">обработку персональных данных</a>.
               </UiConsentCheckbox>
 
               <button
@@ -749,7 +741,7 @@
             </div>
             <div class="px-7 md:px-9 py-5 border-t border-sand-200 flex items-center justify-between bg-sand-100/50 gap-3 flex-wrap">
               <div>
-                <span class="font-display font-500 text-sand-900" style="font-size: clamp(1.2rem, 2vw, 1.5rem)">{{ detailExtra.price }}</span>
+                <span class="font-display font-500 text-sand-900" style="font-size: clamp(1.2rem, 2vw, 1.5rem)">от {{ detailExtra.price }}</span>
                 <span class="text-small text-sand-600 ml-1">· оплачивается отдельно</span>
               </div>
               <button
@@ -1029,16 +1021,6 @@ const allRoomsExceedCapacity = computed(() => {
   return availableRooms.value.every(r => !r.fitsGuests)
 })
 
-// Сжимаем период до 3 ночей от текущей даты заезда. Часто помогает найти
-// свободное окно когда исходный длинный период не помещается ни в одну
-// категорию целиком.
-function shrinkPeriodToWeek() {
-  if (!state.value.arrival) return
-  const d = new Date(state.value.arrival)
-  d.setDate(d.getDate() + 3)
-  state.value.departure = d.toISOString().slice(0, 10)
-  scrollToEl(datesSectionRef.value)
-}
 
 // Реакция на изменение состава/дат:
 // 1) Если выбранный ранее номер больше не вмещает гостей или закрыт на новые даты —
@@ -1190,6 +1172,34 @@ function nightsLabel(n: number): string {
   if (n % 10 === 1 && n % 100 !== 11) return 'ночь'
   if ([2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100)) return 'ночи'
   return 'ночей'
+}
+
+// Поиск ближайшего свободного окна нужной длительности под состав гостя.
+// Сервер сканирует даты вперёд (см. /api/next-available). Применяем найденные
+// даты в форму; если задан slug — заодно выбираем эту категорию.
+const searchingDates = ref(false)
+async function applyNearestWindow(reqNights: number, slug?: string) {
+  if (searchingDates.value) return
+  searchingDates.value = true
+  try {
+    const res = await $fetch<{ ok: boolean; window: { from: string; to: string; nights: number } | null }>(
+      '/api/next-available',
+      { query: { nights: Math.max(1, reqNights), adults: state.value.adults, children: state.value.children, ...(slug ? { slug } : {}) } },
+    )
+    if (res.window) {
+      state.value.arrival = res.window.from
+      state.value.departure = res.window.to
+      if (slug) setRoom(slug)
+      toast.success(`Подобрали свободные даты: ${formatDate(res.window.from)} — ${formatDate(res.window.to)}`)
+      scrollToEl(roomSectionRef.value)
+    } else {
+      toast.info('Не нашли свободное окно в ближайшие недели — позвоните, ресепшн подберёт даты.')
+    }
+  } catch {
+    toast.error('Не удалось подобрать даты. Попробуйте ещё раз или позвоните нам.')
+  } finally {
+    searchingDates.value = false
+  }
 }
 
 function guestsWord(n: number): string {
@@ -1560,6 +1570,9 @@ const summaryExtrasTotal = computed(() =>
 )
 
 const summaryExtrasOpen = ref(false)
+
+// Блок «Условия бронирования» — гармошка (по умолчанию свёрнут), как FAQ на главной.
+const rulesOpen = ref(false)
 
 const hasAnySelection = computed(() =>
   !!state.value.roomId
@@ -2835,39 +2848,50 @@ function scrollToTop() {
   padding: 10px 12px;
   margin-bottom: 12px;
 }
-.room-pick__limit-head {
+.room-pick__limit-msg {
   display: flex;
-  align-items: flex-start;
-  gap: 6px;
-  font-family: 'Source Sans 3', sans-serif;
-  font-size: 13px;
-  color: #8C5D2A;
-  font-weight: 600;
-  line-height: 1.45;
-}
-.room-pick__limit-head svg { color: #B5783A; flex-shrink: 0; margin-top: 2px; }
-.room-pick__limit-actions {
-  display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 6px;
   font-family: 'Source Sans 3', sans-serif;
   font-size: 12.5px;
-  color: #6B5B4A;
-}
-.room-pick__limit-link {
-  background: transparent;
-  border: none;
-  padding: 0;
-  font: inherit;
-  color: #C17F3E;
+  color: #8C5D2A;
   font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  cursor: pointer;
+  line-height: 1.4;
 }
-.room-pick__limit-link:hover { color: #8C5D2A; }
-.room-pick__limit-or { color: #8C7A60; }
+.room-pick__limit-msg svg { color: #B5783A; flex-shrink: 0; }
+.room-pick__limit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 7px;
+}
+.room-pick__limit-btn {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #E0CBA4;
+  background: #fff;
+  color: #8C5D2A;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+  white-space: nowrap;
+}
+.room-pick__limit-btn:hover { background: #FFF8EC; border-color: #C9A87A; }
+.room-pick__limit-btn--primary {
+  background: #C17F3E;
+  border-color: #C17F3E;
+  color: #fff;
+}
+.room-pick__limit-btn--primary:hover { background: #A86A30; border-color: #A86A30; color: #fff; }
 .room-pick__more {
   background: transparent;
   border: none;
@@ -3501,13 +3525,46 @@ function scrollToTop() {
 @media (min-width: 768px) {
   .rules-card { padding: 22px 26px; }
 }
+.rules-card__toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
 .rules-card__title {
   font-family: 'Manrope', sans-serif;
   font-weight: 500;
   font-size: 17px;
   color: #2C2416;
-  margin: 0 0 12px;
+  margin: 0;
 }
+.rules-card__chev {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: #F0E6D6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+.rules-card__chev--open { transform: rotate(180deg); }
+.rules-card__body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.rules-card__body--open {
+  max-height: 420px;
+}
+.rules-card__body .rules-list { padding-top: 14px; }
 .rules-list {
   list-style: none;
   padding: 0;

@@ -47,7 +47,8 @@
         <!-- Галерея — на lg справа, на mobile между абзацами -->
         <div ref="imageRef" class="relative order-2">
           <div
-            class="aspect-5/6 rounded-3 overflow-hidden shadow-xl relative gallery-touch"
+            class="aspect-5/6 rounded-3 overflow-hidden shadow-xl relative gallery-touch cursor-pointer"
+            @click="openLightbox"
             @touchstart.passive="onTouchStart"
             @touchend="onTouchEnd"
           >
@@ -65,13 +66,19 @@
               />
             </transition-group>
 
-            <!-- Лупа (верхний правый угол): открыть фото на весь экран -->
-            <button @click="openLightbox" class="gallery-zoom-btn" aria-label="Открыть фото на весь экран">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35M11 8v6M8 11h6"/></svg>
-            </button>
+            <!-- Лупа (как в блоке «Размещение»): тот же media-arrow в верхнем левом углу -->
+            <div class="absolute top-4 left-4 z-10" @click.stop>
+              <button @click="openLightbox" class="media-arrow" title="Открыть на весь экран" aria-label="Открыть фото на весь экран">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                  <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M7 4.5v5M4.5 7h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
 
             <!-- Bottom bar: arrows left, dots right (same as Rooms) -->
-            <div class="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-between px-4 py-3">
+            <div class="absolute bottom-0 left-0 right-0 z-10 flex items-center justify-between px-4 py-3" @click.stop>
               <!-- Arrows (bottom-left) -->
               <div class="flex items-center gap-1.5">
                 <button @click="prevSlide" class="media-arrow">

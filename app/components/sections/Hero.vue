@@ -40,12 +40,12 @@
 
       <!-- Форма бронирования -->
       <div class="px-5 md:px-8 pb-8 overflow-hidden">
-        <div ref="bookingRef" class="max-w-880px mx-auto bg-white/10 backdrop-blur-md border border-white/15 rounded-3 p-5 md:p-6" style="transform: translateY(140%)">
+        <div ref="bookingRef" class="max-w-780px mx-auto bg-white/10 backdrop-blur-md border border-white/15 rounded-3 p-5 md:p-6" style="transform: translateY(140%)">
           <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-12 gap-3 md:gap-4 items-end">
 
-            <!-- Даты (заезд → выезд одним календарём). Поле сужено (lg: 5 из 12),
-                 панель тоже уже (max-w-880) — по фидбеку Mark 06.2026. -->
-            <div class="col-span-2 md:col-span-4 lg:col-span-5">
+            <!-- Даты (заезд → выезд одним календарём). Поле сужено (lg: 4 из 12),
+                 панель уже (max-w-780) — по фидбеку Mark 06.2026. -->
+            <div class="col-span-2 md:col-span-4 lg:col-span-4">
               <label class="label-dark">Даты заезда и выезда</label>
               <UiDateRangePicker
                 v-model:model-start="form.checkIn"
@@ -75,8 +75,8 @@
               </div>
             </div>
 
-            <!-- Кнопка (lg: 3 из 12 — добирает колонку, освобождённую полем дат) -->
-            <div class="col-span-2 md:col-span-2 lg:col-span-3">
+            <!-- Кнопка (lg: 4 из 12 — добирает колонки, освобождённые полем дат) -->
+            <div class="col-span-2 md:col-span-2 lg:col-span-4">
               <button
                 @click="handleBooking"
                 class="w-full bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white font-body font-600 text-4 rounded-2 py-3.5 transition-all duration-300 shadow-lg shadow-amber-500/20 cursor-pointer border-none">

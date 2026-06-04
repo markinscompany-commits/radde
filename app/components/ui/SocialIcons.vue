@@ -44,9 +44,10 @@ const Instagram = () => h('svg', { width: iconPx.value, height: iconPx.value, vi
 
 const contacts = useContacts()
 
-// Скрытые каналы — по просьбе клиента (06.2026) ВК и Max временно не показываем.
-// Код иконок и данные НЕ удаляем: чтобы вернуть — убери канал из этого списка.
-const HIDDEN_CHANNELS = ['max', 'vk']
+// Скрытые каналы — по просьбе клиента (06.2026) ВК, Max и Telegram не показываем.
+// Остаются WhatsApp + Instagram. Код иконок и данные НЕ удаляем: чтобы вернуть —
+// убери канал из этого списка.
+const HIDDEN_CHANNELS = ['max', 'vk', 'telegram']
 
 const items = computed(() => {
   const map: Record<string, { title: string, href: string, svg?: any, img?: string }> = {

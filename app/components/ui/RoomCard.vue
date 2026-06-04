@@ -66,10 +66,39 @@
           <span class="text-small text-amber-700 font-500 leading-snug">{{ room.note }}</span>
         </div>
 
-        <!-- На главной (showcase) показываем только теги-удобства. Характеристики
-             (площадь/кровать/гости/вид) и бейдж «Последний номер» — это детали
-             страницы бронирования, на главной их не выводим (фидбек Mark 06.2026). -->
+        <!-- Ключевые характеристики (зелёные spec-чипы) + теги-удобства.
+             Бейдж «Последний номер» на главной не показываем (фидбек Mark 06.2026). -->
         <div class="flex flex-wrap gap-2 mb-auto pb-5">
+          <span class="spec-chip">
+            <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
+              <rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M2 7h14M7 2v14" stroke="currentColor" stroke-width="1.3"/>
+            </svg>
+            {{ room.area }} м²
+          </span>
+          <span class="spec-chip">
+            <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
+              <rect x="1.5" y="8" width="15" height="7" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M3 8V6a3 3 0 016 0v2M9 8V6a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M1.5 11.5h15" stroke="currentColor" stroke-width="1.3"/>
+            </svg>
+            {{ room.bed }}
+          </span>
+          <span class="spec-chip">
+            <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="5.5" r="3" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M3 16c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+            до {{ room.guests }} гостей
+          </span>
+          <span class="spec-chip">
+            <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
+              <path d="M2 13c2-4 4.5-7 7-7s5 2 7 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              <path d="M1 15h16" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              <circle cx="13" cy="4" r="2" stroke="currentColor" stroke-width="1.3"/>
+            </svg>
+            {{ room.view }}
+          </span>
           <span v-for="(tag, ti) in room.tags.slice(0, 4)" :key="ti" class="amenity-chip">
             {{ tag }}
           </span>

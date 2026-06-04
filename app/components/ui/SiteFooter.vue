@@ -65,6 +65,7 @@
         <div class="flex flex-wrap items-center gap-x-5 gap-y-1">
           <span class="footer-meta">&copy; {{ new Date().getFullYear() }} Пансионат Радде</span>
           <a :href="`${base}privacy`" class="footer-meta footer-meta--link">Политика конфиденциальности</a>
+          <a :href="`${base}offer`" class="footer-meta footer-meta--link">Оферта</a>
         </div>
         <span class="footer-meta">*Meta признана экстремистской организацией, её деятельность запрещена в России</span>
         <a href="https://markins.ru?utm_source=radde.ru&utm_medium=footer&utm_campaign=credits" target="_blank" rel="noopener" class="flex items-center gap-1.5 footer-meta footer-meta--link">
