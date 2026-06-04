@@ -20,6 +20,17 @@ function todayIso(): string {
   return new Date().toISOString().slice(0, 10)
 }
 
+// Физическая вместимость категорий (совпадает с useRooms на сайте). Берём её,
+// а НЕ capacity_max из запроса: чтобы получить честное «какие номера физически
+// свободны», доступность опрашиваем с adults=1 (любой номер вмещает 1 гостя и
+// показывается свободным), а вместимость для рассадки берём отсюда.
+const PHYS_CAP: Record<string, number> = { vip: 3, panorama: 3, lux: 3, standard: 2 }
+
+function physCap(r: BnovoRateForRoom): number {
+  const bySlug = r.site_slug ? PHYS_CAP[r.site_slug] : undefined
+  return Math.max(bySlug ?? 0, r.capacity_max ?? 0, 1)
+}
+
 /** Свободна ли категория на эти даты (статус + есть физические номера). */
 function roomOpen(r: BnovoRateForRoom): boolean {
   return r.status === 'available' && r.available_count > 0 && !!r.site_slug && r.site_slug !== 'dom'
@@ -27,7 +38,7 @@ function roomOpen(r: BnovoRateForRoom): boolean {
 
 /** Вмещает ли категория состав одним номером. */
 function fitsSingle(r: BnovoRateForRoom, party: number): boolean {
-  return roomOpen(r) && (r.capacity_max == null || r.capacity_max >= party)
+  return roomOpen(r) && physCap(r) >= party
 }
 
 /**
@@ -39,7 +50,7 @@ function canSeatParty(rooms: BnovoRateForRoom[], party: number): boolean {
   const caps: number[] = []
   for (const r of rooms) {
     if (!roomOpen(r)) continue
-    const cap = r.capacity_max && r.capacity_max > 0 ? r.capacity_max : 1
+    const cap = physCap(r)
     for (let i = 0; i < r.available_count; i++) caps.push(cap)
   }
   caps.sort((a, b) => b - a)
@@ -80,10 +91,13 @@ export async function findNextAvailableWindow(opts: {
     windows.push({ from, to: addDays(from, nights) })
   }
 
-  // Параллельно запрашиваем все окна. Ошибку отдельного окна гасим в пустой массив.
+  // Параллельно запрашиваем все окна. ВАЖНО: опрашиваем с adults=1 — так Bnovo
+  // показывает ВСЕ физически свободные номера (при большом составе он бы скрыл
+  // те, что не вмещают всю компанию одним номером, и наборы бы не находились).
+  // Вместимость для рассадки берём из PHYS_CAP. Ошибку окна гасим в [].
   const results = await Promise.all(
     windows.map((w) =>
-      fetchBnovoRates({ arrival: w.from, departure: w.to, adults, children })
+      fetchBnovoRates({ arrival: w.from, departure: w.to, adults: 1, children: 0 })
         .then((res) => res.rooms)
         .catch(() => [] as BnovoRateForRoom[]),
     ),

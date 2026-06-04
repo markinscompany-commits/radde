@@ -605,15 +605,7 @@
                 @click="openFreeIncluded"
                 aria-haspopup="dialog"
               >
-                <span class="free-incl__bullet" aria-hidden="true">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <path d="M3.5 8.5L6.5 11.5L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-                <span class="free-incl__text">
-                  <span class="free-incl__title">Бесплатные услуги — уже&nbsp;в&nbsp;цене</span>
-                  <span class="free-incl__list">Завтрак · Wi-Fi · Парковка · Бельё и&nbsp;ещё&nbsp;3</span>
-                </span>
+                <span class="free-incl__single">{{ freeIncludedItems.length }} {{ freeWord(freeIncludedItems.length) }}</span>
                 <span class="free-incl__chev" aria-hidden="true">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4 2.5L7.5 6L4 9.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </span>
@@ -1299,6 +1291,12 @@ function addExtra(extra: ExtraDef) {
   // Услуга — простой переключатель: выбрана (count=1) или нет. Без множителей
   // «На скольких / Раз в день» — все услуги оплачиваются отдельно при заселении.
   setExtraCount(extra.id, 1)
+}
+
+function freeWord(n: number): string {
+  if (n % 10 === 1 && n % 100 !== 11) return 'бесплатная услуга'
+  if ([2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100)) return 'бесплатные услуги'
+  return 'бесплатных услуг'
 }
 
 function extrasCountWord(n: number): string {
@@ -3346,6 +3344,14 @@ function scrollToTop() {
   font-size: 12px;
   color: #5B6B49;
   line-height: 1.35;
+}
+.free-incl__single {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2C2416;
+  line-height: 1.3;
 }
 .free-incl__chev {
   flex-shrink: 0;
