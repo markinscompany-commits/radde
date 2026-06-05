@@ -174,7 +174,7 @@
 
               <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                 <div
-                  v-for="r in availableRooms"
+                  v-for="r in orderedRooms"
                   :key="r.id"
                   :data-room-id="r.id"
                   class="room-pick"
@@ -939,7 +939,7 @@ const { state, nights, setRoom, setMultiRoom, setExtraCount, getExtraCount, rese
 const { onInput: phoneMaskInput, onKeydown: phoneMaskKeydown } = usePhoneMask()
 const toast = useToast()
 
-const todayIso = computed(() => new Date().toISOString().slice(0, 10))
+const todayIso = computed(() => todayMsk())
 const checkOutMin = computed(() => {
   const a = state.value.arrival || todayIso.value
   const d = new Date(a)
@@ -1003,6 +1003,15 @@ const { rooms: comboReferenceRooms } = useAvailableRooms({
 })
 
 const selectedAvailable = computed(() => availableRooms.value.find(r => r.id === state.value.roomId))
+
+// Порядок карточек: доступные (свободны И вмещают состав) — первыми, недоступные —
+// после. Внутри каждой группы сохраняется порядок по умолчанию (filter стабилен).
+const orderedRooms = computed(() => {
+  const list = availableRooms.value
+  const available = list.filter(r => r.available && r.fitsGuests)
+  const rest = list.filter(r => !(r.available && r.fitsGuests))
+  return [...available, ...rest]
+})
 
 // Все категории заняты на запрошенный период целиком (PMS не предложил даже
 // альтернативных дат). Для UX — показываем общую плашку с предложением

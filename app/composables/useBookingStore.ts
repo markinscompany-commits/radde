@@ -70,13 +70,12 @@ export interface BookingState {
 const STORAGE_KEY = 'radde_booking_v1'
 
 function todayIso(): string {
-  return new Date().toISOString().slice(0, 10)
+  // «Сегодня» по Москве — чтобы ночью по МСК не подставлялся прошедший день.
+  return todayMsk()
 }
 
 function plusDays(iso: string, days: number): string {
-  const d = new Date(iso)
-  d.setDate(d.getDate() + days)
-  return d.toISOString().slice(0, 10)
+  return addDaysIso(iso, days)
 }
 
 function defaultState(): BookingState {

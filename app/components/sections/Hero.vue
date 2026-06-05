@@ -105,11 +105,11 @@ const heroMobileSrcset = [480, 768, 1024]
   .map(w => `${base}images/hero/hero-radde-mobile-${w}w.webp ${w}w`)
   .join(', ')
 
-const today = computed(() => new Date().toISOString().split('T')[0])
+const today = computed(() => todayMsk())
 
 const form = reactive({
   checkIn: today.value,
-  checkOut: (() => { const d = new Date(); d.setDate(d.getDate() + 2); return d.toISOString().split('T')[0] })(),
+  checkOut: addDaysIso(today.value, 2),
   adults: 2,
   children: 0,
 })
