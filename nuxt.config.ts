@@ -23,10 +23,11 @@ export default defineNuxtConfig({
     bnovoWarrantyType: 'onlinepay', // 'onlinepay' (HAR-дефолт) или другое — зависит от тарифа в Bnovo
     adminProbeToken: '',     // /api/admin/bnovo-probe — токен для диагностических POST
     public: {
-      // ID счётчика Яндекс.Метрики. Задаётся через NUXT_PUBLIC_METRIKA_ID на проде.
-      // Пусто — Метрика не грузится (см. plugins/metrika.client.ts). Счётчик
-      // подключается ТОЛЬКО после согласия на аналитические cookie.
-      metrikaId: '',
+      // ID счётчика Яндекс.Метрики (номер публичный). Можно переопределить через
+      // NUXT_PUBLIC_METRIKA_ID. Пусто — Метрика не грузится (см.
+      // plugins/metrika.client.ts). Счётчик подключается ТОЛЬКО после согласия
+      // на аналитические cookie (152-ФЗ).
+      metrikaId: '109657499',
     },
   },
 
