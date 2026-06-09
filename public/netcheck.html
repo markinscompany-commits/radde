@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<!-- Диагностика «сайт не грузится по адресу radde.ru» (июнь 2026).
+     Страницу открывают по IP (http://93.189.231.68/netcheck.html) с проблемного
+     устройства. Она прогоняет проверки соединения с radde.ru разными способами,
+     показывает результат человеку и автоматически отправляет отчёт на сервер
+     (POST /api/debug/netcheck → память + PM2-лог + Telegram-группа).
+     Временный файл, удалить после закрытия диагностики. -->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Проверка соединения — Радде</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+         background: #2C2416; color: #F5EFE6; margin: 0; padding: 24px 16px 48px; }
+  .wrap { max-width: 560px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 600; margin: 0 0 4px; }
+  .sub { color: #B8A88F; font-size: 14px; margin: 0 0 20px; }
+  .card { background: rgba(255,255,255,0.06); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+  .row { display: flex; align-items: baseline; gap: 10px; }
+  .icon { width: 22px; flex: none; }
+  .name { flex: 1; font-size: 15px; }
+  .ms { color: #B8A88F; font-size: 13px; flex: none; }
+  .detail { color: #B8A88F; font-size: 12.5px; margin: 6px 0 0 32px; word-break: break-word; }
+  .verdict { border-radius: 12px; padding: 16px; margin: 18px 0; font-size: 15px; line-height: 1.5;
+             background: rgba(193,127,62,0.18); border: 1px solid rgba(193,127,62,0.4); }
+  .status { font-size: 14px; color: #B8A88F; margin: 14px 0; }
+  .ok { color: #8FBF7F; } .fail { color: #E08A6D; }
+  button { background: #C17F3E; color: #fff; border: 0; border-radius: 10px; padding: 12px 18px;
+           font-size: 15px; font-weight: 600; width: 100%; margin-top: 8px; cursor: pointer; }
+  .spin { display: inline-block; width: 13px; height: 13px; border: 2px solid #B8A88F;
+          border-top-color: transparent; border-radius: 50%; animation: sp 0.8s linear infinite; vertical-align: -2px; }
+  @keyframes sp { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Проверка соединения с radde.ru</h1>
+  <p class="sub">Ничего нажимать не нужно — проверка идёт сама (10–15 секунд) и отчёт отправится автоматически.</p>
+  <div id="probes"></div>
+  <div class="status" id="status"><span class="spin"></span> Идёт проверка…</div>
+  <div class="verdict" id="verdict" style="display:none"></div>
+  <button id="retry" style="display:none" onclick="location.reload()">Проверить ещё раз</button>
+</div>
+<script>
+(function () {
+  var TIMEOUT = 12000
+  var cb = Date.now() + '-' + Math.floor(Math.random() * 1e6)
+  var results = []
+  var probesEl = document.getElementById('probes')
+
+  function row(name) {
+    var el = document.createElement('div')
+    el.className = 'card'
+    el.innerHTML = '<div class="row"><span class="icon"><span class="spin"></span></span>' +
+      '<span class="name">' + name + '</span><span class="ms"></span></div><div class="detail"></div>'
+    probesEl.appendChild(el)
+    return el
+  }
+
+  function done(el, r) {
+    el.querySelector('.icon').innerHTML = r.ok ? '<span class="ok">✓</span>' : '<span class="fail">✕</span>'
+    el.querySelector('.ms').textContent = r.ms + ' мс'
+    if (r.detail) el.querySelector('.detail').textContent = r.detail
+    results.push(r)
+  }
+
+  // fetch с таймаутом; detail — текст ошибки или полезные данные
+  function probeFetch(name, label, url, opts, parse) {
+    var el = row(label)
+    var t0 = Date.now()
+    var ctl = ('AbortController' in window) ? new AbortController() : null
+    var timer = ctl ? setTimeout(function () { ctl.abort() }, TIMEOUT) : null
+    var o = opts || {}
+    if (ctl) o.signal = ctl.signal
+    o.cache = 'no-store'
+    return fetch(url, o).then(function (resp) {
+      var p = parse ? parse(resp) : Promise.resolve('HTTP ' + resp.status + ' (' + resp.type + ')')
+      return Promise.resolve(p).then(function (detail) {
+        return { name: name, ok: true, ms: Date.now() - t0, detail: detail }
+      })
+    }).catch(function (err) {
+      var aborted = err && (err.name === 'AbortError')
+      return { name: name, ok: false, ms: Date.now() - t0,
+               detail: aborted ? 'ТАЙМАУТ ' + TIMEOUT + ' мс (соединение висит)' : String(err && err.message || err) }
+    }).then(function (r) {
+      if (timer) clearTimeout(timer)
+      done(el, r)
+      return r
+    })
+  }
+
+  // картинка — не требует CORS: грузится, если ХОТЬ КАКОЙ-ТО сервер отдаёт файл
+  function probeImage(name, label, url) {
+    var el = row(label)
+    var t0 = Date.now()
+    return new Promise(function (resolve) {
+      var img = new Image()
+      var fin = function (ok, detail) {
+        var r = { name: name, ok: ok, ms: Date.now() - t0, detail: detail || '' }
+        done(el, r); resolve(r)
+      }
+      var timer = setTimeout(function () { img.src = ''; fin(false, 'ТАЙМАУТ ' + TIMEOUT + ' мс') }, TIMEOUT)
+      img.onload = function () { clearTimeout(timer); fin(true) }
+      img.onerror = function () { clearTimeout(timer); fin(false, 'ошибка загрузки') }
+      img.src = url
+    })
+  }
+
+  var probes = [
+    // Контроль: тот же сервер по IP (как открыта эта страница) — должен работать
+    probeFetch('ip-health', 'Сервер по IP (контроль)', '/api/health?cb=' + cb, {},
+      function (resp) { return resp.json().then(function (j) { return 'сервер: ' + j.server + ', host: ' + j.host }) }),
+
+    // Главная проверка: домен + SSL
+    probeFetch('https-radde', 'https://radde.ru (домен + SSL)', 'https://radde.ru/api/health?cb=' + cb, {},
+      function (resp) { return resp.json().then(function (j) { return 'сервер: ' + j.server + ', proto: ' + j.proto }) }),
+
+    probeFetch('https-www', 'https://www.radde.ru', 'https://www.radde.ru/api/health?cb=' + cb, {},
+      function (resp) { return resp.json().then(function (j) { return 'сервер: ' + j.server }) }),
+
+    // Порт 80 домена: картинка проходит 301-редирект на https без CORS-ограничений
+    // (fetch тут не годится — CORS-проверка режет сам 301-ответ).
+    probeImage('img-http80', 'http://radde.ru → редирект → https', 'http://radde.ru/favicon.svg?cb=' + cb),
+
+    // Запасная проверка домена без CORS: opaque-ответ = TLS-соединение прошло,
+    // даже если API недоступен/без CORS-заголовков
+    probeFetch('https-opaque', 'https://radde.ru (без CORS, opaque)', 'https://radde.ru/?cb=' + cb,
+      { mode: 'no-cors' },
+      function (resp) { return 'тип ответа: ' + resp.type }),
+
+    // Картинка с домена — работает без CORS, отдельный путь проверки
+    probeImage('img-domain', 'Картинка с https://radde.ru', 'https://radde.ru/favicon.svg?cb=' + cb),
+
+    // Что отвечает «чистый» DNS Google про radde.ru с ЭТОГО устройства/сети
+    probeFetch('doh-google', 'DNS Google: какой адрес у radde.ru', 'https://dns.google/resolve?name=radde.ru&type=A', {},
+      function (resp) {
+        return resp.json().then(function (j) {
+          var ips = (j.Answer || []).map(function (a) { return a.data }).join(', ')
+          return ips ? 'адрес: ' + ips : 'записей нет (' + j.Status + ')'
+        })
+      }),
+
+    // Контроль SSL на чужой сайт: вообще работает ли https с устройства
+    probeImage('img-yandex', 'SSL-контроль (favicon Яндекса)', 'https://yandex.ru/favicon.ico?cb=' + cb)
+  ]
+
+  Promise.all(probes).then(function () {
+    var by = {}
+    results.forEach(function (r) { by[r.name] = r })
+
+    // Отправка отчёта на сервер (по IP — этот путь работает)
+    var payload = {
+      page: 'netcheck.html',
+      t: new Date().toISOString(),
+      ua: navigator.userAgent,
+      platform: navigator.platform || '',
+      conn: (navigator.connection && navigator.connection.effectiveType) || '',
+      probes: results
+    }
+    fetch('/api/debug/netcheck', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function () {
+      document.getElementById('status').innerHTML = '<span class="ok">✓</span> Готово — отчёт отправлен автоматически.'
+    }).catch(function () {
+      document.getElementById('status').innerHTML = '<span class="fail">✕</span> Отчёт не отправился — сделайте скриншот этой страницы.'
+    })
+
+    // Человеческий вердикт
+    var v = []
+    var domainOk = (by['https-radde'] && by['https-radde'].ok) ||
+                   (by['https-opaque'] && by['https-opaque'].ok) ||
+                   (by['img-domain'] && by['img-domain'].ok)
+    var sslOk = by['img-yandex'] && by['img-yandex'].ok
+    var dohOk = by['doh-google'] && by['doh-google'].ok
+    var dohRight = dohOk && by['doh-google'].detail.indexOf('93.189.231.68') !== -1
+    if (domainOk) {
+      v.push('С этого устройства radde.ru открывается нормально. Если сам сайт при этом не грузится — сделайте скриншот этой страницы и того, что показывает сайт.')
+    } else {
+      v.push('Подтверждено: это устройство не может соединиться с radde.ru.')
+      if (!sslOk) v.push('Защищённые соединения (SSL) не работают вообще — похоже на проблему сети или времени на устройстве.')
+      else if (dohOk && !dohRight) v.push('DNS возвращает НЕВЕРНЫЙ адрес — см. строку «DNS Google».')
+      else if (by['https-radde'] && by['https-radde'].detail.indexOf('ТАЙМАУТ') !== -1) v.push('Соединение именно с radde.ru висит до таймаута — запрос уходит «в никуда».')
+      else v.push('Соединение именно с radde.ru обрывается, при этом другие сайты по SSL работают.')
+    }
+    var vd = document.getElementById('verdict')
+    vd.style.display = 'block'
+    vd.innerHTML = v.join('<br><br>')
+    document.getElementById('retry').style.display = 'block'
+  })
+})()
+</script>
+</body>
+</html>
