@@ -72,13 +72,17 @@ async function waitForReady(): Promise<void> {
     promises.push(document.fonts.ready)
   }
 
-  const heroSrc = `${base}images/hero/hero-radde-mobile-480w.webp`
-  promises.push(new Promise<void>((resolve) => {
-    const img = new Image()
-    img.onload = () => resolve()
-    img.onerror = () => resolve()
-    img.src = heroSrc
-  }))
+  // Ждём именно тот hero-кадр, который браузер выбрал из srcset в Hero.vue
+  // (раньше тут был захардкожен mobile-480w — на retina и десктопе это был
+  // лишний файл, а реальный hero грузился отдельно). На страницах без hero
+  // (booking, blog) элемента нет — просто не ждём картинку.
+  const heroImg = document.querySelector<HTMLImageElement>('img.hero-bg')
+  if (heroImg && !heroImg.complete) {
+    promises.push(new Promise<void>((resolve) => {
+      heroImg.addEventListener('load', () => resolve(), { once: true })
+      heroImg.addEventListener('error', () => resolve(), { once: true })
+    }))
+  }
 
   const logoSrc = `${base}images/logo-white.png`
   promises.push(new Promise<void>((resolve) => {
@@ -88,7 +92,9 @@ async function waitForReady(): Promise<void> {
     img.src = logoSrc
   }))
 
-  const timeout = new Promise<void>(r => setTimeout(r, 6000))
+  // Максимум ждём 3.5 сек: на медленном мобильном интернете лучше показать
+  // сайт с дозагружающимся фото, чем держать гостя на заставке (было 6 сек).
+  const timeout = new Promise<void>(r => setTimeout(r, 3500))
 
   await Promise.race([
     Promise.all(promises),

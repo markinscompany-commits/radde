@@ -1,0 +1,66 @@
+<!--
+  SPA loading screen — статичный HTML, который Nuxt вшивает прямо в index.html
+  и показывает МГНОВЕННО (до загрузки/выполнения JS-бандла). Раньше тут был
+  белый экран на 10-15 сек (медленный мобильный интернет) — выглядело как
+  «сайт сломался / ошибка». Теперь сразу виден фирменный тёмный экран с
+  орнаментом гор, который бесшовно переходит в Vue-Preloader (тот же фон
+  #2C2416). Только инлайн-стили — внешний CSS на этот момент ещё не загружен.
+-->
+<div class="radde-spinner" role="status" aria-label="Загрузка сайта пансионата Радде">
+  <svg class="radde-spinner__ornament" width="280" height="38" viewBox="0 0 240 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M0 16h40" stroke="#8B6F47" stroke-width="1"/>
+    <path d="M200 16h40" stroke="#8B6F47" stroke-width="1"/>
+    <path d="M52 16l8-8 8 8-8 8z" stroke="#8B6F47" stroke-width="1.5" fill="none"/>
+    <path d="M88 20l12-14 8 10 12-16 12 16 8-10 12 14" stroke="#8B6F47" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+    <path d="M172 16l8-8 8 8-8 8z" stroke="#8B6F47" stroke-width="1.5" fill="none"/>
+  </svg>
+  <div class="radde-spinner__dots" aria-hidden="true">
+    <span></span><span></span><span></span>
+  </div>
+</div>
+<style>
+  /* Фон совпадает с Vue-Preloader (#2C2416) → переход без вспышки */
+  #__nuxt:empty { display: block; }
+  .radde-spinner {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #2C2416;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  .radde-spinner__ornament {
+    opacity: 0.85;
+    animation: radde-breathe 2.4s ease-in-out infinite;
+  }
+  .radde-spinner__dots {
+    display: flex;
+    gap: 7px;
+  }
+  .radde-spinner__dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #8B6F47;
+    opacity: 0.35;
+    animation: radde-dot 1.2s ease-in-out infinite;
+  }
+  .radde-spinner__dots span:nth-child(2) { animation-delay: 0.18s; }
+  .radde-spinner__dots span:nth-child(3) { animation-delay: 0.36s; }
+  @keyframes radde-breathe {
+    0%, 100% { opacity: 0.45; transform: scale(0.985); }
+    50%      { opacity: 0.9;  transform: scale(1); }
+  }
+  @keyframes radde-dot {
+    0%, 100% { opacity: 0.3;  transform: translateY(0); }
+    50%      { opacity: 0.95; transform: translateY(-3px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .radde-spinner__ornament,
+    .radde-spinner__dots span { animation: none; opacity: 0.7; }
+  }
+</style>
