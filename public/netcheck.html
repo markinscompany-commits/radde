@@ -143,7 +143,20 @@
       }),
 
     // Контроль SSL на чужой сайт: вообще работает ли https с устройства
-    probeImage('img-yandex', 'SSL-контроль (favicon Яндекса)', 'https://yandex.ru/favicon.ico?cb=' + cb)
+    probeImage('img-yandex', 'SSL-контроль (favicon Яндекса)', 'https://yandex.ru/favicon.ico?cb=' + cb),
+
+    // ДИСКРИМИНАТОР DPI: https по голому IP — браузер НЕ отправляет имя домена
+    // (SNI пустой). Сертификат не совпадёт и проба упадёт — но ВАЖНА СКОРОСТЬ:
+    // быстрый фейл (<3с) = TLS-рукопожатие прошло, трафик без имени проходит,
+    // значит фильтр режет именно ИМЯ radde.ru. Таймаут 12с = режут и без имени.
+    probeFetch('https-ip', 'https по голому IP (без имени в SNI)', 'https://93.189.231.68/?cb=' + cb,
+      { mode: 'no-cors' },
+      function (resp) { return 'тип ответа: ' + resp.type }),
+
+    // Обход наивного строкового фильтра: имя с точкой на конце
+    probeFetch('https-dot', 'https://radde.ru. (точка на конце)', 'https://radde.ru./?cb=' + cb,
+      { mode: 'no-cors' },
+      function (resp) { return 'тип ответа: ' + resp.type })
   ]
 
   Promise.all(probes).then(function () {
